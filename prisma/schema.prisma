@@ -11,3 +11,20 @@ datasource db {
 }
 
 // add db schema(s)
+
+
+// CREATE TYPE muscle_group AS ENUM ('chest', 'back', 'legs', 'shoulders', 'abs', 'cardio');
+
+// CREATE TABLE exercise (
+//   exercise varchar(30), [unique id and a key for user_stats?]
+//   muscle_group muscle_group
+// );
+
+// CREATE TABLE user_stats (
+//   exercise varchar(30), [unique id]
+//   weight integer, [constraint: >= 0, 0 => body weight]
+//   reps integer, [constraint: >= 0]
+//   updated date
+// );
+
+// CREATE TABLE user_workout
