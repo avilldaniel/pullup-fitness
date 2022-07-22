@@ -1,5 +1,5 @@
 {
-  "name": "temp",
+  "name": "pullup-fitness",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -19,6 +19,7 @@
     "@types/react-dom": "18.0.6",
     "eslint": "8.20.0",
     "eslint-config-next": "12.2.3",
+    "prisma": "^4.1.0",
     "typescript": "4.7.4"
   }
 }
