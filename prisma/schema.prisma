@@ -10,28 +10,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// add db schema(s)
-
-
-// CREATE TABLE for users
-
+// TEST AGAINST:
+//  - duplicate emails
 model User {
   id              Int               @id @default(autoincrement())
   memberSince     DateTime          @default(now())
-  name            String            @db.VarChar(30)
+  name            String            @db.VarChar(50)
   email           String            @db.VarChar(50) @unique
-  exerciseStats   Exercise_stats[]
+  exerciseStats   Exercise_stats[]  
+  workouts        Workout[]
 }
 
-// CREATE TABLE user_stats (
-//   exercise varchar(30), [unique id]
-//   weight integer, [constraint: >= 0, 0 => body weight]
-//   reps integer, [constraint: >= 0]
-//   updated date
-// );
-
-// figure out constraint where multi-column (userId, exerciseName, sets) @unique 
-
+// TEST AGAINST:
+//  - duplicate [userId, exerciseName, sets]
 model Exercise_stats {
   // id            Int       @id @default(autoincrement())
   @@id([userId, exerciseName, sets])
@@ -42,42 +33,39 @@ model Exercise_stats {
   sets          Int
   weight        Int?      @default(0) @db.Integer
   reps          Int?      @default(1) @db.Integer
-  lastUpdated   DateTime  @default(now())
-
+  updatedAt     DateTime  @updatedAt
 }
 
-// CREATE TABLE exercise (
-//   exercise varchar(30), [unique id and a key for user_stats?]
-//   muscle_group muscle_group
-// );
-
+// TEST AGAINST:
+//  - duplicate exercises
 model Exercise {
-  id              Int     @id @default(autoincrement())
-  name            String  @db.VarChar(30) @unique
+  id              Int                 @id @default(autoincrement())
+  name            String              @db.VarChar(30) @unique
   muscle_grp      Muscle_grp
   exercise_stats  Exercise_stats[]
-  workouts        ExerciseOnWorkout[]
+  workouts        Workout[]
 }
 
-// CREATE TABLE user_workout
-
+// TEST AGAINST:
+//  - duplicate workouts are fine
 model Workout {
-  id          Int         @id @default(autoincrement())
-  name        String      @db.VarChar(30)
-  exercises   ExerciseOnWorkout[]
+  id          Int                 @id @default(autoincrement())
+  name        String              @db.VarChar(30)
+  createdAt   DateTime            @default(now())
+  creator     User                @relation(fields: [creatorId], references: [id])
+  creatorId   Int
+  exercises   Exercise[]          
 }
 
-model ExerciseOnWorkout {
-  workout     Workout     @relation(fields: [workoutId], references: [id])
-  workoutId   Int         @unique
-  exercise    Exercise    @relation(fields: [exerciseId], references: [id])
-  exerciseId  Int
-  assignedAt  DateTime    @default(now())
-
-  // @@index([workoutId, exerciseId])
-}
-
-// CREATE TYPE muscle_group AS ENUM ('chest', 'back', 'legs', 'shoulders', 'abs', 'cardio');
+// Middle-man between Exercise & Workout
+// model ExerciseOnWorkout {
+//   workout     Workout     @relation(fields: [workoutId], references: [id])
+//   workoutId   Int         @unique
+//   exercise    Exercise    @relation(fields: [exerciseId], references: [id])
+//   exerciseId  Int
+//   assignedAt  DateTime    @default(now())
+//   // @@index([workoutId, exerciseId])
+// }
 
 enum Muscle_grp {
   CHEST
