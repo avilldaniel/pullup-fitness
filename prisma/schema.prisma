@@ -15,11 +15,12 @@ datasource db {
 model User {
   id              Int               @id @default(autoincrement())
   memberSince     DateTime          @default(now())
-  username        String            @db.VarChar(50)
+  username        String            @db.VarChar(50) @unique
   email           String            @db.VarChar(50) @unique
   name            String?           @db.VarChar(50)
   exerciseStats   Exercise_stats[]  
   workouts        Workout[]
+  @@index([username])
 }
 
 // TEST AGAINST:
