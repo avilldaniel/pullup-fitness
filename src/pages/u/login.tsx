@@ -20,13 +20,13 @@ const Login: NextPage = () => {
   // const onSubmit = data => console.log(data);
   // console.log("errors:", errors);
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const loginSubmit: SubmitHandler<FieldValues> = (data) => {
     // console.log("onSubmit:", data.username);
     router.push(data.username);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(loginSubmit)}>
       <input {...register("username")} />
       {errors.username?.message && <p>{errors.username?.message}</p>}
       {/* <input defaultValue="Email" {...register("email")} />
