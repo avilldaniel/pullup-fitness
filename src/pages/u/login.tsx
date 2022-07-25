@@ -1,40 +1,42 @@
-import { NextPage } from "next";
-import { useRouter } from "next/router";
-import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import axios from "axios";
+import { NextPage } from "next";
+import { useState } from "react";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { loginSchema } from "../../schemas/zodSchemas";
 
 const Login: NextPage = () => {
-  const router = useRouter();
+  const [invalidMsg, setInvalidMsg] = useState("");
 
-  const schema = z.object({
-    username: z.string().max(4, "Exceeds max length of 4."),
-    // email: z.string().email("Incorrect email"),
-    // password: z.string().startsWith("a", "Password must start with'a'"),
-  });
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(schema) });
-  // const onSubmit = data => console.log(data);
-  // console.log("errors:", errors);
+  } = useForm({ resolver: zodResolver(loginSchema) });
 
-  const loginSubmit: SubmitHandler<FieldValues> = (data) => {
-    // console.log("onSubmit:", data.username);
-    router.push(data.username);
+  const submitLogin: SubmitHandler<FieldValues> = async (data) => {
+    try {
+      const res = await axios.get(`/api/user/${data.login}`);
+      // update to: const {} = await axios.get('/api/get-user');
+      console.log(res);
+    } catch (e) {
+      console.log("");
+      console.log("");
+      // setInvalidMsg(e.response.data)
+    }
   };
-
   return (
-    <form onSubmit={handleSubmit(loginSubmit)}>
-      <input {...register("username")} />
-      {errors.username?.message && <p>{errors.username?.message}</p>}
-      {/* <input defaultValue="Email" {...register("email")} />
-      {errors.email?.message && <p>{errors.email.message}</p>}
-      <input {...register("password", { required: true })} />
-      {errors.password?.message && <p>{errors.password?.message}</p>} */}
-      <input type="submit" />
-    </form>
+    <>
+      <form onSubmit={handleSubmit(submitLogin)}>
+        <input
+          type="text"
+          {...register("login")}
+          placeholder="Email or username"
+        />
+        {/* <input type="password" /> */}
+        <input type="submit" value="Log In" />
+      </form>
+    </>
   );
 };
 

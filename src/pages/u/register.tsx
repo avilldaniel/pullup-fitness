@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { userSchema } from "../../schemas/zodUserSchema";
+import { userSchema } from "../../schemas/zodSchemas";
 import axios from "axios";
 import { useState } from "react";
 
@@ -59,9 +59,9 @@ const Register: NextPage = () => {
       console.log(
         `Account ${res.data.username} has been registered. Re-direct to user dashboard.`
       );
-    } catch (error: any) {
-      // console.error(error);
-      setInvalidMsg(error.response.data.target[0]);
+    } catch (e: any) {
+      // console.error(e);
+      setInvalidMsg(e.response.data.target[0]);
     }
   };
 
