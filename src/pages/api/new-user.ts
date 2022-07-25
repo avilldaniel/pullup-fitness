@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import * as z from "zod";
 import { prisma } from "../../utils/db";
+import { userSchema, Schema } from "../../schemas/zodUserSchema";
 
 // model User {
 //   id              Int               @id @default(autoincrement())
@@ -12,19 +13,19 @@ import { prisma } from "../../utils/db";
 //   workouts        Workout[]
 //   @@index([username])
 // }
-export const schema = z.object({
-  email: z.string().email().trim().max(50, "Email cannot exceed 50 characters"),
-  name: z
-    .string()
-    .min(1, "Name must be at least 1 character")
-    .max(50, "Name cannot exceed 50 characters")
-    .optional(),
-  username: z
-    .string()
-    .min(5, "Username must be at least 5 characters")
-    .max(50, "Username cannot exceed 50 characters"),
-});
-type Schema = z.infer<typeof schema>;
+// export const schema = z.object({
+//   email: z.string().email().trim().max(50, "Email cannot exceed 50 characters"),
+//   name: z
+//     .string()
+//     .min(1, "Name must be at least 1 character")
+//     .max(50, "Name cannot exceed 50 characters")
+//     .optional(),
+//   username: z
+//     .string()
+//     .min(5, "Username must be at least 5 characters")
+//     .max(50, "Username cannot exceed 50 characters"),
+// });
+// type Schema = z.infer<typeof schema>;
 
 export default async function handler(
   req: NextApiRequest,
@@ -32,7 +33,7 @@ export default async function handler(
 ) {
   // test if data in request is valid and formatted
   try {
-    const user = schema.parse(req.body);
+    const user = userSchema.parse(req.body);
     res.send(user);
 
     // if data passes validation, invoke db query with it
