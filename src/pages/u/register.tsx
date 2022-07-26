@@ -4,9 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { userSchema } from "../../schemas/zodSchemas";
 import axios from "axios";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const Register: NextPage = () => {
-  // const router = useRouter();
+  const router = useRouter();
 
   // model User {
   //   id              Int               @id @default(autoincrement())
@@ -52,13 +53,14 @@ const Register: NextPage = () => {
     //  if success, re-direct to user's new dashboard
     //  if fails, render invalid error
     try {
-      const res = await axios.post("/api/new-user", data);
+      const res = await axios.post("/api/user/new-user", data);
       setInvalidMsg("");
-      // USE ROUTER.PUSH HERE FOR REDIRECATION
-      console.log("res:", res);
-      console.log(
-        `Account ${res.data.username} has been registered. Re-direct to user dashboard.`
-      );
+      // console.log(
+      //   `Account ${res.data.username} has been registered. Re-direct to user dashboard.`
+      // );
+      const { username } = res.data;
+      // console.log("destructured username:", username);
+      router.push(`/u/${username}`);
     } catch (e: any) {
       // console.error(e);
       setInvalidMsg(e.response.data.target[0]);

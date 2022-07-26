@@ -9,7 +9,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { login } = req.query;
-  console.log("login:", login);
+  // console.log("login:", login);
   // check is not undefined and is in correct format
   if (login && typeof login == "string") {
     try {
@@ -20,7 +20,7 @@ export default async function handler(
           OR: [{ email: { equals: login } }, { username: { equals: login } }],
         },
       });
-      console.log("getUser:", getUser);
+      // console.log("getUser:", getUser);
       res.status(200).send(getUser);
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
