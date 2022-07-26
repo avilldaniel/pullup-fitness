@@ -8,10 +8,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // [login].ts
   const { login } = req.query;
   // console.log("login:", login);
-  // check is not undefined and is in correct format
-  if (login && typeof login == "string") {
+  // check login is not undefined and is in correct format
+  if (login && typeof login === "string") {
     try {
       // check if api query (login) matches with an existing user
       const getUser = await prisma.user.findFirstOrThrow({
@@ -21,7 +22,7 @@ export default async function handler(
         },
       });
       // console.log("getUser:", getUser);
-      res.status(200).send(getUser);
+      return res.status(200).send(getUser);
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === "P2002") {
@@ -32,5 +33,5 @@ export default async function handler(
       return res.status(400).send(e);
     }
   }
-  return res.status(400);
+  return res.status(400).send("Invalid request.");
 }

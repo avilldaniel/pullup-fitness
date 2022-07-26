@@ -1,6 +1,39 @@
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { Muscle_grp } from "@prisma/client";
+import { useState } from "react";
+
+const Username: NextPage = () => {
+  // convert list of enums into an array
+  const muscleGrps = Object.keys(Muscle_grp);
+  const [muscleGrp, setMuscleGrp] = useState(muscleGrps[0]);
+
+  const router = useRouter();
+  const { username } = router.query;
+
+  const handleMuscleGrp = (e: any) => {
+    setMuscleGrp(e.target.value);
+    // fetch exercise_stat depending on muscleGrp state
+  };
+
+  return (
+    <>
+      <div>Username: {username}</div>
+      <select onChange={handleMuscleGrp} value={muscleGrp}>
+        {muscleGrps.map((group, i) => {
+          return (
+            <option value={group} key={i}>
+              {group}
+            </option>
+          );
+        })}
+      </select>
+    </>
+  );
+};
+
+export default Username;
 
 // eventually, make it so that if the person visiting a user's
 // page is the actual authenticated user, it will display their dashboard
@@ -11,36 +44,3 @@ import axios from "axios";
 /***********************************************/
 // in the future, we'll implement being able to set
 // a user's profile to private or public
-
-const Username: NextPage = (context) => {
-  console.log("context:", context);
-  const router = useRouter();
-  const { username } = router.query;
-
-  return (
-    <>
-      <div>Username: {username}</div>
-    </>
-  );
-};
-
-export default Username;
-
-// SSR here, which will fetch data that would be most
-// relevant for a user to want to see on their dashboard
-// need to use getStaticPaths since it's a dynamic route
-// OR, research useSwr to see if client-side data fetching
-// would be more optimal for this
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  // fetch
-  // const res = await axios.get()
-  // const { username } = ctx;
-  console.log("ctx:", ctx);
-
-  return {
-    props: {
-      exercises: [],
-      exerciseStats: [],
-    },
-  };
-};

@@ -18,24 +18,27 @@ model User {
   username        String            @db.VarChar(50) @unique
   email           String            @db.VarChar(50) @unique
   name            String?           @db.VarChar(50)
-  exerciseStats   Exercise_stats[]  
+  exerciseStats   Exercise_stat[]  
   workouts        Workout[]
   @@index([username])
 }
 
 // TEST AGAINST:
 //  - duplicate [userId, exerciseName, sets]
-model Exercise_stats {
+model Exercise_stat {
   // id            Int       @id @default(autoincrement())
   @@id([userId, exerciseName, sets])
-  user          User      @relation(fields: [userId], references: [id])
+  user          User        @relation(fields: [userId], references: [id])
   userId        Int
-  exercise      Exercise  @relation(fields: [exerciseName], references: [name])
+  exercise      Exercise    @relation(fields: [exerciseName], references: [name])
   exerciseName  String
+  muscleGrp     Muscle_grp
   sets          Int
-  weight        Int?      @default(0) @db.Integer
-  reps          Int?      @default(1) @db.Integer
-  updatedAt     DateTime  @updatedAt
+  weight        Int?        @default(0) @db.Integer
+  reps          Int?        @default(1) @db.Integer
+  updatedAt     DateTime    @updatedAt
+  
+  @@index([muscleGrp])
 }
 
 // TEST AGAINST:
@@ -43,8 +46,8 @@ model Exercise_stats {
 model Exercise {
   id              Int                 @id @default(autoincrement())
   name            String              @db.VarChar(30) @unique
-  muscle_grp      Muscle_grp
-  exercise_stats  Exercise_stats[]
+  muscleGrp       Muscle_grp
+  exerciseStats   Exercise_stat[]
   workouts        Workout[]
 }
 

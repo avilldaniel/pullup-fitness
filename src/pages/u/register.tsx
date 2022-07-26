@@ -45,7 +45,7 @@ const Register: NextPage = () => {
     formState: { errors },
   } = useForm({ resolver: zodResolver(userSchema) });
 
-  // if form data passes Zod schema, handle submit by invoking api/new-user with the valid data
+  // if form data passes Zod schema, handle submit by invoking api/post-user with the valid data
   const newAccount: SubmitHandler<FieldValues> = async (data) => {
     console.log("onSubmit:", data);
 
@@ -53,7 +53,7 @@ const Register: NextPage = () => {
     //  if success, re-direct to user's new dashboard
     //  if fails, render invalid error
     try {
-      const res = await axios.post("/api/user/new-user", data);
+      const res = await axios.post("/api/user/post-user", data);
       setInvalidMsg("");
       // console.log(
       //   `Account ${res.data.username} has been registered. Re-direct to user dashboard.`
