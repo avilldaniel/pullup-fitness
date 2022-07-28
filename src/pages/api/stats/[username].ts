@@ -14,7 +14,7 @@ export default async function handler(
   console.log("req:", req);
   // get-stats-[username].ts
   const { username } = req.query;
-  console.log("username:", username);
+  // console.log("username:", username);
 
   // check is username is not undefined and is in correct format
   if (username && typeof username === "string") {
@@ -29,11 +29,14 @@ export default async function handler(
           },
         },
       });
-      console.log("getStats:", getStats.length);
+      // console.log("getStats:", getStats);
+      // console.log("getStats:", getStats.length);
+      console.log("typeof getStats:", typeof getStats);
       // check if user has saved exercise stats
       if (getStats.length) {
         return res.status(200).send(getStats);
       }
+      // else if (typeof getStats == [])
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === "P2002") {
@@ -44,5 +47,5 @@ export default async function handler(
       return res.status(400).send(e);
     }
   }
-  return res.status(400).send("Cannot perform request.");
+  return res.status(400).send("Invalid request.");
 }

@@ -1,26 +1,49 @@
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
-import axios from "axios";
 import { Muscle_grp } from "@prisma/client";
 import { useState } from "react";
+import useSWR from "swr";
+import statsFetcher from "../../fetchers/statsFetcher";
+import TableStats from "../../components/TableStats";
 
 const Username: NextPage = () => {
   // convert list of enums into an array
   const muscleGrps = Object.keys(Muscle_grp);
-  const [muscleGrp, setMuscleGrp] = useState(muscleGrps[0]);
 
+  // STATES
+  const [muscleGrp, setMuscleGrp] = useState("ALL");
+  const [statsArr, setStatsArr] = useState([]);
+
+  // ROUTER
   const router = useRouter();
   const { username } = router.query;
 
-  const handleMuscleGrp = (e: any) => {
+  const { data, error } = useSWR(
+    username && [`/api/stats/${username}`, setStatsArr],
+    statsFetcher,
+    {
+      onErrorRetry: (error) => {
+        // Never retry on 400.
+        if (error.status === 400) return;
+      },
+    }
+  );
+  // console.log("useSWR data:", data);
+  // console.log("useSWR error:", error);
+  // console.log("statsArr:", statsArr);
+
+  const handleMuscleGrp = async (e: any) => {
     setMuscleGrp(e.target.value);
-    // fetch exercise_stat depending on muscleGrp state
+    // console.log("e.target.value:", e.target.value);
+    // console.log("muscleGrp:", muscleGrp);
   };
 
   return (
     <>
       <div>Username: {username}</div>
+
       <select onChange={handleMuscleGrp} value={muscleGrp}>
+        <option value="ALL">ALL</option>
         {muscleGrps.map((group, i) => {
           return (
             <option value={group} key={i}>
@@ -29,6 +52,12 @@ const Username: NextPage = () => {
           );
         })}
       </select>
+
+      {!error ? (
+        <TableStats statsArr={statsArr} muscleGrp={muscleGrp} />
+      ) : (
+        <p>Cannot fetch data.</p>
+      )}
     </>
   );
 };
