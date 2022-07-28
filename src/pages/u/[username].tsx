@@ -1,7 +1,7 @@
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { Muscle_grp } from "@prisma/client";
-import { useState } from "react";
+import React, { useState } from "react";
 import useSWR from "swr";
 import statsFetcher from "../../fetchers/statsFetcher";
 import TableStats from "../../components/TableStats";
@@ -18,7 +18,7 @@ const Username: NextPage = () => {
   const router = useRouter();
   const { username } = router.query;
 
-  const { data, error } = useSWR(
+  const { error } = useSWR(
     username && [`/api/stats/${username}`, setStatsArr],
     statsFetcher,
     {
@@ -32,7 +32,7 @@ const Username: NextPage = () => {
   // console.log("useSWR error:", error);
   // console.log("statsArr:", statsArr);
 
-  const handleMuscleGrp = async (e: any) => {
+  const handleMuscleGrp = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     setMuscleGrp(e.target.value);
     // console.log("e.target.value:", e.target.value);
     // console.log("muscleGrp:", muscleGrp);
@@ -56,7 +56,11 @@ const Username: NextPage = () => {
       {!error ? (
         <TableStats statsArr={statsArr} muscleGrp={muscleGrp} />
       ) : (
-        <p>Cannot fetch data.</p>
+        <p>
+          Cannot fetch data. <br />
+          Implement way to differentiate if invalid user or user just doesn't
+          have any stats recorded. Can probably do after adding auth.
+        </p>
       )}
     </>
   );

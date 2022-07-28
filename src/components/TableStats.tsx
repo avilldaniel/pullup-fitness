@@ -1,12 +1,15 @@
-import React from "react";
+import { Exercise_stat } from "@prisma/client";
+import { ITableStats } from "../utils/types";
 
-const TableStats = ({ statsArr, muscleGrp }: any) => {
+const TableStats = ({ statsArr, muscleGrp }: ITableStats) => {
   // console.log("TableStats muscleGrp:", muscleGrp);
   // console.log("TableStats statsArr:", statsArr);
   let filteredArr = statsArr;
 
   if (muscleGrp !== "ALL") {
-    filteredArr = statsArr.filter((stat: any) => stat.muscleGrp == muscleGrp);
+    filteredArr = statsArr.filter(
+      (stat: Exercise_stat) => stat.muscleGrp == muscleGrp
+    );
   }
 
   return (
@@ -21,13 +24,13 @@ const TableStats = ({ statsArr, muscleGrp }: any) => {
             <th>Last Updated</th>
           </tr>
           {filteredArr &&
-            filteredArr.map((stat: any, key: any) => (
+            filteredArr.map((stat: Exercise_stat, key: number) => (
               <tr key={key}>
                 <td>{stat.exerciseName}</td>
                 <td>{stat.weight}</td>
                 <td>{stat.sets}</td>
                 <td>{stat.reps}</td>
-                <td>{stat.updatedAt}</td>
+                <td>{stat.updatedAt.toString().slice(0, 10)}</td>
               </tr>
             ))}
         </tbody>

@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userSchema } from "../../schemas/zodSchemas";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
