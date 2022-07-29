@@ -11,12 +11,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log("req:", req);
-  // get-stats-[username].ts
+  // console.log("req:", req);
+  // /api/stats/[username].ts
   const { username } = req.query;
   // console.log("username:", username);
 
-  // check is username is not undefined and is in correct format
+  // check if username is not undefined and is in correct format
   if (username && typeof username === "string") {
     try {
       // fetch all of user's exercise stats
@@ -31,12 +31,11 @@ export default async function handler(
       });
       // console.log("getStats:", getStats);
       // console.log("getStats:", getStats.length);
-      console.log("typeof getStats:", typeof getStats);
+      // console.log("typeof getStats:", typeof getStats);
       // check if user has saved exercise stats
       if (getStats.length) {
         return res.status(200).send(getStats);
       }
-      // else if (typeof getStats == [])
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === "P2002") {

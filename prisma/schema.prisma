@@ -30,15 +30,16 @@ model Exercise_stat {
   @@id([userId, exerciseName, sets])
   user          User        @relation(fields: [userId], references: [id])
   userId        Int
-  exercise      Exercise    @relation(fields: [exerciseName], references: [name])
+  exercise      Exercise    @relation(fields: [exerciseName, muscleGroup], references: [name, muscleGrp])
   exerciseName  String
-  muscleGrp     Muscle_grp
+  muscleGroup   Muscle_grp
+  // muscleGrp     Muscle_grp
   sets          Int
   weight        Int?        @default(0) @db.Integer
   reps          Int?        @default(1) @db.Integer
   updatedAt     DateTime    @updatedAt
   
-  @@index([muscleGrp])
+  // @@index([muscleGrp])
 }
 
 // TEST AGAINST:
@@ -49,6 +50,8 @@ model Exercise {
   muscleGrp       Muscle_grp
   exerciseStats   Exercise_stat[]
   workouts        Workout[]
+
+  @@unique([name, muscleGrp])
 }
 
 // TEST AGAINST:

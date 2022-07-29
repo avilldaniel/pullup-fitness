@@ -5,6 +5,8 @@ import React, { useState } from "react";
 import useSWR from "swr";
 import statsFetcher from "../../fetchers/statsFetcher";
 import TableStats from "../../components/TableStats";
+import OrangeLoader from "../../components/OrangeLoader";
+import { Select } from "@mantine/core";
 
 const Username: NextPage = () => {
   // convert list of enums into an array
@@ -17,8 +19,9 @@ const Username: NextPage = () => {
   // ROUTER
   const router = useRouter();
   const { username } = router.query;
+  // console.log("username:", username);
 
-  const { error } = useSWR(
+  const { data, error, isValidating } = useSWR(
     username && [`/api/stats/${username}`, setStatsArr],
     statsFetcher,
     {
@@ -32,33 +35,47 @@ const Username: NextPage = () => {
   // console.log("useSWR error:", error);
   // console.log("statsArr:", statsArr);
 
-  const handleMuscleGrp = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setMuscleGrp(e.target.value);
-    // console.log("e.target.value:", e.target.value);
-    // console.log("muscleGrp:", muscleGrp);
+  const handleMuscleGrp = (e: string) => {
+    setMuscleGrp(e);
   };
+  // const handleMuscleGrp = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   setMuscleGrp(e.target.value);
+  // };
+
+  const selectOptions = [{ value: "ALL", label: "All" }];
+  muscleGrps.map((group, i) => {
+    selectOptions.push({
+      value: `${group}`,
+      label: `${group[0].toUpperCase() + group.slice(1).toLowerCase()}`,
+    });
+  });
 
   return (
     <>
-      <div>Username: {username}</div>
+      <h1>Username: {username}</h1>
 
-      <select onChange={handleMuscleGrp} value={muscleGrp}>
-        <option value="ALL">ALL</option>
-        {muscleGrps.map((group, i) => {
-          return (
-            <option value={group} key={i}>
-              {group}
-            </option>
-          );
-        })}
-      </select>
+      {/* Select dropdown */}
+      <Select
+        label="Select a muscle group"
+        defaultValue="All"
+        value={muscleGrp}
+        onChange={handleMuscleGrp}
+        data={selectOptions}
+        // transition="pop-top-left"
+        transition="scale-y"
+        transitionDuration={100}
+        transitionTimingFunction="ease"
+      />
 
-      {!error ? (
+      {/* Table */}
+      {isValidating ? (
+        <OrangeLoader />
+      ) : data && !error ? (
         <TableStats statsArr={statsArr} muscleGrp={muscleGrp} />
       ) : (
         <p>
           Cannot fetch data. <br />
-          Implement way to differentiate if invalid user or user just doesn't
+          Implement way to differentiate if invalid user or user just doesnt
           have any stats recorded. Can probably do after adding auth.
         </p>
       )}
