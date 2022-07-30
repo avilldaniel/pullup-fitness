@@ -20,37 +20,44 @@ model User {
   name            String?           @db.VarChar(50)
   exerciseStats   Exercise_stat[]  
   workouts        Workout[]
+  create          Exercise[]
   @@index([username])
 }
 
 // TEST AGAINST:
-//  - duplicate [userId, exerciseName, sets]
+//  - duplicate [userId, exerciseName, creatorName]
 model Exercise_stat {
   // id            Int       @id @default(autoincrement())
-  @@id([userName, exerciseName])
+  @@id([userName, exerciseName, creatorName])
   user          User        @relation(fields: [userName], references: [username])
   userName      String
-  exercise      Exercise    @relation(fields: [exerciseName, muscleGroup], references: [name, muscleGrp])
+  exercise      Exercise    @relation(fields: [exerciseName, muscleGroup, creatorName], references: [name, muscleGrp, creator])
   exerciseName  String
   muscleGroup   Muscle_grp
-  sets          Int
+  creatorName   String
+  sets          Int         @default(3) @db.Integer
   weight        Int?        @default(0) @db.Integer
   reps          Int?        @default(1) @db.Integer
   updatedAt     DateTime    @updatedAt
   
-  // @@index([muscleGrp])
+  // @@index([userName, exerciseName])
 }
 
 // TEST AGAINST:
-//  - duplicate exercises
+//  - two different users should be able to create exercise with same exercise name
+//  - 
 model Exercise {
   id              Int                 @id @default(autoincrement())
-  name            String              @db.VarChar(30) @unique
+  name            String              @db.VarChar(30)
+  // name            String              @db.VarChar(30) @unique
   muscleGrp       Muscle_grp
   exerciseStats   Exercise_stat[]
   workouts        Workout[]
+  create          User                @relation(fields: [creator], references: [username])
+  creator         String
 
-  @@unique([name, muscleGrp])
+  // @@unique([name, muscleGrp])
+  @@unique([name, muscleGrp, creator])
 }
 
 // TEST AGAINST:

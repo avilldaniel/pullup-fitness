@@ -77,6 +77,7 @@ ITableStats) => {
 
   const updateStats = async ({
     username,
+    creatorName,
     exerciseName,
     newWeight,
     newSets,
@@ -91,6 +92,7 @@ ITableStats) => {
     // })
     const res = await axios.post("/api/stats/post-update", {
       username,
+      creatorName,
       exerciseName,
       newWeight,
       newSets,
@@ -109,12 +111,20 @@ ITableStats) => {
   // invoke when user hits save
   const onSave = ({
     username,
+    creatorName,
     exerciseName,
     newWeight,
     newSets,
     newReps,
   }: ITableRowUpdates) => {
-    updateStats({ username, exerciseName, newWeight, newSets, newReps });
+    updateStats({
+      username,
+      creatorName,
+      exerciseName,
+      newWeight,
+      newSets,
+      newReps,
+    });
   };
 
   // Reset state
@@ -199,7 +209,8 @@ ITableStats) => {
 
   return (
     <div>
-      <Table>
+      <Table fontSize="sm" horizontalSpacing={4} striped>
+        {/* <Table */}
         <thead>
           <tr>
             <th>Exercise</th>

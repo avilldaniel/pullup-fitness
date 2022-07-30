@@ -9,15 +9,24 @@ export default async function handler(
   res: NextApiResponse
 ) {
   // destructure from request body
-  const { username, exerciseName, newWeight, newSets, newReps } = req.body;
+  const { username, creatorName, exerciseName, newWeight, newSets, newReps } =
+    req.body;
   // let updateStat;
   try {
     await prisma.exercise_stat.update({
       // updateStat = await prisma.exercise_stat.update({
+      // where: {
+      //   userName_exerciseName: {
+      //     userName: username,
+      //     exerciseName: exerciseName,
+      //   },
+      // },
       where: {
-        userName_exerciseName: {
+        userName_exerciseName_creatorName: {
           userName: username,
           exerciseName: exerciseName,
+          creatorName: creatorName,
+          // creatorName: username || "admin",
         },
       },
       data: {
@@ -74,11 +83,16 @@ export default async function handler(
     // }
     const updatedArr = await prisma.exercise_stat.findMany({
       where: {
-        user: {
-          username: {
-            equals: username,
-          },
-        },
+        // user: {
+        //   username: {
+        //     equals: username,
+        //   },
+        // },
+        AND: { userName: { equals: username } },
+        OR: [
+          { creatorName: { equals: username } },
+          { creatorName: { equals: "admin" } },
+        ],
       },
     });
     console.log("updateStat:", updatedArr);

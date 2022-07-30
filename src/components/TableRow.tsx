@@ -31,7 +31,7 @@ const TableRow = ({
       {/* Weight */}
       <td>
         {inEditMode.status && inEditMode.rowKey === theKey ? (
-          <NumberInput value={weight} onChange={(e) => setWeight(e!)} />
+          <NumberInput value={weight} min={0} onChange={(e) => setWeight(e!)} />
         ) : (
           stat.weight
         )}
@@ -40,7 +40,7 @@ const TableRow = ({
       {/* Sets */}
       <td>
         {inEditMode.status && inEditMode.rowKey === theKey ? (
-          <NumberInput value={sets} onChange={(e) => setSets(e!)} />
+          <NumberInput value={sets} min={0} onChange={(e) => setSets(e!)} />
         ) : (
           stat.sets
         )}
@@ -49,7 +49,7 @@ const TableRow = ({
       {/* Reps */}
       <td>
         {inEditMode.status && inEditMode.rowKey === theKey ? (
-          <NumberInput value={reps} onChange={(e) => setReps(e!)} />
+          <NumberInput value={reps} min={0} onChange={(e) => setReps(e!)} />
         ) : (
           stat.reps
         )}
@@ -66,6 +66,7 @@ const TableRow = ({
               onClick={() =>
                 onSave({
                   username: username,
+                  creatorName: stat.creatorName,
                   exerciseName: stat.exerciseName,
                   newWeight: weight,
                   newSets: sets,

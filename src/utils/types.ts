@@ -15,6 +15,7 @@ export interface IOnEdit {
 
 export interface ITableRowUpdates {
   username: string;
+  creatorName: string;
   exerciseName: string;
   newWeight: number;
   newSets: number;
