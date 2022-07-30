@@ -10,9 +10,10 @@ export default async function handler(
 ) {
   // destructure from request body
   const { username, exerciseName, newWeight, newSets, newReps } = req.body;
-  let updateStat;
+  // let updateStat;
   try {
-    updateStat = await prisma.exercise_stat.update({
+    await prisma.exercise_stat.update({
+      // updateStat = await prisma.exercise_stat.update({
       where: {
         userName_exerciseName: {
           userName: username,
@@ -71,7 +72,17 @@ export default async function handler(
     //   default:
     //     return res.status(400).send("Invalid request.");
     // }
-    return res.status(200).send(updateStat);
+    const updatedArr = await prisma.exercise_stat.findMany({
+      where: {
+        user: {
+          username: {
+            equals: username,
+          },
+        },
+      },
+    });
+    console.log("updateStat:", updatedArr);
+    return res.status(200).send(updatedArr);
     // return res.status(200).send(JSON.stringify(updateStat));
   } catch (e) {
     // handle error when invalid data is used in prisma schema query

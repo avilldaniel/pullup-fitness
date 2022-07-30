@@ -53,8 +53,11 @@ export interface ITableRow {
 }
 
 export interface ITableStats {
-  statsArr: never[];
   muscleGrp: string;
   username: string;
-  setFetchingData: Dispatch<React.SetStateAction<boolean>>;
+  filteredArr: never[];
+  setFilteredArr: Dispatch<React.SetStateAction<never[]>>;
+  // statsArr: never[];
+  // setStatsArr: Dispatch<React.SetStateAction<never[]>>;
+  // setFetchingData: Dispatch<React.SetStateAction<boolean>>;
 }

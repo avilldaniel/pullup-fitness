@@ -14,8 +14,9 @@ const Username: NextPage = () => {
 
   // STATES
   const [muscleGrp, setMuscleGrp] = useState("ALL");
-  const [statsArr, setStatsArr] = useState([]);
-  const [fetchingData, setFetchingData] = useState(true);
+  const [filteredArr, setFilteredArr] = useState([]);
+  // const [statsArr, setStatsArr] = useState([]);
+  // const [fetchingData, setFetchingData] = useState(true);
 
   // ROUTER
   const router = useRouter();
@@ -23,9 +24,7 @@ const Username: NextPage = () => {
   // console.log("username:", username);
 
   const { data, error, isValidating } = useSWR(
-    fetchingData
-      ? username && [`/api/stats/${username}`, setStatsArr, setFetchingData]
-      : null,
+    username && [`/api/stats/${username}`, setFilteredArr],
     statsFetcher,
     {
       onErrorRetry: (error) => {
@@ -34,9 +33,19 @@ const Username: NextPage = () => {
       },
     }
   );
-  console.log("useSWR data:", data);
-  console.log("useSWR error:", error);
-  console.log("statsArr:", statsArr);
+  // const { data, error, isValidating } = useSWR(
+  //   username && [`/api/stats/${username}`, setStatsArr],
+  //   statsFetcher,
+  //   {
+  //     onErrorRetry: (error) => {
+  //       // Never retry on 400.
+  //       if (error.status === 400) return;
+  //     },
+  //   }
+  // );
+  // console.log("useSWR data:", data);
+  // console.log("useSWR error:", error);
+  // console.log("statsArr:", statsArr);
 
   const handleMuscleGrp = (e: string) => {
     setMuscleGrp(e);
@@ -70,13 +79,16 @@ const Username: NextPage = () => {
       {/* Table */}
       {isValidating ? (
         <OrangeLoader />
-      ) : statsArr && typeof username === "string" ? (
-        // ) : data && !error && typeof username === "string" ? (
+      ) : // ) : statsArr && typeof username === "string" ? (
+      data && !error && typeof username === "string" ? (
         <TableStats
-          statsArr={statsArr}
           muscleGrp={muscleGrp}
           username={username}
-          setFetchingData={setFetchingData}
+          filteredArr={filteredArr}
+          setFilteredArr={setFilteredArr}
+          // statsArr={statsArr}
+          // setStatsArr={setStatsArr}
+          // setFetchingData={setFetchingData}
         />
       ) : (
         <p>

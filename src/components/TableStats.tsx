@@ -1,6 +1,5 @@
-import { ActionIcon, NumberInput, Table } from "@mantine/core";
+import { Table } from "@mantine/core";
 import { Exercise_stat } from "@prisma/client";
-import { IconBarbell } from "@tabler/icons";
 import { useState } from "react";
 import {
   IEditMode,
@@ -9,17 +8,35 @@ import {
   ITableStats,
 } from "../utils/types";
 import TableRow from "./TableRow";
-import { prisma } from "../utils/db";
 import axios from "axios";
+import useSWR from "swr";
+import statsFetcher from "../fetchers/statsFetcher";
 
 const TableStats = ({
-  statsArr,
+  // statsArr,
   muscleGrp,
   username,
-  setFetchingData,
-}: ITableStats) => {
+  filteredArr,
+  setFilteredArr,
+}: // setStatsArr,
+// setFetchingData,
+ITableStats) => {
   // console.log("TableStats muscleGrp:", muscleGrp);
-  // console.log("TableStats statsArr:", statsArr);
+  // const [filteredArr, setFilteredArr] = useState([]);
+  const { data, error, isValidating } = useSWR(
+    muscleGrp !== "ALL" && username
+      ? [`/api/stats/${username}/${muscleGrp}`, setFilteredArr]
+      : [`/api/stats/${username}`, setFilteredArr],
+    statsFetcher,
+    {
+      onErrorRetry: (error) => {
+        // Never retry on 400.
+        if (error.status === 400) return;
+      },
+    }
+  );
+  // console.log("useSWR data:", data);
+  // console.log("useSWR error:", error);
 
   /****************************************************************************/
   // State variables which allow table to be dynamic and editable
@@ -36,7 +53,7 @@ const TableStats = ({
       status: true,
       rowKey: id,
     });
-    console.log("inEditMode:", inEditMode);
+    // console.log("inEditMode:", inEditMode);
     setWeight(weight);
     setSets(sets);
     setReps(reps);
@@ -80,7 +97,11 @@ const TableStats = ({
       newReps,
     });
     console.log("res.data:", res.data);
-    setFetchingData(true);
+
+    // re-fetch data to re-render new data
+    setFilteredArr(res.data);
+    // console.log("trying to append res.data:", filteredArr);
+
     // Reset state after posting
     onCancel();
   };
@@ -109,19 +130,21 @@ const TableStats = ({
   };
   /****************************************************************************/
 
-  let filteredArr = statsArr;
-  if (muscleGrp !== "ALL") {
-    filteredArr = statsArr.filter(
-      (stat: Exercise_stat) => stat.muscleGroup == muscleGrp
-    );
-  }
-  // if (muscleGrp !== "ALL" && filtering) {
-  //   setFilterArr(statsArr.filter(
+  // let filteredArr = data;
+  // if (muscleGrp !== "ALL") {
+  //   filteredArr = filteredArr.filter(
   //     (stat: Exercise_stat) => stat.muscleGroup == muscleGrp
-  //   ));
+  //   );
+  // }
+  // let filteredArr = statsArr;
+  // if (muscleGrp !== "ALL") {
+  //   filteredArr = statsArr.filter(
+  //     (stat: Exercise_stat) => stat.muscleGroup == muscleGrp
+  //   );
   // }
 
   const rows = filteredArr.map((stat: Exercise_stat, key: number) => {
+    // const rows = filteredArr.map((stat: Exercise_stat, key: number) => {
     // const d = new Date(stat.updatedAt);
     // const date = d.toLocaleDateString("en-US");
 
