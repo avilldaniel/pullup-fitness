@@ -3,14 +3,12 @@ import { Dispatch, SetStateAction } from "react";
 
 export default async function statsFetcher(
   url: string,
-  setStatsArr: Dispatch<SetStateAction<never[]>>,
-  setFetchingData: Dispatch<React.SetStateAction<boolean>>
+  setStatsArr: Dispatch<SetStateAction<never[]>>
 ) {
   // console.log("url:", url);
   const { data } = await axios.get(url);
   // console.log("data:", data);
   setStatsArr(data);
-  setFetchingData(false);
   return data;
   // setTimeout(() => {
   //   setStatsArr(data);

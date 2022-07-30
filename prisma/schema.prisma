@@ -27,13 +27,12 @@ model User {
 //  - duplicate [userId, exerciseName, sets]
 model Exercise_stat {
   // id            Int       @id @default(autoincrement())
-  @@id([userId, exerciseName, sets])
-  user          User        @relation(fields: [userId], references: [id])
-  userId        Int
+  @@id([userName, exerciseName])
+  user          User        @relation(fields: [userName], references: [username])
+  userName      String
   exercise      Exercise    @relation(fields: [exerciseName, muscleGroup], references: [name, muscleGrp])
   exerciseName  String
   muscleGroup   Muscle_grp
-  // muscleGrp     Muscle_grp
   sets          Int
   weight        Int?        @default(0) @db.Integer
   reps          Int?        @default(1) @db.Integer

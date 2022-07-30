@@ -15,6 +15,7 @@ const Username: NextPage = () => {
   // STATES
   const [muscleGrp, setMuscleGrp] = useState("ALL");
   const [statsArr, setStatsArr] = useState([]);
+  const [fetchingData, setFetchingData] = useState(true);
 
   // ROUTER
   const router = useRouter();
@@ -22,7 +23,9 @@ const Username: NextPage = () => {
   // console.log("username:", username);
 
   const { data, error, isValidating } = useSWR(
-    username && [`/api/stats/${username}`, setStatsArr],
+    fetchingData
+      ? username && [`/api/stats/${username}`, setStatsArr, setFetchingData]
+      : null,
     statsFetcher,
     {
       onErrorRetry: (error) => {
@@ -31,16 +34,13 @@ const Username: NextPage = () => {
       },
     }
   );
-  // console.log("useSWR data:", data);
-  // console.log("useSWR error:", error);
-  // console.log("statsArr:", statsArr);
+  console.log("useSWR data:", data);
+  console.log("useSWR error:", error);
+  console.log("statsArr:", statsArr);
 
   const handleMuscleGrp = (e: string) => {
     setMuscleGrp(e);
   };
-  // const handleMuscleGrp = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   setMuscleGrp(e.target.value);
-  // };
 
   const selectOptions = [{ value: "ALL", label: "All" }];
   muscleGrps.map((group, i) => {
@@ -70,8 +70,14 @@ const Username: NextPage = () => {
       {/* Table */}
       {isValidating ? (
         <OrangeLoader />
-      ) : data && !error ? (
-        <TableStats statsArr={statsArr} muscleGrp={muscleGrp} />
+      ) : statsArr && typeof username === "string" ? (
+        // ) : data && !error && typeof username === "string" ? (
+        <TableStats
+          statsArr={statsArr}
+          muscleGrp={muscleGrp}
+          username={username}
+          setFetchingData={setFetchingData}
+        />
       ) : (
         <p>
           Cannot fetch data. <br />
