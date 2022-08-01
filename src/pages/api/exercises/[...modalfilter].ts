@@ -25,7 +25,7 @@ export default async function handler(
         ],
       },
     });
-    console.log("muscleExercises:", muscleExercises);
+    // console.log("muscleExercises:", muscleExercises);
 
     // get user's exercises
     const userExercises = await prisma.exercise.findMany({
@@ -37,11 +37,17 @@ export default async function handler(
         },
       },
     });
-    console.log("userExercises:", userExercises);
+    // console.log("userExercises:", userExercises);
 
-    // get difference of the two arrays, return it
+    // get difference of the two arrays of objects, return it
+    const diffArray = muscleExercises.filter((muscExercise) => {
+      return !userExercises.some((userExercise) => {
+        return userExercise.id === muscExercise.id;
+      });
+    });
+    // console.log("diffArray:", diffArray);
 
-    return res.status(420).send("testing");
+    return res.status(200).send(diffArray);
   } catch (e) {
     console.error(e);
   }

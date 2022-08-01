@@ -2,6 +2,8 @@ import { Exercise_stat } from "@prisma/client";
 import { Dispatch, SetStateAction } from "react";
 
 export interface IModalExer {
+  username: string;
+  muscleGrp: string;
   modalOpen: boolean;
   setModalOpen: Dispatch<SetStateAction<boolean>>;
 }

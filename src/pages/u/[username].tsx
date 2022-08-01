@@ -106,9 +106,14 @@ const Username: NextPage = () => {
           onClick={() => setModalOpen(true)}
         >{`Add ${muscleGrp.toLowerCase()} exercise`}</Button>
       )}
-      {modalOpen && (
+      {modalOpen && typeof username === "string" && (
         // pass in array of all exercises where: muscleGroup = muscleGrp AND creator = "admin" AND filterArr
-        <ModalExercise modalOpen={modalOpen} setModalOpen={setModalOpen} />
+        <ModalExercise
+          username={username}
+          muscleGrp={muscleGrp}
+          modalOpen={modalOpen}
+          setModalOpen={setModalOpen}
+        />
       )}
     </>
   );

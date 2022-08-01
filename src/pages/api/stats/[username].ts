@@ -32,7 +32,7 @@ export default async function handler(
           ],
         },
       });
-      console.log("getStats:", getStats);
+      // console.log("getStats:", getStats);
       // console.log("getStats:", getStats.length);
       // console.log("typeof getStats:", typeof getStats);
       // check if user has saved exercise stats
