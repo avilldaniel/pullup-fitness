@@ -6,19 +6,18 @@ import useSWR from "swr";
 import statsFetcher from "../../fetchers/statsFetcher";
 import TableStats from "../../components/TableStats";
 import OrangeLoader from "../../components/OrangeLoader";
-import { Button, Select } from "@mantine/core";
-import ModalExercise from "../../components/ModalExercise";
+import { Select } from "@mantine/core";
+import ModalExers from "../../components/ModalExers";
 
 const Username: NextPage = () => {
-  // convert list of enums into an array
+  // Convert list of enums into an array
   const muscleGrps = Object.keys(Muscle_grp);
 
-  // STATES
+  // States
   const [muscleGrp, setMuscleGrp] = useState("ALL");
   const [filteredArr, setFilteredArr] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
 
-  // ROUTER
+  // Router
   const router = useRouter();
   const { username } = router.query;
   // console.log("username:", username);
@@ -33,23 +32,9 @@ const Username: NextPage = () => {
       },
     }
   );
-  // const { data, error, isValidating } = useSWR(
-  //   username && [`/api/stats/${username}`, setStatsArr],
-  //   statsFetcher,
-  //   {
-  //     onErrorRetry: (error) => {
-  //       // Never retry on 400.
-  //       if (error.status === 400) return;
-  //     },
-  //   }
-  // );
   // console.log("useSWR data:", data);
   // console.log("useSWR error:", error);
   // console.log("statsArr:", statsArr);
-
-  const handleMuscleGrp = (e: string) => {
-    setMuscleGrp(e);
-  };
 
   const selectOptions = [{ value: "ALL", label: "All" }];
   muscleGrps.map((group, i) => {
@@ -68,9 +53,9 @@ const Username: NextPage = () => {
         label="Select a muscle group"
         defaultValue="All"
         value={muscleGrp}
-        onChange={handleMuscleGrp}
+        // onChange={handleMuscleGrp}
+        onChange={(e: string) => setMuscleGrp(e)}
         data={selectOptions}
-        // transition="pop-top-left"
         transition="scale-y"
         transitionDuration={100}
         transitionTimingFunction="ease"
@@ -79,16 +64,12 @@ const Username: NextPage = () => {
       {/* Table */}
       {isValidating ? (
         <OrangeLoader />
-      ) : // ) : statsArr && typeof username === "string" ? (
-      data && !error && typeof username === "string" ? (
+      ) : data && !error && typeof username === "string" ? (
         <TableStats
           muscleGrp={muscleGrp}
           username={username}
           filteredArr={filteredArr}
           setFilteredArr={setFilteredArr}
-          // statsArr={statsArr}
-          // setStatsArr={setStatsArr}
-          // setFetchingData={setFetchingData}
         />
       ) : (
         <p>
@@ -98,22 +79,9 @@ const Username: NextPage = () => {
         </p>
       )}
 
-      {/* Add exercise button + modal */}
-      {muscleGrp !== "ALL" && (
-        <Button
-          variant="gradient"
-          gradient={{ from: "#d9480f", to: "#f08c00" }}
-          onClick={() => setModalOpen(true)}
-        >{`Add ${muscleGrp.toLowerCase()} exercise`}</Button>
-      )}
-      {modalOpen && typeof username === "string" && (
-        // pass in array of all exercises where: muscleGroup = muscleGrp AND creator = "admin" AND filterArr
-        <ModalExercise
-          username={username}
-          muscleGrp={muscleGrp}
-          modalOpen={modalOpen}
-          setModalOpen={setModalOpen}
-        />
+      {/* Modal buttons to add exercises */}
+      {muscleGrp !== "ALL" && typeof username === "string" && (
+        <ModalExers username={username} muscleGrp={muscleGrp} />
       )}
     </>
   );

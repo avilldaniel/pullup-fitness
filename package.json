@@ -14,6 +14,7 @@
     "@hookform/resolvers": "^2.9.6",
     "@mantine/core": "^5.0.0",
     "@mantine/hooks": "^5.0.0",
+    "@mantine/modals": "^5.0.2",
     "@mantine/next": "^5.0.0",
     "@prisma/client": "^4.1.0",
     "@tabler/icons": "^1.78.1",
