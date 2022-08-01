@@ -1,6 +1,11 @@
 import { Exercise_stat } from "@prisma/client";
 import { Dispatch, SetStateAction } from "react";
 
+export interface IModalExer {
+  modalOpen: boolean;
+  setModalOpen: Dispatch<SetStateAction<boolean>>;
+}
+
 export interface IEditMode {
   status: boolean;
   rowKey: number | null;

@@ -6,7 +6,8 @@ import useSWR from "swr";
 import statsFetcher from "../../fetchers/statsFetcher";
 import TableStats from "../../components/TableStats";
 import OrangeLoader from "../../components/OrangeLoader";
-import { Select } from "@mantine/core";
+import { Button, Select } from "@mantine/core";
+import ModalExercise from "../../components/ModalExercise";
 
 const Username: NextPage = () => {
   // convert list of enums into an array
@@ -15,8 +16,7 @@ const Username: NextPage = () => {
   // STATES
   const [muscleGrp, setMuscleGrp] = useState("ALL");
   const [filteredArr, setFilteredArr] = useState([]);
-  // const [statsArr, setStatsArr] = useState([]);
-  // const [fetchingData, setFetchingData] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
 
   // ROUTER
   const router = useRouter();
@@ -96,6 +96,19 @@ const Username: NextPage = () => {
           Implement way to differentiate if invalid user or user just doesnt
           have any stats recorded. Can probably do after adding auth.
         </p>
+      )}
+
+      {/* Add exercise button + modal */}
+      {muscleGrp !== "ALL" && (
+        <Button
+          variant="gradient"
+          gradient={{ from: "#d9480f", to: "#f08c00" }}
+          onClick={() => setModalOpen(true)}
+        >{`Add ${muscleGrp.toLowerCase()} exercise`}</Button>
+      )}
+      {modalOpen && (
+        // pass in array of all exercises where: muscleGroup = muscleGrp AND creator = "admin" AND filterArr
+        <ModalExercise modalOpen={modalOpen} setModalOpen={setModalOpen} />
       )}
     </>
   );

@@ -13,14 +13,11 @@ import useSWR from "swr";
 import statsFetcher from "../fetchers/statsFetcher";
 
 const TableStats = ({
-  // statsArr,
   muscleGrp,
   username,
   filteredArr,
   setFilteredArr,
-}: // setStatsArr,
-// setFetchingData,
-ITableStats) => {
+}: ITableStats) => {
   // console.log("TableStats muscleGrp:", muscleGrp);
   // const [filteredArr, setFilteredArr] = useState([]);
   const { data, error, isValidating } = useSWR(
@@ -57,22 +54,6 @@ ITableStats) => {
     setWeight(weight);
     setSets(sets);
     setReps(reps);
-    // switch (field) {
-    //   case "weight":
-    //     console.log("field is weight");
-    //     setWeight(unit);
-    //     break;
-    //   case "sets":
-    //     console.log("field is sets");
-    //     setSets(unit);
-    //     break;
-    //   case "reps":
-    //     console.log("field is reps");
-    //     setReps(unit);
-    //     break;
-    //   default:
-    //     break;
-    // }
   };
 
   const updateStats = async ({
@@ -83,13 +64,6 @@ ITableStats) => {
     newSets,
     newReps,
   }: ITableRowUpdates) => {
-    // const res = await axios.post('/api/stats/post-update', {
-    //   username: username,
-    //   exerciseName: exerciseName,
-    //   newWeight: newWeight,
-    //   newSets: newSets,
-    //   newReps: newReps
-    // })
     const res = await axios.post("/api/stats/post-update", {
       username,
       creatorName,
@@ -98,7 +72,7 @@ ITableStats) => {
       newSets,
       newReps,
     });
-    console.log("res.data:", res.data);
+    // console.log("res.data:", res.data);
 
     // re-fetch data to re-render new data
     setFilteredArr(res.data);
@@ -140,24 +114,7 @@ ITableStats) => {
   };
   /****************************************************************************/
 
-  // let filteredArr = data;
-  // if (muscleGrp !== "ALL") {
-  //   filteredArr = filteredArr.filter(
-  //     (stat: Exercise_stat) => stat.muscleGroup == muscleGrp
-  //   );
-  // }
-  // let filteredArr = statsArr;
-  // if (muscleGrp !== "ALL") {
-  //   filteredArr = statsArr.filter(
-  //     (stat: Exercise_stat) => stat.muscleGroup == muscleGrp
-  //   );
-  // }
-
   const rows = filteredArr.map((stat: Exercise_stat, key: number) => {
-    // const rows = filteredArr.map((stat: Exercise_stat, key: number) => {
-    // const d = new Date(stat.updatedAt);
-    // const date = d.toLocaleDateString("en-US");
-
     // console.log("stat & key:", stat, key);
     return (
       <TableRow
@@ -178,33 +135,6 @@ ITableStats) => {
         reps={reps!}
       />
     );
-    // <tr key={key}>
-    //   <td>{stat.exerciseName}</td>
-    //   <td>
-    //     <NumberInput value={stat.weight!} disabled color="" />
-    //   </td>
-    //   <td>
-    //     <NumberInput value={stat.sets!} disabled />
-    //   </td>
-    //   <td>
-    //     <NumberInput value={stat.reps!} disabled />
-    //   </td>
-    //   {/* <td>{stat.weight}</td>
-    //   <td>{stat.sets}</td>
-    //   <td>{stat.reps}</td> */}
-    //   <td>{date}</td>
-    //   {/* <td>{stat.updatedAt.toString().slice(0, 10)}</td> */}
-    //   <td>
-    //     <ActionIcon
-    //       // onClick={}
-    //       radius="md"
-    //       size="sm"
-    //       aria-label="Modify stats"
-    //     >
-    //       <IconBarbell />
-    //     </ActionIcon>
-    //   </td>
-    // </tr>
   });
 
   return (

@@ -76,6 +76,7 @@ const TableRow = ({
               radius="md"
               size="md"
               aria-label="Save changes"
+              title="Save"
             >
               <IconCircleCheck color="green" />
             </ActionIcon>
@@ -85,6 +86,7 @@ const TableRow = ({
               radius="md"
               size="md"
               aria-label="Cancel changes"
+              title="Cancel"
             >
               <IconCircleX color="red" />
             </ActionIcon>
@@ -102,6 +104,7 @@ const TableRow = ({
             radius="md"
             size="sm"
             aria-label="Modify stats"
+            title="Edit"
           >
             <IconBarbell />
           </ActionIcon>

@@ -5,8 +5,8 @@ export const userSchema = z.object({
   name: z
     .string()
     .min(1, "Name must be at least 1 character")
-    .max(50, "Name cannot exceed 50 characters")
-    .optional(),
+    .max(50, "Name cannot exceed 50 characters"),
+  // .optional(),
   username: z
     .string()
     .min(5, "Username must be at least 5 characters")
