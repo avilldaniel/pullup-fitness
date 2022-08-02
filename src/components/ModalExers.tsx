@@ -1,4 +1,4 @@
-import { Button, List, TextInput } from "@mantine/core";
+import { Button, Checkbox, TextInput } from "@mantine/core";
 import { openModal, closeAllModals } from "@mantine/modals";
 import { Exercise } from "@prisma/client";
 import { useState } from "react";
@@ -15,17 +15,26 @@ const ModalExers = ({ username, muscleGrp }: IModalExers) => {
   );
   // console.log("data:", data);
 
-  // States
-  const [presetExer, setPresetExer] = useState<string[]>([]);
-
   // Convert list items to JSX to insert into <List>
-  let listItems: React.ReactNode[];
+  let checkItems: React.ReactNode[];
   if (data && !error) {
-    listItems = data.map((exercise: Exercise) => {
-      return <List.Item key={exercise.id}>{exercise.name}</List.Item>;
+    checkItems = data.map((exercise: Exercise) => {
+      return (
+        <Checkbox
+          key={exercise.id}
+          value={exercise.name}
+          label={exercise.name}
+        />
+      );
     });
   }
 
+  // States
+  const [presetExer, setPresetExer] = useState<string[]>();
+
+  /* --------------------------------PRESET EXERCISE----------------------------------- */
+
+  /* --------------------------------CUSTOM EXERCISE----------------------------------- */
   // run when custom exercise button is clicked, which will trigger a focus trap <Popover>
   // Popover will include a <Form>, or just <TextInput onSubmit?>
   const handleNewExer = async () => {
@@ -40,6 +49,7 @@ const ModalExers = ({ username, muscleGrp }: IModalExers) => {
   // axios.post will call Next API route which will query db
   // if query fails, prompt user
   // else if query is successful, notify user, then close modal
+
   return (
     <>
       {/* Add preset exercise */}
@@ -47,13 +57,24 @@ const ModalExers = ({ username, muscleGrp }: IModalExers) => {
         onClick={() => {
           openModal({
             title: `Add ${muscleGrp.toLowerCase()} exercise`,
+            onClose() {
+              setPresetExer([]);
+            },
             children: (
               <>
                 {/* List available exercises to add */}
                 {isValidating ? (
                   <OrangeLoader />
                 ) : data.length ? (
-                  <List listStyleType="none">{listItems}</List>
+                  <Checkbox.Group
+                    value={presetExer}
+                    onChange={setPresetExer}
+                    orientation="vertical"
+                    spacing="md"
+                    size="md"
+                  >
+                    {checkItems}
+                  </Checkbox.Group>
                 ) : (
                   <p>
                     All preset {muscleGrp.toLowerCase()} exercises have already
