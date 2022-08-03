@@ -33,11 +33,6 @@ const Login: NextPage = () => {
     <>
       {/* Login form */}
       <form onSubmit={handleSubmit(submitLogin)}>
-        {/* <input
-          type="text"
-          {...register("login")}
-          placeholder="Email or username"
-        /> */}
         <TextInput
           placeholder="Email or username"
           variant="filled"
@@ -56,7 +51,6 @@ const Login: NextPage = () => {
           {...register("password")}
         /> */}
 
-        {/* <input type="submit" value="Log In" /> */}
         <Button type="submit" color="orange">
           Log In
         </Button>

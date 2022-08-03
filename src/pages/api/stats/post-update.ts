@@ -14,13 +14,6 @@ export default async function handler(
   // let updateStat;
   try {
     await prisma.exercise_stat.update({
-      // updateStat = await prisma.exercise_stat.update({
-      // where: {
-      //   userName_exerciseName: {
-      //     userName: username,
-      //     exerciseName: exerciseName,
-      //   },
-      // },
       where: {
         userName_exerciseName_creatorName: {
           userName: username,
@@ -35,52 +28,7 @@ export default async function handler(
         reps: newReps,
       },
     });
-    // switch (field) {
-    //   case "weight":
-    //     // console.log("updating weight from API");
-    //     updateStat = await prisma.exercise_stat.update({
-    //       where: {
-    //         userName_exerciseName: {
-    //           userName: username,
-    //           exerciseName: exerciseName,
-    //         },
-    //       },
-    //       data: {
-    //         weight: unit,
-    //       },
-    //     });
-    //     break;
-    //   case "sets":
-    //     // console.log("updating sets from API");
-    //     updateStat = await prisma.exercise_stat.update({
-    //       where: {
-    //         userName_exerciseName: {
-    //           userName: username,
-    //           exerciseName: exerciseName,
-    //         },
-    //       },
-    //       data: {
-    //         sets: unit,
-    //       },
-    //     });
-    //     break;
-    //   case "reps":
-    //     // console.log("updating reps from API");
-    //     updateStat = await prisma.exercise_stat.update({
-    //       where: {
-    //         userName_exerciseName: {
-    //           userName: username,
-    //           exerciseName: exerciseName,
-    //         },
-    //       },
-    //       data: {
-    //         reps: unit,
-    //       },
-    //     });
-    //     break;
-    //   default:
-    //     return res.status(400).send("Invalid request.");
-    // }
+
     const updatedArr = await prisma.exercise_stat.findMany({
       where: {
         // user: {
