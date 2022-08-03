@@ -1,5 +1,4 @@
-import { Button, Checkbox, TextInput } from "@mantine/core";
-import { openModal, closeAllModals } from "@mantine/modals";
+import { Button, Checkbox, Modal, TextInput } from "@mantine/core";
 import { Exercise } from "@prisma/client";
 import axios from "axios";
 import { FormEvent, useState } from "react";
@@ -12,7 +11,8 @@ const ModalExers = ({ username, muscleGrp }: IModalExers) => {
   // States
   const [presetExer, setPresetExer] = useState<string[]>([]);
   const [customExer, setCustomExer] = useState<string>("");
-  // console.log("presetExer idk:", presetExer);
+  const [presetOpened, setPresetOpened] = useState(false);
+  const [customOpened, setCustomOpened] = useState(false);
 
   // useSWR, fetch array that is to be rendered inside Modal, which will include radio buttons
   const { data, error, isValidating } = useSWR(
@@ -40,7 +40,6 @@ const ModalExers = ({ username, muscleGrp }: IModalExers) => {
   // will iterate through each exercise name and it to user's exercise stats w/ the
   // default weight, sets, and reps.
   const handleAddedExer = async (e: FormEvent<HTMLFormElement>) => {
-    // const handleAddedExer = async () => {
     e.preventDefault();
     try {
       // POST request only needs username and the names[] of the exercises to be added
@@ -55,7 +54,7 @@ const ModalExers = ({ username, muscleGrp }: IModalExers) => {
       // after db query, setPresetExer([]) and close modal
       // test if stats were re-rendered with new exercises
       setPresetExer([]);
-      closeAllModals();
+      setPresetOpened(false);
     } catch (e) {
       // if not able to query db with new exercises,
       // prompt user for "Unable to add new exercises. Please try refreshing."
@@ -79,7 +78,7 @@ const ModalExers = ({ username, muscleGrp }: IModalExers) => {
 
       // after db query, close modal; test if stats were re-rendered with new exercises
       setCustomExer("");
-      closeAllModals();
+      setCustomOpened(false);
     } catch (e) {
       // if not able to query db with new exercise (ex. exercise name already exists),
       // prompt user for "Invalid exercise."
@@ -87,96 +86,86 @@ const ModalExers = ({ username, muscleGrp }: IModalExers) => {
     }
   };
 
-  // on Popover Form submit, will only need name of new exercise (so 1 <TextInput>)
-  // axios.post will call Next API route which will query db
-  // if query fails, prompt user
-  // else if query is successful, notify user, then close modal
-
   return (
     <>
       {/* Add preset exercise */}
-      <Button
-        onClick={() => {
-          openModal({
-            title: `Add ${muscleGrp.toLowerCase()} exercise(s)`,
-            children: (
-              <>
-                {/* List available exercises to add */}
-                {isValidating ? (
-                  <OrangeLoader />
-                ) : data && data.length ? (
-                  <form onSubmit={handleAddedExer}>
-                    <Checkbox.Group
-                      // value={presetExer}
-                      onChange={setPresetExer}
-                      orientation="vertical"
-                      spacing="md"
-                      size="md"
-                    >
-                      {checkItems}
-                    </Checkbox.Group>
-                    <Button
-                      fullWidth
-                      mt="md"
-                      variant="gradient"
-                      gradient={{ from: "#d9480f", to: "#f08c00" }}
-                      // onClick={handleAddedExer}
-                      type="submit"
-                    >
-                      Add exercise(s)
-                    </Button>
-                  </form>
-                ) : (
-                  <p>
-                    All preset {muscleGrp.toLowerCase()} exercises have already
-                    been added.
-                  </p>
-                )}
-              </>
-            ),
-          });
-        }}
-        color="orange"
-        radius="md"
-      >
+      <Button onClick={() => setPresetOpened(true)} color="orange" radius="md">
         Add preset exercise
       </Button>
+      {presetOpened && (
+        <Modal
+          opened={presetOpened}
+          onClose={() => setPresetOpened(false)}
+          title={`Add ${muscleGrp.toLowerCase()} exercise(s)`}
+          centered
+        >
+          {/* List available exercises to add */}
+          {isValidating ? (
+            <OrangeLoader />
+          ) : data ? (
+            // ) : data && data.length ? (
+            <form onSubmit={handleAddedExer}>
+              <Checkbox.Group
+                // value={presetExer}
+                onChange={setPresetExer}
+                orientation="vertical"
+                spacing="md"
+                size="md"
+              >
+                {checkItems!}
+              </Checkbox.Group>
+              <Button
+                fullWidth
+                mt="md"
+                variant="gradient"
+                gradient={{ from: "#d9480f", to: "#f08c00" }}
+                // onClick={handleAddedExer}
+                type="submit"
+              >
+                Add exercise(s)
+              </Button>
+            </form>
+          ) : (
+            <p>
+              All preset {muscleGrp.toLowerCase()} exercises have already been
+              added.
+            </p>
+          )}
+        </Modal>
+      )}
 
       {/* Add custom exercise */}
-      <Button
-        onClick={() => {
-          openModal({
-            title: `Create custom ${muscleGrp.toLowerCase()} exercise`,
-            children: (
-              <>
-                <form onSubmit={handleNewExer}>
-                  <TextInput
-                    // value={customExer}
-                    onChange={(event) => setCustomExer(event.target.value)}
-                    // onChange={(e) => setCustomExer(e.currentTarget.value)}
-                    placeholder="Name of new exercise"
-                    data-autofocus
-                  />
-                  <Button
-                    fullWidth
-                    mt="md"
-                    variant="gradient"
-                    gradient={{ from: "#d9480f", to: "#f08c00" }}
-                    // onClick={handleNewExer}
-                    type="submit"
-                  >
-                    Create
-                  </Button>
-                </form>
-              </>
-            ),
-          });
-        }}
-        color="orange"
-        radius="md"
-      >
+      <Button onClick={() => setCustomOpened(true)} color="orange" radius="md">
         Add custom exercise
       </Button>
+      {customOpened && (
+        <Modal
+          opened={customOpened}
+          onClose={() => setCustomOpened(false)}
+          title={`Create custom ${muscleGrp.toLowerCase()} exercise`}
+          centered
+        >
+          <form onSubmit={handleNewExer}>
+            <TextInput
+              // value={customExer}
+              onChange={(event) => setCustomExer(event.target.value)}
+              // onChange={(e) => setCustomExer(e.currentTarget.value)}
+              placeholder="Name of new exercise"
+              data-autofocus
+            />
+            <Button
+              fullWidth
+              mt="md"
+              variant="gradient"
+              gradient={{ from: "#d9480f", to: "#f08c00" }}
+              // onClick={handleNewExer}
+              type="submit"
+            >
+              Create
+            </Button>
+          </form>
+        </Modal>
+      )}
     </>
   );
 };
