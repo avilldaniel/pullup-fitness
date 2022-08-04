@@ -1,30 +1,57 @@
-import { Button, Checkbox, Modal, TextInput } from "@mantine/core";
+import { FormEvent, ReactNode, useEffect, useState } from "react";
 import { Exercise } from "@prisma/client";
-import axios from "axios";
-import { FormEvent, useState } from "react";
 import useSWR from "swr";
+import axios from "axios";
 import modalFetcher from "../fetchers/modalFetcher";
+import { Button, Checkbox, Modal, TextInput } from "@mantine/core";
+import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { customExerSchema } from "../schemas/zodSchemas";
 import { IModalExers } from "../utils/types";
 import OrangeLoader from "./OrangeLoader";
 
-const ModalExers = ({ username, muscleGrp }: IModalExers) => {
+const ModalExers = ({ username, muscleGrp, setFilteredArr }: IModalExers) => {
   // States
+  const [diffArray, setDiffArray] = useState<string[]>([]);
   const [presetExer, setPresetExer] = useState<string[]>([]);
-  const [customExer, setCustomExer] = useState<string>("");
   const [presetOpened, setPresetOpened] = useState(false);
   const [customOpened, setCustomOpened] = useState(false);
+  const [invalidCustom, setInvalidCustom] = useState(false);
+  const [invalidPreset, setInvalidPreset] = useState(false);
 
   // useSWR, fetch array that is to be rendered inside Modal, which will include radio buttons
   const { data, error, isValidating } = useSWR(
-    `/api/exercises/${username}/${muscleGrp}`,
+    [`/api/exercises/${username}/${muscleGrp}`, setDiffArray],
     modalFetcher
   );
-  // console.log("data:", data);
 
-  // Convert list items to JSX to insert into <List>
+  // react-hook-form (useForm) + Zod to validate custom exercise input:
+  // 1 <= custom exercise name length <= 30
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(customExerSchema),
+  });
+
+  // recommended way to reset custom exercise form after submission
+  // from react-hook-form docs
+  useEffect(() => {
+    if (formState.isSubmitSuccessful) {
+      reset({ customExerSchema });
+    }
+  }, [formState, reset]);
+
+  // Convert items to JSX checkboxes to insert into <Checkbox.Group>
   let checkItems: React.ReactNode[];
-  if (data && !error) {
-    checkItems = data.map((exercise: Exercise) => {
+  // let checkItems: ReactNode[];
+  if (diffArray && !error) {
+    console.log("diffArray:", diffArray);
+    checkItems = diffArray.map((exercise: any) => {
+      // checkItems = diffArray.map((exercise: Exercise) => {
       return (
         <Checkbox
           key={exercise.id}
@@ -43,46 +70,56 @@ const ModalExers = ({ username, muscleGrp }: IModalExers) => {
     e.preventDefault();
     try {
       // POST request only needs username and the names[] of the exercises to be added
-      console.log("presetExer:", presetExer);
+      // response will be array of updated stats (by querying db)
       const res = await axios.post(`/api/exercises/post/${username}`, {
         newExers: presetExer,
         muscleGroup: muscleGrp,
         creatorName: "admin",
       });
-      // console.log("preset exercise res:", res);
 
-      // after db query, setPresetExer([]) and close modal
-      // test if stats were re-rendered with new exercises
+      // after db query, setPresetExer([]), reset invalidPreset (may already be reset),
+      // setFilteredArr(w/ new exercises) to re-render table stats with new data,
+      // setDiffArray(w/ removed exercises) to re-render preset checkbox group, and close modal
       setPresetExer([]);
+      setInvalidPreset(false);
+      setFilteredArr(res.data);
+      const diffArrayRes = await axios.get(
+        `/api/exercises/${username}/${muscleGrp}`
+      );
+      const diffArrayData = diffArrayRes.data;
+      // /api/exercises/${username}/${muscleGrp}
+      setDiffArray(diffArrayData);
       setPresetOpened(false);
     } catch (e) {
       // if not able to query db with new exercises,
       // prompt user for "Unable to add new exercises. Please try refreshing."
       console.error(e);
+      setInvalidPreset(true);
     }
   };
 
   /* --------------------------------CUSTOM EXERCISE----------------------------------- */
-  // run when custom exercise button is clicked, which will trigger a focus trap <Popover>
-  // Popover will include a <Form>, or just <TextInput onSubmit?>
-  const handleNewExer = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onCustomSubmit: SubmitHandler<FieldValues> = async ({ customExer }) => {
     try {
       // POST request will need username, exercise name, and muscle group
       // it will make 2 queries to db: creating exercise & adding it as an exercise stat
+      // response will be array of updated stats (by querying db)
       const res = await axios.post(`/api/exercises/post/${username}`, {
         newExers: customExer,
         muscleGroup: muscleGrp,
         creatorName: username,
       });
 
-      // after db query, close modal; test if stats were re-rendered with new exercises
-      setCustomExer("");
+      // after db query, reset invalidCustom (may already be reset),
+      // setFilteredArr(w/ new exercises) to re-render table stats with new data, and close modal
+      setInvalidCustom(false);
+      setFilteredArr(res.data);
       setCustomOpened(false);
     } catch (e) {
       // if not able to query db with new exercise (ex. exercise name already exists),
       // prompt user for "Invalid exercise."
       console.error(e);
+      setInvalidCustom(true);
     }
   };
 
@@ -103,7 +140,6 @@ const ModalExers = ({ username, muscleGrp }: IModalExers) => {
           {isValidating ? (
             <OrangeLoader />
           ) : data ? (
-            // ) : data && data.length ? (
             <form onSubmit={handleAddedExer}>
               <Checkbox.Group
                 // value={presetExer}
@@ -114,6 +150,9 @@ const ModalExers = ({ username, muscleGrp }: IModalExers) => {
               >
                 {checkItems!}
               </Checkbox.Group>
+              {invalidPreset && (
+                <div>Unable to add new exercises. Please try refreshing.</div>
+              )}
               <Button
                 fullWidth
                 mt="md"
@@ -145,14 +184,19 @@ const ModalExers = ({ username, muscleGrp }: IModalExers) => {
           title={`Create custom ${muscleGrp.toLowerCase()} exercise`}
           centered
         >
-          <form onSubmit={handleNewExer}>
+          <form onSubmit={handleSubmit(onCustomSubmit)}>
             <TextInput
-              // value={customExer}
-              onChange={(event) => setCustomExer(event.target.value)}
-              // onChange={(e) => setCustomExer(e.currentTarget.value)}
+              {...register("customExer")}
+              // onChange={(event) => setCustomExer(event.target.value)}
               placeholder="Name of new exercise"
               data-autofocus
             />
+            {errors.customExer?.message && (
+              <div>{errors.customExer.message}</div>
+            )}
+            {invalidCustom && (
+              <div>Invalid exercise. Try a different name.</div>
+            )}
             <Button
               fullWidth
               mt="md"

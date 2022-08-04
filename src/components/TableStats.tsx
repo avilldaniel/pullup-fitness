@@ -18,8 +18,6 @@ const TableStats = ({
   filteredArr,
   setFilteredArr,
 }: ITableStats) => {
-  // console.log("TableStats muscleGrp:", muscleGrp);
-  // const [filteredArr, setFilteredArr] = useState([]);
   const { data, error, isValidating } = useSWR(
     muscleGrp !== "ALL" && username
       ? [`/api/stats/${username}/${muscleGrp}`, setFilteredArr]

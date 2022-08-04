@@ -1,11 +1,15 @@
 import { Exercise_stat } from "@prisma/client";
 import { Dispatch, SetStateAction } from "react";
 
+export interface IPresetExerDiff {
+  username: string;
+  muscleGrp: string;
+}
+
 export interface IModalExers {
   username: string;
   muscleGrp: string;
-  // modalOpen: boolean;
-  // setModalOpen: Dispatch<SetStateAction<boolean>>;
+  setFilteredArr: Dispatch<React.SetStateAction<never[]>>;
 }
 
 export interface IModalExer {
@@ -59,7 +63,6 @@ export interface ITableRow {
   }: ITableRowUpdates) => void;
   onCancel: () => void;
   setWeight: (value: SetStateAction<number | null>) => void;
-  // setWeight: Dispatch<SetStateAction<number | null>>;
   setSets: Dispatch<SetStateAction<number | null>>;
   setReps: Dispatch<SetStateAction<number | null>>;
   weight: number;
@@ -72,7 +75,4 @@ export interface ITableStats {
   username: string;
   filteredArr: never[];
   setFilteredArr: Dispatch<React.SetStateAction<never[]>>;
-  // statsArr: never[];
-  // setStatsArr: Dispatch<React.SetStateAction<never[]>>;
-  // setFetchingData: Dispatch<React.SetStateAction<boolean>>;
 }

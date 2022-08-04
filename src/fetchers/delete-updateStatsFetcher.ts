@@ -5,13 +5,7 @@ export default async function updateStatsFetcher(
   url: string,
   setStatsArr: Dispatch<SetStateAction<never[]>>
 ) {
-  // console.log("url:", url);
   const { data } = await axios.get(url);
-  // console.log("data:", data);
   setStatsArr(data);
   return data;
-  // setTimeout(() => {
-  //   setStatsArr(data);
-  //   return data;
-  // }, 5000);
 }

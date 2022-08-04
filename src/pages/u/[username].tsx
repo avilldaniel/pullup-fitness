@@ -81,7 +81,11 @@ const Username: NextPage = () => {
 
       {/* Modal buttons to add exercises */}
       {muscleGrp !== "ALL" && typeof username === "string" && (
-        <ModalExers username={username} muscleGrp={muscleGrp} />
+        <ModalExers
+          username={username}
+          muscleGrp={muscleGrp}
+          setFilteredArr={setFilteredArr}
+        />
       )}
     </>
   );

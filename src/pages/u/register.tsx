@@ -80,9 +80,7 @@ const Register: NextPage = () => {
           required
           {...register("email")}
         />
-        {errors.email?.message && (
-          <div className="zodSchemaError">{errors.email?.message}</div>
-        )}
+        {errors.email?.message && <div>{errors.email?.message}</div>}
 
         <TextInput
           placeholder="Name"
@@ -92,9 +90,7 @@ const Register: NextPage = () => {
           required
           {...register("name")}
         />
-        {errors.name?.message && (
-          <div className="zodSchemaError">{errors.name?.message}</div>
-        )}
+        {errors.name?.message && <div>{errors.name?.message}</div>}
 
         <TextInput
           placeholder="Username"
@@ -104,9 +100,7 @@ const Register: NextPage = () => {
           required
           {...register("username")}
         />
-        {errors.username?.message && (
-          <div className="zodSchemaError">{errors.username?.message}</div>
-        )}
+        {errors.username?.message && <div>{errors.username?.message}</div>}
 
         <Button type="submit" color="orange">
           Sign up

@@ -15,7 +15,8 @@ export default async function handler(
   if (Array.isArray(newExers) && typeof username === "string") {
     for (let i = 0; i < newExers.length; i++) {
       try {
-        const addedExercise = await prisma.exercise_stat.create({
+        // create new presets[] records in db
+        await prisma.exercise_stat.create({
           data: {
             userName: username,
             exerciseName: newExers[i],
@@ -23,7 +24,20 @@ export default async function handler(
             muscleGroup: muscleGroup,
           },
         });
-        return res.status(200).send(addedExercise);
+
+        // fetch all of user's updated exercise stats
+        const getStats = await prisma.exercise_stat.findMany({
+          where: {
+            AND: { userName: { equals: username } },
+            OR: [
+              { creatorName: { equals: username } },
+              { creatorName: { equals: "admin" } },
+            ],
+          },
+        });
+
+        // return updated array of stats
+        return res.status(200).send(getStats);
       } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
           if (e.code === "P2002") {
@@ -35,18 +49,21 @@ export default async function handler(
       }
     }
   }
+
   // if adding a custom exercise
   else if (typeof newExers === "string") {
     if (typeof username === "string") {
       try {
-        const createdExercise = await prisma.exercise.create({
+        // create new custom exercises record in db
+        // then create it as a new exercise stat (w/ default stats)
+        await prisma.exercise.create({
           data: {
             name: newExers,
             muscleGrp: muscleGroup,
             creator: username,
           },
         });
-        const addedExercise = await prisma.exercise_stat.create({
+        await prisma.exercise_stat.create({
           data: {
             userName: username,
             exerciseName: newExers,
@@ -54,7 +71,20 @@ export default async function handler(
             muscleGroup: muscleGroup,
           },
         });
-        return res.status(200).send(createdExercise);
+
+        // fetch all of user's updated exercise stats
+        const getStats = await prisma.exercise_stat.findMany({
+          where: {
+            AND: { userName: { equals: username } },
+            OR: [
+              { creatorName: { equals: username } },
+              { creatorName: { equals: "admin" } },
+            ],
+          },
+        });
+
+        // return updated array of stats
+        return res.status(200).send(getStats);
       } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
           if (e.code === "P2002") {
