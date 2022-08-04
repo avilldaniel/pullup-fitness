@@ -1,5 +1,10 @@
 import { ActionIcon, NumberInput } from "@mantine/core";
-import { IconBarbell, IconCircleCheck, IconCircleX } from "@tabler/icons";
+import {
+  IconBarbell,
+  IconCircleCheck,
+  IconCircleX,
+  IconTrash,
+} from "@tabler/icons";
 import React from "react";
 import { ITableRow } from "../utils/types";
 
@@ -10,9 +15,9 @@ const TableRow = ({
   stat,
   onEdit,
   inEditMode,
-  updateStats,
   onSave,
   onCancel,
+  onDelete,
   setWeight,
   setSets,
   setReps,
@@ -20,7 +25,7 @@ const TableRow = ({
   sets,
   reps,
 }: ITableRow) => {
-  // Formate date
+  // Format date
   const d = new Date(stat.updatedAt);
   const date = d.toLocaleDateString("en-US");
 
@@ -60,8 +65,10 @@ const TableRow = ({
 
       {/* Action */}
       <td>
+        {/* In edit mode */}
         {inEditMode.status && inEditMode.rowKey === theKey ? (
           <>
+            {/* Save changes */}
             <ActionIcon
               onClick={() =>
                 onSave({
@@ -81,6 +88,7 @@ const TableRow = ({
               <IconCircleCheck color="green" />
             </ActionIcon>
 
+            {/* Cancel changes */}
             <ActionIcon
               onClick={() => onCancel()}
               radius="md"
@@ -92,22 +100,45 @@ const TableRow = ({
             </ActionIcon>
           </>
         ) : (
-          <ActionIcon
-            onClick={() =>
-              onEdit({
-                id: theKey,
-                weight: stat.weight!,
-                sets: stat.sets,
-                reps: stat.reps!,
-              })
-            }
-            radius="md"
-            size="sm"
-            aria-label="Modify stats"
-            title="Edit"
-          >
-            <IconBarbell />
-          </ActionIcon>
+          // Not in edit mode
+          <>
+            {/* Click to enter edit mode */}
+            <ActionIcon
+              onClick={() =>
+                onEdit({
+                  id: theKey,
+                  weight: stat.weight!,
+                  sets: stat.sets,
+                  reps: stat.reps!,
+                })
+              }
+              radius="md"
+              size="sm"
+              aria-label="Modify stats"
+              title="Edit"
+            >
+              <IconBarbell />
+            </ActionIcon>
+
+            {/* Delete exercise */}
+            <ActionIcon
+              // onClick={() => setDelModalOpened(true)}
+              onClick={() =>
+                onDelete({
+                  username: username,
+                  creatorName: stat.creatorName,
+                  exerciseName: stat.exerciseName,
+                  muscleGrp: stat.muscleGroup,
+                })
+              }
+              radius="md"
+              size="sm"
+              aria-label="Delete record"
+              title="Delete"
+            >
+              <IconTrash color="red" />
+            </ActionIcon>
+          </>
         )}
       </td>
     </tr>

@@ -1,5 +1,4 @@
 import { FormEvent, ReactNode, useEffect, useState } from "react";
-import { Exercise } from "@prisma/client";
 import useSWR from "swr";
 import axios from "axios";
 import modalFetcher from "../fetchers/modalFetcher";
@@ -49,7 +48,7 @@ const ModalExers = ({ username, muscleGrp, setFilteredArr }: IModalExers) => {
   let checkItems: React.ReactNode[];
   // let checkItems: ReactNode[];
   if (diffArray && !error) {
-    console.log("diffArray:", diffArray);
+    // console.log("diffArray:", diffArray);
     checkItems = diffArray.map((exercise: any) => {
       // checkItems = diffArray.map((exercise: Exercise) => {
       return (
@@ -129,87 +128,79 @@ const ModalExers = ({ username, muscleGrp, setFilteredArr }: IModalExers) => {
       <Button onClick={() => setPresetOpened(true)} color="orange" radius="md">
         Add preset exercise
       </Button>
-      {presetOpened && (
-        <Modal
-          opened={presetOpened}
-          onClose={() => setPresetOpened(false)}
-          title={`Add ${muscleGrp.toLowerCase()} exercise(s)`}
-          centered
-        >
-          {/* List available exercises to add */}
-          {isValidating ? (
-            <OrangeLoader />
-          ) : data ? (
-            <form onSubmit={handleAddedExer}>
-              <Checkbox.Group
-                // value={presetExer}
-                onChange={setPresetExer}
-                orientation="vertical"
-                spacing="md"
-                size="md"
-              >
-                {checkItems!}
-              </Checkbox.Group>
-              {invalidPreset && (
-                <div>Unable to add new exercises. Please try refreshing.</div>
-              )}
-              <Button
-                fullWidth
-                mt="md"
-                variant="gradient"
-                gradient={{ from: "#d9480f", to: "#f08c00" }}
-                // onClick={handleAddedExer}
-                type="submit"
-              >
-                Add exercise(s)
-              </Button>
-            </form>
-          ) : (
-            <p>
-              All preset {muscleGrp.toLowerCase()} exercises have already been
-              added.
-            </p>
-          )}
-        </Modal>
-      )}
-
-      {/* Add custom exercise */}
-      <Button onClick={() => setCustomOpened(true)} color="orange" radius="md">
-        Add custom exercise
-      </Button>
-      {customOpened && (
-        <Modal
-          opened={customOpened}
-          onClose={() => setCustomOpened(false)}
-          title={`Create custom ${muscleGrp.toLowerCase()} exercise`}
-          centered
-        >
-          <form onSubmit={handleSubmit(onCustomSubmit)}>
-            <TextInput
-              {...register("customExer")}
-              // onChange={(event) => setCustomExer(event.target.value)}
-              placeholder="Name of new exercise"
-              data-autofocus
-            />
-            {errors.customExer?.message && (
-              <div>{errors.customExer.message}</div>
-            )}
-            {invalidCustom && (
-              <div>Invalid exercise. Try a different name.</div>
+      <Modal
+        opened={presetOpened}
+        onClose={() => setPresetOpened(false)}
+        title={`Add ${muscleGrp.toLowerCase()} exercise(s)`}
+        centered
+      >
+        {/* List available exercises to add */}
+        {isValidating ? (
+          <OrangeLoader />
+        ) : data ? (
+          <form onSubmit={handleAddedExer}>
+            <Checkbox.Group
+              // value={presetExer}
+              onChange={setPresetExer}
+              orientation="vertical"
+              spacing="md"
+              size="md"
+            >
+              {checkItems!}
+            </Checkbox.Group>
+            {invalidPreset && (
+              <div>Unable to add new exercises. Please try refreshing.</div>
             )}
             <Button
               fullWidth
               mt="md"
               variant="gradient"
               gradient={{ from: "#d9480f", to: "#f08c00" }}
-              // onClick={handleNewExer}
+              // onClick={handleAddedExer}
               type="submit"
             >
-              Create
+              Add exercise(s)
             </Button>
           </form>
-        </Modal>
-      )}
+        ) : (
+          <p>
+            All preset {muscleGrp.toLowerCase()} exercises have already been
+            added.
+          </p>
+        )}
+      </Modal>
+
+      {/* Add custom exercise */}
+      <Button onClick={() => setCustomOpened(true)} color="orange" radius="md">
+        Add custom exercise
+      </Button>
+      <Modal
+        opened={customOpened}
+        onClose={() => setCustomOpened(false)}
+        title={`Create custom ${muscleGrp.toLowerCase()} exercise`}
+        centered
+      >
+        <form onSubmit={handleSubmit(onCustomSubmit)}>
+          <TextInput
+            {...register("customExer")}
+            // onChange={(event) => setCustomExer(event.target.value)}
+            placeholder="Name of new exercise"
+            data-autofocus
+          />
+          {errors.customExer?.message && <div>{errors.customExer.message}</div>}
+          {invalidCustom && <div>Invalid exercise. Try a different name.</div>}
+          <Button
+            fullWidth
+            mt="md"
+            variant="gradient"
+            gradient={{ from: "#d9480f", to: "#f08c00" }}
+            // onClick={handleNewExer}
+            type="submit"
+          >
+            Create
+          </Button>
+        </form>
+      </Modal>
     </>
   );
 };

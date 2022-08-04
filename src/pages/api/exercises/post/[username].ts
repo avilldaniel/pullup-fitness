@@ -24,20 +24,6 @@ export default async function handler(
             muscleGroup: muscleGroup,
           },
         });
-
-        // fetch all of user's updated exercise stats
-        const getStats = await prisma.exercise_stat.findMany({
-          where: {
-            AND: { userName: { equals: username } },
-            OR: [
-              { creatorName: { equals: username } },
-              { creatorName: { equals: "admin" } },
-            ],
-          },
-        });
-
-        // return updated array of stats
-        return res.status(200).send(getStats);
       } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
           if (e.code === "P2002") {
@@ -48,6 +34,56 @@ export default async function handler(
         return res.status(400).send(e);
       }
     }
+
+    // fetch all of user's updated exercise stats
+    const getStats = await prisma.exercise_stat.findMany({
+      where: {
+        AND: { userName: { equals: username } },
+        OR: [
+          { creatorName: { equals: username } },
+          { creatorName: { equals: "admin" } },
+        ],
+      },
+    });
+
+    // return updated array of stats
+    return res.status(200).send(getStats);
+
+    // for (let i = 0; i < newExers.length; i++) {
+    //   try {
+    //     // create new presets[] records in db
+    //     await prisma.exercise_stat.create({
+    //       data: {
+    //         userName: username,
+    //         exerciseName: newExers[i],
+    //         creatorName: creatorName,
+    //         muscleGroup: muscleGroup,
+    //       },
+    //     });
+
+    //     // fetch all of user's updated exercise stats
+    //     const getStats = await prisma.exercise_stat.findMany({
+    //       where: {
+    //         AND: { userName: { equals: username } },
+    //         OR: [
+    //           { creatorName: { equals: username } },
+    //           { creatorName: { equals: "admin" } },
+    //         ],
+    //       },
+    //     });
+
+    //     // return updated array of stats
+    //     return res.status(200).send(getStats);
+    //   } catch (e) {
+    //     if (e instanceof Prisma.PrismaClientKnownRequestError) {
+    //       if (e.code === "P2002") {
+    //         console.log("Can't create exercises.");
+    //         return res.status(400).send(e.meta);
+    //       }
+    //     }
+    //     return res.status(400).send(e);
+    //   }
+    // }
   }
 
   // if adding a custom exercise
@@ -97,15 +133,4 @@ export default async function handler(
     }
   }
   return res.status(400).send("Invalid request");
-
-  // try
-  // If typeof newExers === "array" handle db.createMany, or iterate through array of exercises
-  // and make separate queries to db
-
-  // If typeof newExers === "string", handle db.create
-
-  // return res.status(200).send("ok"); OR, could send returned data if client does not re-render with new data
-  // catch (e)
-  // return res.status(400).send(e);
-  // return res.status(400).send("Invalid request");
 }

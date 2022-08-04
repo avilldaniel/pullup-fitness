@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { Table } from "@mantine/core";
 import { Exercise_stat } from "@prisma/client";
-import { useState } from "react";
 import {
   IEditMode,
+  IOnDelete,
   IOnEdit,
   ITableRowUpdates,
   ITableStats,
@@ -17,6 +18,8 @@ const TableStats = ({
   username,
   filteredArr,
   setFilteredArr,
+  setDelModalOpened,
+  setDeleteQueue,
 }: ITableStats) => {
   const { data, error, isValidating } = useSWR(
     muscleGrp !== "ALL" && username
@@ -72,15 +75,13 @@ const TableStats = ({
     });
     // console.log("res.data:", res.data);
 
-    // re-fetch data to re-render new data
+    // Re-fetch data to re-render new data
     setFilteredArr(res.data);
-    // console.log("trying to append res.data:", filteredArr);
-
     // Reset state after posting
     onCancel();
   };
 
-  // invoke when user hits save
+  // Invoke when user hits save
   const onSave = ({
     username,
     creatorName,
@@ -105,15 +106,29 @@ const TableStats = ({
       status: false,
       rowKey: null,
     });
-
     setWeight(null);
     setSets(null);
     setReps(null);
   };
+
+  // Invoke when user wants to delete a record
+  // if creatorName !== "admin", delete exercise WHERE username: username AND exerciseName: exerciseName
+  const onDelete = ({
+    creatorName,
+    username,
+    exerciseName,
+    muscleGrp,
+  }: IOnDelete) => {
+    // Open modal "Are you sure you want to delete this exercise?"
+    setDelModalOpened(true);
+
+    // store 3 variables in a state
+    setDeleteQueue({ creatorName, username, exerciseName, muscleGrp });
+  };
   /****************************************************************************/
 
+  // individual rows to render
   const rows = filteredArr.map((stat: Exercise_stat, key: number) => {
-    // console.log("stat & key:", stat, key);
     return (
       <TableRow
         key={key}
@@ -125,6 +140,7 @@ const TableStats = ({
         updateStats={updateStats}
         onSave={onSave}
         onCancel={onCancel}
+        onDelete={onDelete}
         setWeight={setWeight}
         setSets={setSets}
         setReps={setReps}
@@ -137,8 +153,8 @@ const TableStats = ({
 
   return (
     <div>
+      {/* Table of stats */}
       <Table fontSize="sm" horizontalSpacing={4} striped>
-        {/* <Table */}
         <thead>
           <tr>
             <th>Exercise</th>
@@ -156,76 +172,3 @@ const TableStats = ({
 };
 
 export default TableStats;
-
-// import { ActionIcon, NumberInput, Table } from "@mantine/core";
-// import { Exercise_stat } from "@prisma/client";
-// import { IconBarbell } from "@tabler/icons";
-// import { useState } from "react";
-// import { ITableStats } from "../utils/types";
-
-// const TableStats = ({ statsArr, muscleGrp }: ITableStats) => {
-//   // console.log("TableStats muscleGrp:", muscleGrp);
-//   // console.log("TableStats statsArr:", statsArr);
-
-//   let filteredArr = statsArr;
-//   if (muscleGrp !== "ALL") {
-//     filteredArr = statsArr.filter(
-//       (stat: Exercise_stat) => stat.muscleGroup == muscleGrp
-//     );
-//   }
-
-//   const rows = filteredArr.map((stat: Exercise_stat, key: number) => {
-//     const d = new Date(stat.updatedAt);
-//     const date = d.toLocaleDateString("en-US");
-//     // console.log("stat & key:", stat, key);
-//     return (
-//       <tr key={key}>
-//         <td>{stat.exerciseName}</td>
-//         <td>
-//           <NumberInput value={stat.weight!} disabled color="" />
-//         </td>
-//         <td>
-//           <NumberInput value={stat.sets!} disabled />
-//         </td>
-//         <td>
-//           <NumberInput value={stat.reps!} disabled />
-//         </td>
-//         {/* <td>{stat.weight}</td>
-//         <td>{stat.sets}</td>
-//         <td>{stat.reps}</td> */}
-//         <td>{date}</td>
-//         {/* <td>{stat.updatedAt.toString().slice(0, 10)}</td> */}
-//         <td>
-//           <ActionIcon
-//             // onClick={}
-//             radius="md"
-//             size="sm"
-//             aria-label="Modify stats"
-//           >
-//             <IconBarbell />
-//           </ActionIcon>
-//         </td>
-//       </tr>
-//     );
-//   });
-
-//   return (
-//     <div>
-//       <Table>
-//         <thead>
-//           <tr>
-//             <th>Exercise</th>
-//             <th>Weight</th>
-//             <th>Sets</th>
-//             <th>Reps</th>
-//             <th>Last Updated</th>
-//             <th>Edit</th>
-//           </tr>
-//         </thead>
-//         <tbody>{rows}</tbody>
-//       </Table>
-//     </div>
-//   );
-// };
-
-// export default TableStats;

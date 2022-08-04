@@ -17,7 +17,7 @@ model User {
   memberSince     DateTime          @default(now())
   username        String            @db.VarChar(50) @unique
   email           String            @db.VarChar(50) @unique
-  name            String?           @db.VarChar(50)
+  name            String            @db.VarChar(50)
   exerciseStats   Exercise_stat[]  
   workouts        Workout[]
   create          Exercise[]
@@ -26,6 +26,8 @@ model User {
 
 // TEST AGAINST:
 //  - duplicate [userId, exerciseName, creatorName]
+// note: this model does not allow for duplicate exercise stats which could be differentiated by
+// different number of sets (ex. 3x10, 5x5, hypertrohpy); i would like to implement this eventually
 model Exercise_stat {
   // id            Int       @id @default(autoincrement())
   @@id([userName, exerciseName, creatorName])

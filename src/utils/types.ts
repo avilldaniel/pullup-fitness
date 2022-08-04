@@ -1,9 +1,13 @@
-import { Exercise_stat } from "@prisma/client";
+import { Exercise_stat, Muscle_grp } from "@prisma/client";
 import { Dispatch, SetStateAction } from "react";
 
 export interface IPresetExerDiff {
   username: string;
   muscleGrp: string;
+}
+
+export interface IGetUserExerStats {
+  username: string;
 }
 
 export interface IModalExers {
@@ -17,6 +21,13 @@ export interface IModalExer {
   muscleGrp: string;
   modalOpen: boolean;
   setModalOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface IOnDelete {
+  creatorName: string;
+  username: string;
+  exerciseName: string;
+  muscleGrp: Muscle_grp;
 }
 
 export interface IEditMode {
@@ -62,6 +73,8 @@ export interface ITableRow {
     newReps,
   }: ITableRowUpdates) => void;
   onCancel: () => void;
+  onDelete: ({ creatorName, username, exerciseName }: IOnDelete) => void;
+  // setDelModalOpened: Dispatch<React.SetStateAction<boolean>>;
   setWeight: (value: SetStateAction<number | null>) => void;
   setSets: Dispatch<SetStateAction<number | null>>;
   setReps: Dispatch<SetStateAction<number | null>>;
@@ -75,4 +88,6 @@ export interface ITableStats {
   username: string;
   filteredArr: never[];
   setFilteredArr: Dispatch<React.SetStateAction<never[]>>;
+  setDelModalOpened: Dispatch<React.SetStateAction<boolean>>;
+  setDeleteQueue: React.Dispatch<React.SetStateAction<IOnDelete | undefined>>;
 }

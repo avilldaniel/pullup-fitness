@@ -6,8 +6,10 @@ import useSWR from "swr";
 import statsFetcher from "../../fetchers/statsFetcher";
 import TableStats from "../../components/TableStats";
 import OrangeLoader from "../../components/OrangeLoader";
-import { Select } from "@mantine/core";
+import { Button, Modal, Select } from "@mantine/core";
 import ModalExers from "../../components/ModalExers";
+import { IOnDelete } from "../../utils/types";
+import axios from "axios";
 
 const Username: NextPage = () => {
   // Convert list of enums into an array
@@ -16,12 +18,17 @@ const Username: NextPage = () => {
   // States
   const [muscleGrp, setMuscleGrp] = useState("ALL");
   const [filteredArr, setFilteredArr] = useState([]);
+  const [delModalOpened, setDelModalOpened] = useState(false);
+  const [deleteQueue, setDeleteQueue] = useState<IOnDelete | undefined>(
+    undefined
+  );
+  const [invalidDelete, setInvalidDelete] = useState(false);
 
   // Router
   const router = useRouter();
   const { username } = router.query;
-  // console.log("username:", username);
 
+  // Fetch all of user's exercise stats
   const { data, error, isValidating } = useSWR(
     username && [`/api/stats/${username}`, setFilteredArr],
     statsFetcher,
@@ -32,10 +39,8 @@ const Username: NextPage = () => {
       },
     }
   );
-  // console.log("useSWR data:", data);
-  // console.log("useSWR error:", error);
-  // console.log("statsArr:", statsArr);
 
+  // Items to render for select dropdown
   const selectOptions = [{ value: "ALL", label: "All" }];
   muscleGrps.map((group, i) => {
     selectOptions.push({
@@ -43,6 +48,29 @@ const Username: NextPage = () => {
       label: `${group[0].toUpperCase() + group.slice(1).toLowerCase()}`,
     });
   });
+
+  // Invoked when user confirms they would like to delete a record
+  const deleteSubmitted = async () => {
+    // hit API route which will query db and delete a record if creatorName !== "admin"
+    // res.data should return array user's updated stats
+    try {
+      const res = await axios.delete("/api/stats/delete", {
+        data: deleteQueue,
+      });
+
+      // if (res.ok), setFilteredArr(res.data) to re-render table stats
+      if (res.status === 200) {
+        setFilteredArr(res.data);
+      }
+    } catch (e) {
+      // console.error(e);
+      // setInvalidDelete(true) -> {invalidDelete && {<p>Cannot delete record. Try refreshing.</p>}}
+      setInvalidDelete(true);
+    }
+
+    // close modal
+    setDelModalOpened(false);
+  };
 
   return (
     <>
@@ -70,12 +98,13 @@ const Username: NextPage = () => {
           username={username}
           filteredArr={filteredArr}
           setFilteredArr={setFilteredArr}
+          setDelModalOpened={setDelModalOpened}
+          setDeleteQueue={setDeleteQueue}
         />
       ) : (
         <p>
-          Cannot fetch data. <br />
-          Implement way to differentiate if invalid user or user just doesnt
-          have any stats recorded. Can probably do after adding auth.
+          To add exercises, select a muscle group. <br />
+          Then add from a list of preset exercises, or create your own exercise.
         </p>
       )}
 
@@ -87,6 +116,28 @@ const Username: NextPage = () => {
           setFilteredArr={setFilteredArr}
         />
       )}
+
+      {/* Modal that opens when user is deleting a record */}
+      <Modal
+        opened={delModalOpened}
+        onClose={() => setDelModalOpened(false)}
+        // title="Are you sure you want to delete this exercise?"
+        withCloseButton={false}
+        centered
+      >
+        Are you sure you want to delete this exercise?
+        <Button onClick={deleteSubmitted} color="red" variant="subtle">
+          Yes.
+        </Button>
+        <Button
+          onClick={() => setDelModalOpened(false)}
+          color="gray"
+          variant="subtle"
+        >
+          No.
+        </Button>
+        {invalidDelete && <p>Cannot delete record. Try refreshing.</p>}
+      </Modal>
     </>
   );
 };

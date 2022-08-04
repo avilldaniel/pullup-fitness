@@ -3,7 +3,7 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { Prisma } from "@prisma/client";
-import { prisma } from "../../../utils/db";
+import { getUserExerStats } from "../../../db-queries/getUserExerStats";
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,17 +16,9 @@ export default async function handler(
   if (username && typeof username === "string") {
     try {
       // fetch all of user's exercise stats
-      const getStats = await prisma.exercise_stat.findMany({
-        where: {
-          AND: { userName: { equals: username } },
-          OR: [
-            { creatorName: { equals: username } },
-            { creatorName: { equals: "admin" } },
-          ],
-        },
-      });
-      if (getStats.length) {
-        return res.status(200).send(getStats);
+      const stats = await getUserExerStats({ username });
+      if (stats.length) {
+        return res.status(200).send(stats);
       }
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
