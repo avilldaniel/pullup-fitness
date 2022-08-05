@@ -1,22 +1,12 @@
 import { AppProps } from "next/app";
-import Head from "next/head";
 import { MantineProvider } from "@mantine/core";
+import Layout from "../components/Layout";
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
 
   return (
-    <>
-      <Head>
-        <title>
-          Add {"<Meta/>"} within {"<Layout/>"}
-        </title>
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width"
-        />
-      </Head>
-
+    <Layout>
       <MantineProvider
         withGlobalStyles
         withNormalizeCSS
@@ -28,6 +18,6 @@ export default function App(props: AppProps) {
       >
         <Component {...pageProps} />
       </MantineProvider>
-    </>
+    </Layout>
   );
 }
