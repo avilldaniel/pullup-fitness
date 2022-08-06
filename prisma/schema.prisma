@@ -73,16 +73,6 @@ model Workout {
   exercises   Exercise[]          
 }
 
-// Middle-man between Exercise & Workout
-// model ExerciseOnWorkout {
-//   workout     Workout     @relation(fields: [workoutId], references: [id])
-//   workoutId   Int         @unique
-//   exercise    Exercise    @relation(fields: [exerciseId], references: [id])
-//   exerciseId  Int
-//   assignedAt  DateTime    @default(now())
-//   // @@index([workoutId, exerciseId])
-// }
-
 enum Muscle_grp {
   CHEST
   BACK
