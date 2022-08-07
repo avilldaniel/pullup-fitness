@@ -7,6 +7,7 @@ import {
 } from "@tabler/icons";
 import React from "react";
 import { ITableRow } from "../utils/types";
+import { useUserStore } from "../utils/zustand-stores";
 
 const TableRow = ({
   // key,
@@ -26,6 +27,9 @@ const TableRow = ({
 }: // username,
 any) => {
   // }: ITableRow) => {
+
+  // Zustand
+  const username = useUserStore((state) => state.username);
 
   // Format date
   const d = new Date(stat.updatedAt);
@@ -124,14 +128,14 @@ any) => {
 
             {/* Delete exercise */}
             <ActionIcon
-              // onClick={() =>
-              //   onDelete({
-              //     username: username,
-              //     creatorName: stat.creatorName,
-              //     exerciseName: stat.exerciseName,
-              //     muscleGrp: stat.muscleGroup,
-              //   })
-              // }
+              onClick={() =>
+                onDelete({
+                  username: username,
+                  creatorName: stat.creatorName,
+                  exerciseName: stat.exerciseName,
+                  muscleGrp: stat.muscleGroup,
+                })
+              }
               radius="md"
               size="sm"
               aria-label="Delete record"

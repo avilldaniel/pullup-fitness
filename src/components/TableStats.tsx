@@ -12,18 +12,22 @@ import TableRow from "./TableRow";
 import axios from "axios";
 import useSWR from "swr";
 import statsFetcher from "../fetchers/statsFetcher";
-import { useFetchStats } from "../react-query-hooks/stats";
+// import { getStatsFetcher, useFetchStats } from "../react-query-hooks/stats";
 import { useRouter } from "next/router";
 import { TableStatsContext } from "../utils/contexts";
 import OrangeLoader from "./OrangeLoader";
+import { useUserStore } from "../utils/zustand-stores";
+import ModalDelete from "./ModalDelete";
+import { useQuery } from "@tanstack/react-query";
 
 const TableStats = () => {
   // Router
   const router = useRouter();
   const { username: queryUsername } = router.query;
 
-  // Context
-  const { username, setUsername } = useContext(TableStatsContext);
+  // Zustand
+  const username = useUserStore((state) => state.username);
+  const setUsername = useUserStore((state) => state.setUsername);
 
   // Set username on loadup
   useEffect(() => {
@@ -32,15 +36,31 @@ const TableStats = () => {
     }
   });
 
-  // fetch user stats
-  const { isLoading, isError, data } = useFetchStats(username);
+  // Fetch user stats
+  // const { isLoading, isError, data } = useFetchStats(username);
+  // const { isLoading, isError, data } = useQuery(["stats"], getStatsFetcher);
+  const { isLoading, isError, data } = useQuery(["stats"], async () => {
+    const res = await axios.get("/api/stats/fetchStats", {
+      params: {
+        username,
+      },
+    });
+
+    console.log("hellores.data 2:", res.data);
+    return res.data;
+  });
 
   /****************************************************************************/
-  // State variables which allow table to be dynamic and editable
+  // Make table editable, dynamic
+
   const [inEditMode, setInEditMode] = useState<IEditMode>({
     status: false,
     rowKey: null,
   });
+  const [delModalOpened, setDelModalOpened] = useState(false);
+  const [invalidDelete, setInvalidDelete] = useState(false);
+  const [deleteQueue, setDeleteQueue] = useState({});
+
   const [weight, setWeight] = useState<number | null>(null);
   const [sets, setSets] = useState<number | null>(null);
   const [reps, setReps] = useState<number | null>(null);
@@ -114,18 +134,18 @@ const TableStats = () => {
   // Invoke when user wants to delete a record
   // if creatorName !== "admin", delete exercise WHERE username: username AND exerciseName: exerciseName
   const onDelete = ({
-    creatorName,
     username,
-    exerciseName,
     muscleGrp,
+    exerciseName,
+    creatorName,
   }: IOnDelete) => {
     // Open modal "Are you sure you want to delete this exercise?"
-    // setDelModalOpened(true);
+    setDelModalOpened(true);
     // store 3 variables in a state
-    // setDeleteQueue({ creatorName, username, exerciseName, muscleGrp });
+    setDeleteQueue({ username, muscleGrp, exerciseName, creatorName });
   };
-  /****************************************************************************/
 
+  /****************************************************************************/
   // individual rows to render
   let rows: [] = [];
   if (data) {
@@ -165,19 +185,29 @@ const TableStats = () => {
           Then add from a list of preset exercises, or create your own exercise.
         </p>
       ) : (
-        <Table fontSize="sm" horizontalSpacing={4} striped>
-          <thead>
-            <tr>
-              <th>Exercise</th>
-              <th>Weight</th>
-              <th>Sets</th>
-              <th>Reps</th>
-              <th>Last Updated</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>{rows}</tbody>
-        </Table>
+        <>
+          <Table fontSize="sm" horizontalSpacing={4} striped>
+            <thead>
+              <tr>
+                <th>Exercise</th>
+                <th>Weight</th>
+                <th>Sets</th>
+                <th>Reps</th>
+                <th>Last Updated</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>{rows}</tbody>
+          </Table>
+
+          <ModalDelete
+            delModalOpened={delModalOpened}
+            setDelModalOpened={setDelModalOpened}
+            // deleteSubmitted={deleteSubmitted}
+            invalidDelete={invalidDelete}
+            deleteQueue={deleteQueue}
+          />
+        </>
       )}
     </>
   );

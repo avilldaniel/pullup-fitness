@@ -18,6 +18,7 @@ export default async function handler(
   const { username, muscleGrp, exerciseName, creatorName } = req.body;
 
   try {
+    console.log(username, muscleGrp, exerciseName, creatorName);
     // delete exercise stat
     const objectDeleted = await prisma.exercise_stat.delete({
       where: {
