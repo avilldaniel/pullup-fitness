@@ -1,9 +1,7 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { Muscle_grp } from "@prisma/client";
-import React, { useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useGetStats } from "../../react-query/stats";
+import React, { useState } from "react";
 import useSWR from "swr";
 import statsFetcher from "../../fetchers/statsFetcher";
 import TableStats from "../../components/TableStats";
@@ -30,28 +28,17 @@ const Username: NextPage = () => {
   const router = useRouter();
   const { username } = router.query;
 
-  // QueryClient instance
-  const queryClient = useQueryClient();
-
-  // fetch stats on loadup
-  // useEffect(() => {
-  //   router.isReady ?
-  // }, [username])
-
   // Fetch all of user's exercise stats
-  // const { isFetching, ...queryInfo } = useStats(username);
-  const { isLoading, isError, data, error } = useGetStats(username);
-
-  // const { data, error, isValidating } = useSWR(
-  //   username && [`/api/stats/${username}`, setFilteredArr],
-  //   statsFetcher,
-  //   {
-  //     onErrorRetry: (error) => {
-  //       // Never retry on 400.
-  //       if (error.status === 400) return;
-  //     },
-  //   }
-  // );
+  const { data, error, isValidating } = useSWR(
+    username && [`/api/stats/${username}`, setFilteredArr],
+    statsFetcher,
+    {
+      onErrorRetry: (error) => {
+        // Never retry on 400.
+        if (error.status === 400) return;
+      },
+    }
+  );
 
   // Items to render for select dropdown
   const selectOptions = [{ value: "ALL", label: "All" }];
@@ -87,7 +74,7 @@ const Username: NextPage = () => {
 
   return (
     <>
-      {/* <h1>Username: {username}</h1> */}
+      <h1>Username: {username}</h1>
 
       {/* Select dropdown */}
       <Select
@@ -103,21 +90,7 @@ const Username: NextPage = () => {
       />
 
       {/* Table */}
-      {isLoading ? (
-        <OrangeLoader />
-      ) : isError ? (
-        <p>
-          To add exercises, select a muscle group. <br />
-          Then add from a list of preset exercises, or create your own exercise.
-        </p>
-      ) : (
-        <>
-          {data.map((exercise: any, key: any) => (
-            <span key={key}>{exercise.exerciseName}</span>
-          ))}
-        </>
-      )}
-      {/* {isValidating ? (
+      {isValidating ? (
         <OrangeLoader />
       ) : data && !error && typeof username === "string" ? (
         <TableStats
@@ -133,16 +106,16 @@ const Username: NextPage = () => {
           To add exercises, select a muscle group. <br />
           Then add from a list of preset exercises, or create your own exercise.
         </p>
-      )} */}
+      )}
 
       {/* Modal buttons to add exercises */}
-      {/* {muscleGrp !== "ALL" && typeof username === "string" && (
+      {muscleGrp !== "ALL" && typeof username === "string" && (
         <ModalExers
           username={username}
           muscleGrp={muscleGrp}
           setFilteredArr={setFilteredArr}
         />
-      )} */}
+      )}
 
       {/* Modal that opens when user is deleting a record */}
       <Modal
@@ -170,3 +143,13 @@ const Username: NextPage = () => {
 };
 
 export default Username;
+
+// eventually, make it so that if the person visiting a user's
+// page is the actual authenticated user, it will display their dashboard
+// else, it will just show the requested user's public profile
+// which will include their stats/workouts/etc.
+/***********************************************/
+// the SSR fetch will depend on who is the auth user
+/***********************************************/
+// in the future, we'll implement being able to set
+// a user's profile to private or public
