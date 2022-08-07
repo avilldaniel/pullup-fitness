@@ -11,7 +11,6 @@ import { ITableRow } from "../utils/types";
 const TableRow = ({
   // key,
   theKey,
-  username,
   stat,
   onEdit,
   inEditMode,
@@ -24,7 +23,10 @@ const TableRow = ({
   weight,
   sets,
   reps,
-}: ITableRow) => {
+}: // username,
+any) => {
+  // }: ITableRow) => {
+
   // Format date
   const d = new Date(stat.updatedAt);
   const date = d.toLocaleDateString("en-US");
@@ -72,7 +74,7 @@ const TableRow = ({
             <ActionIcon
               onClick={() =>
                 onSave({
-                  username: username,
+                  // username: username,
                   creatorName: stat.creatorName,
                   exerciseName: stat.exerciseName,
                   newWeight: weight,
@@ -122,15 +124,14 @@ const TableRow = ({
 
             {/* Delete exercise */}
             <ActionIcon
-              // onClick={() => setDelModalOpened(true)}
-              onClick={() =>
-                onDelete({
-                  username: username,
-                  creatorName: stat.creatorName,
-                  exerciseName: stat.exerciseName,
-                  muscleGrp: stat.muscleGroup,
-                })
-              }
+              // onClick={() =>
+              //   onDelete({
+              //     username: username,
+              //     creatorName: stat.creatorName,
+              //     exerciseName: stat.exerciseName,
+              //     muscleGrp: stat.muscleGroup,
+              //   })
+              // }
               radius="md"
               size="sm"
               aria-label="Delete record"

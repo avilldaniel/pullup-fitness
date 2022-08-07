@@ -11,6 +11,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // useContext(username)
   const { username, muscleGroup, newExers, creatorName } = req.body;
 
   // if adding from preset exercises, newExers === []

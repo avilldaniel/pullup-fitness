@@ -1,9 +1,8 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { Muscle_grp } from "@prisma/client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useGetStats } from "../../react-query/stats";
 import useSWR from "swr";
 import statsFetcher from "../../fetchers/statsFetcher";
 import TableStats from "../../components/TableStats";
@@ -12,13 +11,17 @@ import { Button, Modal, Select } from "@mantine/core";
 import ModalExers from "../../components/ModalExers";
 import { IOnDelete } from "../../utils/types";
 import axios from "axios";
+import { TableStatsProvider } from "../../components/TableStatsProvider";
+import { TableStatsContext } from "../../utils/contexts";
+import { useFetchStats } from "../../react-query-hooks/stats";
+import SelectMuscleGrp from "../../components/SelectMuscleGrp";
 
 const Username: NextPage = () => {
   // Convert list of enums into an array
-  const muscleGrps = Object.keys(Muscle_grp);
+  // const muscleGrps = Object.keys(Muscle_grp);
 
   // States
-  const [muscleGrp, setMuscleGrp] = useState("ALL");
+  // const [muscleGrp, setMuscleGrp] = useState("ALL");
   const [filteredArr, setFilteredArr] = useState([]);
   const [delModalOpened, setDelModalOpened] = useState(false);
   const [deleteQueue, setDeleteQueue] = useState<IOnDelete | undefined>(
@@ -28,39 +31,23 @@ const Username: NextPage = () => {
 
   // Router
   const router = useRouter();
-  const { username } = router.query;
+  const { username: queryUsername } = router.query;
+
+  // useContext
+  const { username, setUsername, muscleGrp } = useContext(TableStatsContext);
+
+  // set username on loadup
+  useEffect(() => {
+    if (queryUsername && typeof queryUsername === "string") {
+      setUsername(queryUsername);
+    }
+  }, []);
 
   // QueryClient instance
   const queryClient = useQueryClient();
 
-  // fetch stats on loadup
-  // useEffect(() => {
-  //   router.isReady ?
-  // }, [username])
-
   // Fetch all of user's exercise stats
-  // const { isFetching, ...queryInfo } = useStats(username);
-  const { isLoading, isError, data, error } = useGetStats(username);
-
-  // const { data, error, isValidating } = useSWR(
-  //   username && [`/api/stats/${username}`, setFilteredArr],
-  //   statsFetcher,
-  //   {
-  //     onErrorRetry: (error) => {
-  //       // Never retry on 400.
-  //       if (error.status === 400) return;
-  //     },
-  //   }
-  // );
-
-  // Items to render for select dropdown
-  const selectOptions = [{ value: "ALL", label: "All" }];
-  muscleGrps.map((group, i) => {
-    selectOptions.push({
-      value: `${group}`,
-      label: `${group[0].toUpperCase() + group.slice(1).toLowerCase()}`,
-    });
-  });
+  const { isLoading, isError, data } = useFetchStats(username);
 
   // Invoked when user confirms they would like to delete a record
   const deleteSubmitted = async () => {
@@ -85,38 +72,38 @@ const Username: NextPage = () => {
     setDelModalOpened(false);
   };
 
-  return (
-    <>
-      {/* <h1>Username: {username}</h1> */}
+  // Items to render for select dropdown
+  // const selectOptions = [{ value: "ALL", label: "All" }];
+  // muscleGrps.map((group, i) => {
+  //   selectOptions.push({
+  //     value: `${group}`,
+  //     label: `${group[0].toUpperCase() + group.slice(1).toLowerCase()}`,
+  //   });
+  // });
 
-      {/* Select dropdown */}
-      <Select
+  return (
+    <TableStatsProvider>
+      ={/* Select dropdown */}
+      <SelectMuscleGrp />
+      {/* <Select
         label="Select a muscle group"
-        defaultValue="All"
+        defaultValue={"All"}
         value={muscleGrp}
         // onChange={handleMuscleGrp}
+        // onChange={(e) => setMuscleGrp(e)}
+        // onChange={(e) => {
+        //   console.log("e:", e?.toString());
+        //   setMuscleGrp(e!.toString());
+        //   console.log("muscleGrp:", muscleGrp);
+        // }}
         onChange={(e: string) => setMuscleGrp(e)}
         data={selectOptions}
         transition="scale-y"
         transitionDuration={100}
         transitionTimingFunction="ease"
-      />
-
+      /> */}
       {/* Table */}
-      {isLoading ? (
-        <OrangeLoader />
-      ) : isError ? (
-        <p>
-          To add exercises, select a muscle group. <br />
-          Then add from a list of preset exercises, or create your own exercise.
-        </p>
-      ) : (
-        <>
-          {data.map((exercise: any, key: any) => (
-            <span key={key}>{exercise.exerciseName}</span>
-          ))}
-        </>
-      )}
+      <TableStats />
       {/* {isValidating ? (
         <OrangeLoader />
       ) : data && !error && typeof username === "string" ? (
@@ -134,8 +121,8 @@ const Username: NextPage = () => {
           Then add from a list of preset exercises, or create your own exercise.
         </p>
       )} */}
-
       {/* Modal buttons to add exercises */}
+      <ModalExers />
       {/* {muscleGrp !== "ALL" && typeof username === "string" && (
         <ModalExers
           username={username}
@@ -143,7 +130,6 @@ const Username: NextPage = () => {
           setFilteredArr={setFilteredArr}
         />
       )} */}
-
       {/* Modal that opens when user is deleting a record */}
       <Modal
         opened={delModalOpened}
@@ -165,7 +151,7 @@ const Username: NextPage = () => {
         </Button>
         {invalidDelete && <p>Cannot delete record. Try refreshing.</p>}
       </Modal>
-    </>
+    </TableStatsProvider>
   );
 };
 

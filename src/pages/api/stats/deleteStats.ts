@@ -14,6 +14,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // useContext(username)
   const { username, muscleGrp, exerciseName, creatorName } = req.body;
 
   try {
@@ -41,7 +42,7 @@ export default async function handler(
       });
     }
 
-    // return filtered array of updated stats
+    // return deleted stat as an object
     return res.status(200).send(objectDeleted);
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
