@@ -1,12 +1,13 @@
 import { Button, Modal } from "@mantine/core";
 import { QueryCache, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserStore } from "../utils/zustand-stores";
-import {
-  deleteStatsFetcher,
-  useMutateDeleteStats,
-} from "../react-query-hooks/stats";
+import { useFetchStats } from "../react-query-hooks/useFetchStats";
 // import { deleteStatsFetcher } from "../react-query-hooks/stats";
 import OrangeLoader from "./OrangeLoader";
+import axios from "axios";
+import { useContext } from "react";
+import { TableStatsContext } from "../utils/contexts";
+import { Exercise, Exercise_stat } from "@prisma/client";
 
 const ModalDelete = ({
   delModalOpened,
@@ -17,27 +18,36 @@ const ModalDelete = ({
   // Zustand
   const username = useUserStore((state) => state.username);
 
-  // const useMutateDeleteStats = () => {
-  //   // const queryClient = useQueryClient();
-  //   // const queryCache = QueryCache;
-  //   return useMutation(deleteStatsFetcher, {
-  //     onSuccess: (data) => {
-  //       // const queryCache = QueryCache;
-  //       // data -> object that was just deleted
-  //       // queryClient.setQueryData(["stats", username], (old) => {
-  //       //   console.log("old:", old);
-  //       // });
+  // Fetch user stats
+  // const { isLoading, isError, data: stats } = useFetchStats();
 
-  //     },
-  //   });
-  // };
-  const deleteMutation = useMutateDeleteStats(username);
+  const queryClient = useQueryClient();
+  const deleteStatsMutation = useMutation(
+    async () => {
+      const res = await axios.delete("/api/stats/deleteStats", {
+        data: deleteQueue,
+      });
+      return res.data;
+    },
+    {
+      onSuccess: (data) => {
+        queryClient.setQueriesData(
+          ["stats", username],
+          (oldData: Exercise_stat[] | undefined) => {
+            return oldData?.filter(
+              (exercise) => JSON.stringify(exercise) !== JSON.stringify(data)
+            );
+          }
+        );
+      },
+    }
+  );
 
   // Invoked when user confirms they would like to delete a record
   const deleteSubmitted = () => {
     // hit API route which will query db and delete a record if creatorName !== "admin"
     // res.data should return array user's updated stats
-    deleteMutation.mutate(deleteQueue);
+    deleteStatsMutation.mutate();
 
     //   // if (res.ok), setFilteredArr(res.data) to re-render table stats
     //   if (res.status === 200) {
@@ -86,7 +96,7 @@ const ModalDelete = ({
       </Modal>
 
       {/* Deleted notification */}
-      {deleteMutation.isLoading ? (
+      {/* {deleteMutation.isLoading ? (
         <OrangeLoader />
       ) : deleteMutation.isError ? (
         <p>
@@ -94,7 +104,7 @@ const ModalDelete = ({
         </p>
       ) : (
         <p>Record successfully deleted.</p>
-      )}
+      )} */}
     </>
   );
 };

@@ -10,48 +10,81 @@ import { IModalExers } from "../utils/types";
 import OrangeLoader from "./OrangeLoader";
 import { TableStatsContext } from "../utils/contexts";
 import { useUserStore } from "../utils/zustand-stores";
-import {
-  getDiffExersFetcher,
-  // getStatsFetcher,
-  // useFetchStats,
-} from "../react-query-hooks/stats";
-import { useQuery } from "@tanstack/react-query";
+import { useFetchStats } from "../react-query-hooks/useFetchStats";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Exercise, Exercise_stat } from "@prisma/client";
 
 const ModalExers = () => {
   // Zustand
   const username = useUserStore((state) => state.username);
 
-  // Fetch stats
-  // const { isLoading, isError, data } = useFetchStats(username);
-  const { isLoading, isError, data } = useQuery(["stats"], async () => {
-    const res = await axios.get("/api/stats/fetchStats", {
-      params: {
-        username,
-      },
-    });
-
-    console.log("hellores.data 2:", res.data);
-    return res.data;
-  });
-
-  const { data: diffData } = useQuery(["diff-exers"], getDiffExersFetcher);
-
   // Context
   const { muscleGrp } = useContext(TableStatsContext);
 
   // States
-  const [diffArray, setDiffArray] = useState<string[]>([]);
+  // const [diffArray, setDiffArray] = useState<string[]>([]);
   const [presetExer, setPresetExer] = useState<string[]>([]);
   const [presetOpened, setPresetOpened] = useState(false);
   const [customOpened, setCustomOpened] = useState(false);
   const [invalidCustom, setInvalidCustom] = useState(false);
   const [invalidPreset, setInvalidPreset] = useState(false);
 
-  // useSWR, fetch array that is to be rendered inside Modal, which will include radio buttons
-  // const { data, error, isValidating } = useSWR(
-  //   [`/api/exercises/${username}/${muscleGrp}`, setDiffArray],
-  //   modalFetcher
-  // );
+  // Fetch user stats
+  // const { data: stats } = useFetchStats();
+
+  const {
+    isLoading,
+    isError,
+    data: diffArray,
+  } = useQuery(
+    ["exercise-diff"],
+    async () => {
+      const res = await axios.get("/api/exercises/differenceExercises", {
+        params: {
+          username,
+          muscleGrp,
+        },
+      });
+
+      // returns array of Exercises {id, name, muscleGrp, creator}
+      return res.data;
+    },
+    {
+      // run query only when preset modal is opened
+      enabled: !!presetOpened,
+    }
+  );
+
+  const queryClient = useQueryClient();
+  const addStatsMutation = useMutation(
+    async () => {
+      const res = await axios.post("/api/stats/addStats", {
+        username,
+        muscleGroup: muscleGrp,
+        newExers: presetExer,
+        creatorName: "admin",
+      });
+      return res.data;
+    },
+    {
+      onSuccess: (data) => {
+        queryClient.setQueriesData(
+          ["stats", username],
+          (oldData: Exercise_stat[] | undefined) => {
+            return [...oldData!, ...data];
+          }
+        );
+        queryClient.setQueriesData(
+          ["exercise-diff"],
+          (oldData: Exercise[] | undefined) => {
+            return oldData?.filter((exercise) => {
+              exercise.id !== data.id;
+            });
+          }
+        );
+      },
+    }
+  );
 
   // react-hook-form (useForm) + Zod to validate custom exercise input:
   // 1 <= custom exercise name length <= 30
@@ -75,15 +108,15 @@ const ModalExers = () => {
 
   // Convert items to JSX checkboxes to insert into <Checkbox.Group>
   let checkItems: React.ReactNode[];
-  if (diffData && !isError) {
+  if (diffArray && !isError) {
     // if (diffArray && !isError) {
-    checkItems = diffData.map((exercise: any, key: number) => {
-      console.log("exercise:", exercise);
+    checkItems = diffArray.map((exercise: Exercise) => {
+      // console.log("exercise:", exercise);
       return (
         <Checkbox
-          key={key}
-          value={exercise.exerciseName}
-          label={exercise.exerciseName}
+          key={exercise.id}
+          value={exercise.name}
+          label={exercise.name}
         />
       );
     });
@@ -93,16 +126,13 @@ const ModalExers = () => {
   // Run when checkbox group has been submitted. Pass presetExer to API route. API route
   // will iterate through each exercise name and it to user's exercise stats w/ the
   // default weight, sets, and reps.
+
   const handleAddedExer = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       // POST request only needs username and the names[] of the exercises to be added
       // response will be array of updated stats (by querying db)
-      const res = await axios.post(`/api/exercises/post/${username}`, {
-        newExers: presetExer,
-        muscleGroup: muscleGrp,
-        creatorName: "admin",
-      });
+      addStatsMutation.mutate();
 
       // after db query, setPresetExer([]), reset invalidPreset (may already be reset),
       // setFilteredArr(w/ new exercises) to re-render table stats with new data,
@@ -110,12 +140,12 @@ const ModalExers = () => {
       setPresetExer([]);
       setInvalidPreset(false);
       // setFilteredArr(res.data);
-      const diffArrayRes = await axios.get(
-        `/api/exercises/${username}/${muscleGrp}`
-      );
-      const diffArrayData = diffArrayRes.data;
+      // const diffArrayRes = await axios.get(
+      //   `/api/exercises/${username}/${muscleGrp}`
+      // );
+      // const diffArrayData = diffArrayRes.data;
       // /api/exercises/${username}/${muscleGrp}
-      setDiffArray(diffArrayData);
+      // setDiffArray(diffArrayData);
       setPresetOpened(false);
     } catch (e) {
       // if not able to query db with new exercises,
@@ -171,7 +201,8 @@ const ModalExers = () => {
             {/* List available exercises to add */}
             {isLoading ? (
               <OrangeLoader />
-            ) : data ? (
+            ) : diffArray ? (
+              // <form onSubmit={() => {}}>
               <form onSubmit={handleAddedExer}>
                 <Checkbox.Group
                   // value={presetExer}

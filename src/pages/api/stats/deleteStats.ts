@@ -16,9 +16,9 @@ export default async function handler(
 ) {
   // useContext(username)
   const { username, muscleGrp, exerciseName, creatorName } = req.body;
+  // console.log(username, muscleGrp, exerciseName, creatorName);
 
   try {
-    console.log(username, muscleGrp, exerciseName, creatorName);
     // delete exercise stat
     const objectDeleted = await prisma.exercise_stat.delete({
       where: {

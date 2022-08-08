@@ -13,6 +13,7 @@ export default async function handler(
 ) {
   // useContext(username)
   const { username, muscleGroup, newExers, creatorName } = req.body;
+  console.log(username, muscleGroup, newExers, creatorName);
 
   // if adding from preset exercises, newExers === []
   if (Array.isArray(newExers) && typeof username === "string") {

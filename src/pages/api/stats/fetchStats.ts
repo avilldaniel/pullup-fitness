@@ -11,15 +11,18 @@ export default async function handler(
   res: NextApiResponse
 ) {
   // change this so that we get username from global state
-  const { username } = req.body;
+  const { username } = req.query;
+  // const { username } = req.body;
+  // console.log("req.body:", req.body);
+  // console.log("req.query", req.query);
 
   try {
     // query db to fetch user's stats
     const getStats = await prisma.exercise_stat.findMany({
       where: {
-        AND: { userName: { equals: username } },
+        AND: { userName: { equals: username as string } },
         OR: [
-          { creatorName: { equals: username } },
+          { creatorName: { equals: username as string } },
           { creatorName: { equals: "admin" } },
         ],
       },

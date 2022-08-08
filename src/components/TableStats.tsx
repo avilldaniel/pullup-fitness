@@ -19,6 +19,7 @@ import OrangeLoader from "./OrangeLoader";
 import { useUserStore } from "../utils/zustand-stores";
 import ModalDelete from "./ModalDelete";
 import { useQuery } from "@tanstack/react-query";
+import { useFetchStats } from "../react-query-hooks/useFetchStats";
 
 const TableStats = () => {
   // Router
@@ -37,18 +38,9 @@ const TableStats = () => {
   });
 
   // Fetch user stats
+  const { isLoading, isError, data: stats } = useFetchStats();
   // const { isLoading, isError, data } = useFetchStats(username);
   // const { isLoading, isError, data } = useQuery(["stats"], getStatsFetcher);
-  const { isLoading, isError, data } = useQuery(["stats"], async () => {
-    const res = await axios.get("/api/stats/fetchStats", {
-      params: {
-        username,
-      },
-    });
-
-    console.log("hellores.data 2:", res.data);
-    return res.data;
-  });
 
   /****************************************************************************/
   // Make table editable, dynamic
@@ -148,8 +140,8 @@ const TableStats = () => {
   /****************************************************************************/
   // individual rows to render
   let rows: [] = [];
-  if (data) {
-    rows = data.map((stat: Exercise_stat, key: number) => {
+  if (stats) {
+    rows = stats.map((stat: Exercise_stat, key: number) => {
       // const rows = data.map((stat: Exercise_stat, key: number) => {
       return (
         <TableRow
