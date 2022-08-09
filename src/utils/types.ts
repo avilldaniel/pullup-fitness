@@ -1,14 +1,14 @@
 import { Exercise_stat, Muscle_grp } from "@prisma/client";
 import { Dispatch, SetStateAction } from "react";
 
-export interface IPresetExerDiff {
-  username: string;
-  muscleGrp: string;
-}
+// export interface IPresetExerDiff {
+//   username: string;
+//   muscleGrp: string;
+// }
 
-export interface IGetUserExerStats {
-  username: string;
-}
+// export interface IGetUserExerStats {
+//   username: string;
+// }
 
 export interface IModalExers {
   username: string;

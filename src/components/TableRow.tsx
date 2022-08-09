@@ -7,11 +7,11 @@ import {
 } from "@tabler/icons";
 import React from "react";
 import { ITableRow } from "../utils/types";
+import { useUserStore } from "../utils/zustand-stores";
 
 const TableRow = ({
   // key,
   theKey,
-  username,
   stat,
   onEdit,
   inEditMode,
@@ -24,7 +24,13 @@ const TableRow = ({
   weight,
   sets,
   reps,
-}: ITableRow) => {
+}: // username,
+any) => {
+  // }: ITableRow) => {
+
+  // Zustand
+  const username = useUserStore((state) => state.username);
+
   // Format date
   const d = new Date(stat.updatedAt);
   const date = d.toLocaleDateString("en-US");
@@ -72,7 +78,7 @@ const TableRow = ({
             <ActionIcon
               onClick={() =>
                 onSave({
-                  username: username,
+                  // username: username,
                   creatorName: stat.creatorName,
                   exerciseName: stat.exerciseName,
                   newWeight: weight,
@@ -122,7 +128,6 @@ const TableRow = ({
 
             {/* Delete exercise */}
             <ActionIcon
-              // onClick={() => setDelModalOpened(true)}
               onClick={() =>
                 onDelete({
                   username: username,

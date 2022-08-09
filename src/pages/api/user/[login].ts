@@ -1,4 +1,4 @@
-// this dynamic API route will be used to fetch a specific user
+// Dynamic API route used to fetch a specific user
 
 import { Prisma } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -10,18 +10,17 @@ export default async function handler(
 ) {
   // [login].ts
   const { login } = req.query;
-  // console.log("login:", login);
-  // check login is not undefined and is in correct format
+  // Check login is not undefined and is in correct format
   if (login && typeof login === "string") {
     try {
-      // check if api query (login) matches with an existing user
+      // Check if api query (login) matches with an existing user
       const getUser = await prisma.user.findFirstOrThrow({
         where: {
           // login === username || login === email
           OR: [{ email: { equals: login } }, { username: { equals: login } }],
         },
       });
-      // console.log("getUser:", getUser);
+
       return res.status(200).send(getUser);
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {

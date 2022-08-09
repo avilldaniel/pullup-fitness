@@ -1,20 +1,24 @@
-// API route which will delete an individual exercise stat
-// respone should return array of user's updated stats
+// API route used to delete an individual exercise stat
+// needs username (which will be pulled from Context)
+// return object of exercise stat that was deleted
+// onMutation setQueryData:
+// queryData.filter(stat => {
+// stat.exerciseName !== deleted.exerciseName
+// && stat.creatorName !== deleted.creatorName)}
 
-import { Prisma } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getUserExerStats } from "../../../../db-queries/getUserExerStats";
-import { prisma } from "../../../../utils/db";
+import { Prisma } from "@prisma/client";
+import { prisma } from "../../../utils/db";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { creatorName, username, exerciseName, muscleGrp } = req.body;
+  const { username, muscleGrp, exerciseName, creatorName } = req.body;
 
   try {
-    // delete exercise stat
-    await prisma.exercise_stat.delete({
+    // Delete exercise stat
+    const objectDeleted = await prisma.exercise_stat.delete({
       where: {
         userName_exerciseName_creatorName: {
           userName: username,
@@ -24,7 +28,7 @@ export default async function handler(
       },
     });
 
-    // if creatorName !== "admin", delete the actual exercise itself
+    // If creatorName !== "admin", delete the actual exercise itself
     if (creatorName !== "admin") {
       await prisma.exercise.delete({
         where: {
@@ -37,9 +41,8 @@ export default async function handler(
       });
     }
 
-    // return updated stats
-    const stats = await getUserExerStats({ username });
-    return res.status(200).send(stats);
+    // Return deleted stat as an object
+    return res.status(200).send(objectDeleted);
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === "P2002") {
