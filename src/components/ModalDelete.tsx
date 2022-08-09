@@ -1,13 +1,8 @@
 import { Button, Modal } from "@mantine/core";
-import { QueryCache, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserStore } from "../utils/zustand-stores";
-import { useFetchStats } from "../react-query-hooks/useFetchStats";
-// import { deleteStatsFetcher } from "../react-query-hooks/stats";
-import OrangeLoader from "./OrangeLoader";
 import axios from "axios";
-import { useContext } from "react";
-import { TableStatsContext } from "../utils/contexts";
-import { Exercise, Exercise_stat } from "@prisma/client";
+import { Exercise_stat } from "@prisma/client";
 
 const ModalDelete = ({
   delModalOpened,
@@ -18,9 +13,7 @@ const ModalDelete = ({
   // Zustand
   const username = useUserStore((state) => state.username);
 
-  // Fetch user stats
-  // const { isLoading, isError, data: stats } = useFetchStats();
-
+  // Mutation for deleting a stat
   const queryClient = useQueryClient();
   const deleteStatsMutation = useMutation(
     async () => {
@@ -45,21 +38,10 @@ const ModalDelete = ({
 
   // Invoked when user confirms they would like to delete a record
   const deleteSubmitted = () => {
-    // hit API route which will query db and delete a record if creatorName !== "admin"
-    // res.data should return array user's updated stats
+    // Invoke delete
     deleteStatsMutation.mutate();
 
-    //   // if (res.ok), setFilteredArr(res.data) to re-render table stats
-    //   if (res.status === 200) {
-    //     // setFilteredArr(res.data);
-    //   }
-    // } catch (e) {
-    //   // console.error(e);
-    //   // setInvalidDelete(true) -> {invalidDelete && {<p>Cannot delete record. Try refreshing.</p>}}
-    //   // setInvalidDelete(true);
-    // }
-
-    // close modal
+    // Close modal
     setDelModalOpened(false);
   };
 

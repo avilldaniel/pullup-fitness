@@ -62,28 +62,6 @@ const ModalExers = () => {
         // creatorName: username,
       });
       return res.data;
-      // // If a custom exercise is being added
-      // if (typeof exercises === "string") {
-      //   const res = await axios.post("/api/stats/addStats", {
-      //     username,
-      //     muscleGroup: muscleGrp,
-      //     newExers: exercises,
-      //     creatorName: username,
-      //   });
-      //   // returns array of custom exercise (1)
-      //   return res.data;
-      // }
-
-      // // Else if an array of preset exercises is being added
-      // else {
-      //   const res = await axios.post("/api/stats/addStats", {
-      //     username,
-      //     muscleGroup: muscleGrp,
-      //     newExers: exercises,
-      //     creatorName: "admin",
-      //   });
-      //   return res.data;
-      // }
     },
     {
       // Update query cache of two arrays

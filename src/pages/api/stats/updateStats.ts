@@ -40,6 +40,6 @@ export default async function handler(
         return res.status(400).send(e.meta);
       }
     }
-    return res.status(400).send(e);
+    return res.status(401).send(e);
   }
 }
