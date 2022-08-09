@@ -37,6 +37,9 @@ const TableStats = () => {
     }
   });
 
+  // Context
+  const { muscleGrp } = useContext(TableStatsContext);
+
   // Fetch user stats
   const { isLoading, isError, data: stats } = useFetchStats();
   // const { isLoading, isError, data } = useFetchStats(username);
@@ -139,31 +142,36 @@ const TableStats = () => {
 
   /****************************************************************************/
   // individual rows to render
-  let rows: [] = [];
+  let rows: React.ReactNode[] = [];
   if (stats) {
     rows = stats.map((stat: Exercise_stat, key: number) => {
       // const rows = data.map((stat: Exercise_stat, key: number) => {
-      return (
-        <TableRow
-          key={key}
-          theKey={key}
-          // username={username}
-          stat={stat}
-          onEdit={onEdit}
-          inEditMode={inEditMode}
-          updateStats={updateStats}
-          onSave={onSave}
-          onCancel={onCancel}
-          onDelete={onDelete}
-          setWeight={setWeight}
-          setSets={setSets}
-          setReps={setReps}
-          weight={weight!}
-          sets={sets!}
-          reps={reps!}
-        />
-      );
+      if (stat.muscleGroup === muscleGrp || muscleGrp === "ALL") {
+        return (
+          <TableRow
+            key={key}
+            theKey={key}
+            // username={username}
+            stat={stat}
+            onEdit={onEdit}
+            inEditMode={inEditMode}
+            updateStats={updateStats}
+            onSave={onSave}
+            onCancel={onCancel}
+            onDelete={onDelete}
+            setWeight={setWeight}
+            setSets={setSets}
+            setReps={setReps}
+            weight={weight!}
+            sets={sets!}
+            reps={reps!}
+          />
+        );
+      }
     });
+
+    // Remove undefined values in array
+    rows = rows.filter((stat) => stat);
   }
 
   return (
@@ -171,7 +179,8 @@ const TableStats = () => {
       {/* Table of stats */}
       {isLoading ? (
         <OrangeLoader />
-      ) : isError ? (
+      ) : !rows.length ? (
+        // ) : isError ? (
         <p>
           To add exercises, select a muscle group. <br />
           Then add from a list of preset exercises, or create your own exercise.

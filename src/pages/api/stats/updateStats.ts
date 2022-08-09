@@ -11,7 +11,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // useContext(username)
   const { username, creatorName, exerciseName, newWeight, newSets, newReps } =
     req.body;
 
@@ -32,7 +31,7 @@ export default async function handler(
       },
     });
 
-    // return updated stat as an object
+    // Return updated stat as an object
     return res.status(200).send(objectUpdated);
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {

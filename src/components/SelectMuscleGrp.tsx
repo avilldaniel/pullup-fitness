@@ -1,22 +1,21 @@
 import { Select } from "@mantine/core";
 import { Muscle_grp } from "@prisma/client";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { TableStatsContext } from "../utils/contexts";
 
 const SelectMuscleGrp = () => {
+  // Context
   const { muscleGrp, setMuscleGrp } = useContext(TableStatsContext);
+
   // Convert list of enums into an array
   const muscleGrps = Object.keys(Muscle_grp);
 
-  // Items to render for select dropdown
+  // Set default value of select dropdown (All), then map rest of muscle groups
   const selectOptions = [{ value: "ALL", label: "All" }];
-
-  useEffect(() => {
-    muscleGrps.map((group, i) => {
-      selectOptions.push({
-        value: `${group}`,
-        label: `${group[0].toUpperCase() + group.slice(1).toLowerCase()}`,
-      });
+  muscleGrps.map((group, i) => {
+    selectOptions.push({
+      value: `${group}`,
+      label: `${group[0].toUpperCase() + group.slice(1).toLowerCase()}`,
     });
   });
 

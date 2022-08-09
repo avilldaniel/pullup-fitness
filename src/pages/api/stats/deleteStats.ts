@@ -14,12 +14,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // useContext(username)
   const { username, muscleGrp, exerciseName, creatorName } = req.body;
-  // console.log(username, muscleGrp, exerciseName, creatorName);
 
   try {
-    // delete exercise stat
+    // Delete exercise stat
     const objectDeleted = await prisma.exercise_stat.delete({
       where: {
         userName_exerciseName_creatorName: {
@@ -30,7 +28,7 @@ export default async function handler(
       },
     });
 
-    // if creatorName !== "admin", delete the actual exercise itself
+    // If creatorName !== "admin", delete the actual exercise itself
     if (creatorName !== "admin") {
       await prisma.exercise.delete({
         where: {
@@ -43,7 +41,7 @@ export default async function handler(
       });
     }
 
-    // return deleted stat as an object
+    // Return deleted stat as an object
     return res.status(200).send(objectDeleted);
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {

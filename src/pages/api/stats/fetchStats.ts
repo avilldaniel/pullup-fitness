@@ -10,35 +10,42 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // change this so that we get username from global state
   const { username } = req.query;
-  // const { username } = req.body;
-  // console.log("req.body:", req.body);
-  // console.log("req.query", req.query);
+  if (username && typeof username === "string") {
+    try {
+      // Confirm username is a registered user
+      await prisma.user.findFirstOrThrow({
+        where: {
+          username: {
+            equals: username,
+          },
+        },
+      });
 
-  try {
-    // query db to fetch user's stats
-    const getStats = await prisma.exercise_stat.findMany({
-      where: {
-        AND: { userName: { equals: username as string } },
-        OR: [
-          { creatorName: { equals: username as string } },
-          { creatorName: { equals: "admin" } },
-        ],
-      },
-    });
+      // Query db to fetch user's stats
+      const getStats = await prisma.exercise_stat.findMany({
+        where: {
+          AND: { userName: { equals: username } },
+          OR: [
+            { creatorName: { equals: username } },
+            { creatorName: { equals: "admin" } },
+          ],
+        },
+      });
 
-    // return array of stats
-    return res.status(200).send(getStats);
-  } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code === "P2002") {
-        console.log("Can't fetch user.");
-        return res.status(400).send(e.meta);
+      // Return array of stats
+      return res.status(200).send(getStats);
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === "P2002") {
+          console.log("Can't fetch user.");
+          return res.status(400).send(e.meta);
+        }
       }
-    }
 
-    // username may not be registed
-    return res.status(400).send("Invalid request.");
+      // Username may not be registed
+      return res.status(400).send("Invalid request.");
+    }
   }
+  return res.status(401).send("Invalid request.");
 }

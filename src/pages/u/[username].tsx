@@ -19,59 +19,41 @@ const Username: NextPage = () => {
   const setUsername = useUserStore((state) => state.setUsername);
 
   // Fetch user stats
-  // const {} = useFetchStats();
   const { isLoading, isError, data: stats } = useFetchStats();
 
   // Set username on loadup
   useEffect(() => {
+    // console.log("username before set:", username);
     if (queryUsername && typeof queryUsername === "string") {
-      // console.log("username before set:", username);
       setUsername(queryUsername);
       // console.log("username after set:", username);
     }
-  }, []);
+  }, [username, setUsername, queryUsername]);
 
-  if (stats) {
-    return (
-      <TableStatsProvider>
-        <h3>Username: {username}</h3>
+  return (
+    <TableStatsProvider>
+      {isLoading ? (
+        <OrangeLoader />
+      ) : isError ? (
+        <h1>Invalid user.</h1>
+      ) : (
+        <>
+          <h3>Username: {username}</h3>
 
-        {/* Select dropdown */}
-        <SelectMuscleGrp />
+          <div>
+            {/* Select dropdown */}
+            <SelectMuscleGrp />
+            will be side-by-side
+            {/* Modal buttons to add exercises */}
+            <ModalExers />
+          </div>
 
-        {/* Table */}
-        <TableStats />
-
-        {/* Modal buttons to add exercises */}
-        <ModalExers />
-      </TableStatsProvider>
-    );
-  }
-
-  return <OrangeLoader />;
-
-  // return (
-  //   <TableStatsProvider>
-  //     {isLoading ? (
-  //       <OrangeLoader />
-  //     ) : isError ? (
-  //       <h1>Invalid user.</h1>
-  //     ) : (
-  //       <>
-  //         <h3>Username: {username}</h3>
-
-  //         {/* Select dropdown */}
-  //         <SelectMuscleGrp />
-
-  //         {/* Table */}
-  //         <TableStats />
-
-  //         {/* Modal buttons to add exercises */}
-  //         <ModalExers />
-  //       </>
-  //     )}
-  //   </TableStatsProvider>
-  // );
+          {/* Table */}
+          <TableStats />
+        </>
+      )}
+    </TableStatsProvider>
+  );
 };
 
 export default Username;
