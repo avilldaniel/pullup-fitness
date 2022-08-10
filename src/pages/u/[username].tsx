@@ -8,6 +8,8 @@ import SelectMuscleGrp from "../../components/SelectMuscleGrp";
 import { useUserStore } from "../../utils/zustand-stores";
 import { useFetchStats } from "../../react-query-hooks/useFetchStats";
 import OrangeLoader from "../../components/OrangeLoader";
+import exercises from "../../styles/ExercisesTableLayout.module.css";
+import bg from "../../styles/Background.module.css";
 
 const Username: NextPage = () => {
   // Router
@@ -31,28 +33,30 @@ const Username: NextPage = () => {
   }, [username, setUsername, queryUsername]);
 
   return (
-    <TableStatsProvider>
-      {isLoading ? (
-        <OrangeLoader />
-      ) : isError ? (
-        <h1>Invalid user.</h1>
-      ) : (
-        <>
-          <h3>Username: {username}</h3>
+    <div className={bg.color}>
+      <TableStatsProvider>
+        {isLoading ? (
+          <OrangeLoader />
+        ) : isError ? (
+          <h1>Invalid user.</h1>
+        ) : (
+          <>
+            <h3>Username: {username}</h3>
 
-          <div>
-            {/* Select dropdown */}
-            <SelectMuscleGrp />
-            will be side-by-side
-            {/* Modal buttons to add exercises */}
-            <ModalExers />
-          </div>
+            <div>
+              {/* Select dropdown */}
+              <SelectMuscleGrp />
+              will be side-by-side
+              {/* Modal buttons to add exercises */}
+              <ModalExers />
+            </div>
 
-          {/* Table */}
-          <TableStats />
-        </>
-      )}
-    </TableStatsProvider>
+            {/* Table */}
+            <TableStats />
+          </>
+        )}
+      </TableStatsProvider>
+    </div>
   );
 };
 

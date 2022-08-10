@@ -207,7 +207,7 @@ const TableStats = () => {
         </p>
       ) : (
         <>
-          <Table fontSize="sm" horizontalSpacing={4} striped>
+          <Table fontSize="sm" horizontalSpacing={4} highlightOnHover>
             <thead>
               <tr>
                 <th>Exercise</th>
