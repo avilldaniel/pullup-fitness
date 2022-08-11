@@ -21,7 +21,7 @@
 
 .card {
   /* dev */
-  border: 1px solid red;
+  /* border: 5px solid red; */
 
   /* From https://css.glass */
   background: rgba(29, 117, 170, 0.8);
@@ -65,6 +65,7 @@
   /* flex */
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 /* .form Button {
   align-self: flex-end;

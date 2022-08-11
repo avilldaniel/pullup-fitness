@@ -10,7 +10,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { loginSchema } from "../../schemas/zodSchemas";
+import { loginSchema, userSchema } from "../../schemas/zodSchemas";
 import bg from "../../styles/Background.module.css";
 import login from "../../styles/Login.module.css";
 
@@ -24,7 +24,7 @@ const Login: NextPage = () => {
   // State
   // state that toggles whether in sign-in or register mode
   const [showRegister, setShowRegister] = useState(false);
-  const [invalidMsg, setInvalidMsg] = useState("");
+  const [invalidLogin, setInvalidLogin] = useState("");
 
   const {
     register,
@@ -40,7 +40,34 @@ const Login: NextPage = () => {
       router.push(`/u/${username}`);
     } catch (e) {
       // console.log("e:", e);
-      setInvalidMsg("Incorrect username or password.");
+      setInvalidLogin("Incorrect username or password.");
+    }
+  };
+
+  /*******************************************************************/
+  // For register form
+  const [invalidRegister, setInvalidRegister] = useState("");
+
+  // instantiate useForm() which will conform to our defined Zod schema
+  const {
+    register: registerReg,
+    handleSubmit: handleRegSubmit,
+    formState: { errors },
+  } = useForm({ resolver: zodResolver(userSchema) });
+
+  // if form data passes Zod schema, handle submit by invoking api/post-user with the valid data
+  const newAccount: SubmitHandler<FieldValues> = async (data) => {
+    // Query db with form data
+    //  if success, user info can be posted into db, re-direct to user's new dashboard
+    //  if fails, user info may already exist in db, render invalid error
+    try {
+      const res = await axios.post("/api/user/post-user", data);
+      setInvalidRegister("");
+      const { username } = res.data;
+      router.push(`/u/${username}`);
+    } catch (e: any) {
+      // console.error(e);
+      setInvalidRegister(e.response.data.target[0]);
     }
   };
 
@@ -51,13 +78,62 @@ const Login: NextPage = () => {
           <h3>{`<App Name, aha>`}</h3>
           <div className={login.card}>
             {showRegister ? (
-              <>register WIP</>
+              <>
+                {/* Register form */}
+                <form onSubmit={handleRegSubmit(newAccount)}>
+                  <TextInput
+                    placeholder="Email"
+                    variant="filled"
+                    radius="md"
+                    size="md"
+                    required
+                    {...registerReg("email")}
+                  />
+                  {errors.email?.message && (
+                    <div>{errors.email?.message as unknown as string}</div>
+                  )}
+                  {/* {errors.email?.message && <div>{errors.email?.message}</div>} */}
+
+                  <TextInput
+                    placeholder="Name"
+                    variant="filled"
+                    radius="md"
+                    size="md"
+                    required
+                    {...registerReg("name")}
+                  />
+                  {errors.name?.message && (
+                    <div>{errors.name?.message as unknown as string}</div>
+                  )}
+                  {/* {errors.name?.message && <div>{errors.name?.message}</div>} */}
+
+                  <TextInput
+                    placeholder="Username"
+                    variant="filled"
+                    radius="md"
+                    size="md"
+                    required
+                    {...registerReg("username")}
+                  />
+                  {errors.username?.message && (
+                    <div>{errors.username?.message as unknown as string}</div>
+                  )}
+                  {/* {errors.username?.message && <div>{errors.username?.message}</div>} */}
+
+                  <Button type="submit" color="orange">
+                    Sign up
+                  </Button>
+                </form>
+                {/* Invalid message, if cannot register user */}
+                {invalidRegister && <p>Invalid {invalidRegister}</p>}
+              </>
             ) : (
+              /*******************************************************************/
               // Login form
               <form className={login.form} onSubmit={handleSubmit(submitLogin)}>
                 <h5>Sign in</h5>
                 <TextInput
-                  placeholder="Email or username"
+                  placeholder="Username or email"
                   variant="default"
                   // variant="filled"
                   radius="md"
@@ -89,7 +165,7 @@ const Login: NextPage = () => {
                     type="submit"
                     variant="gradient"
                     gradient={{
-                      from: theme.colors.rose[3],
+                      from: theme.colors.rose[4],
                       to: theme.colors.rose[5],
                       deg: 45,
                     }}
@@ -99,7 +175,7 @@ const Login: NextPage = () => {
                 </div>
 
                 {/* Invalid message, if login is incorrect */}
-                {invalidMsg && <p>{invalidMsg}</p>}
+                {invalidLogin && <p>{invalidLogin}</p>}
               </form>
             )}
           </div>
@@ -158,4 +234,4 @@ export default Login;
 // </div>
 
 // {/* Invalid message, if login is incorrect */}
-// {invalidMsg && <p>{invalidMsg}</p>}
+// {invalidRegister && <p>{invalidRegister}</p>}

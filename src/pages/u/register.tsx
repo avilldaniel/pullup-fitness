@@ -83,7 +83,7 @@ const Register: NextPage = () => {
       </form>
 
       {/* Invalid message, if cannot register user */}
-      {invalidMsg && <p>Invalid {`${invalidMsg}`}</p>}
+      {invalidMsg && <p>Invalid {invalidMsg}</p>}
     </>
   );
 };
