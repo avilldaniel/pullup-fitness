@@ -5,28 +5,15 @@ const MyGlobalStyles = () => {
     <Global
       styles={(theme) => ({
         "*, *::before, *::after": {
+          padding: 0,
+          margin: 0,
           boxSizing: "border-box",
         },
 
-        // html, body: {
-        "html, body": {
-          padding: 0,
-          margin: 0,
-          fontSize: "1.25rem",
+        a: {
+          color: "inherit",
+          textDecoration: "none",
         },
-
-        //   'html, body':  {
-        //   padding: 0;
-        //   margin: 0;
-        //   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-        //     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-        //   /* font-family: "Ubuntu", sans-serif; */
-        // }
-
-        // a {
-        //   color: inherit;
-        //   text-decoration: none;
-        // }
       })}
     />
   );

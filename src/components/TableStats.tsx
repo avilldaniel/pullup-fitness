@@ -198,7 +198,7 @@ const TableStats = () => {
     <>
       {/* Table of stats */}
       {isLoading ? (
-        <OrangeLoader />
+        <OrangeLoader /> // change to global loader
       ) : !rows.length ? (
         // ) : isError ? (
         <p>

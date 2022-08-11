@@ -1,22 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap");
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: "DM Sans";
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
+/* Needed in order to import custom fonts */
 
 /* dm-sans-regular - latin */
 @font-face {

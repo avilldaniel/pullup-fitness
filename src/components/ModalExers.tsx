@@ -90,6 +90,7 @@ const ModalExers = () => {
     register,
     handleSubmit,
     reset,
+    setError,
     formState,
     formState: { errors },
   } = useForm({
@@ -163,7 +164,8 @@ const ModalExers = () => {
           {/* Add preset exercise */}
           <Button
             onClick={() => setPresetOpened(true)}
-            color="orange"
+            // color="orange"
+            variant="gradient"
             radius="md"
           >
             Add preset exercise
@@ -176,7 +178,7 @@ const ModalExers = () => {
           >
             {/* List available exercises to add */}
             {isLoading ? (
-              <OrangeLoader />
+              <OrangeLoader /> // change to global loader
             ) : !diffArray.length ? (
               <p>
                 All preset {muscleGrp.toLowerCase()} exercises have already been
@@ -214,7 +216,8 @@ const ModalExers = () => {
           {/* Add custom exercise */}
           <Button
             onClick={() => setCustomOpened(true)}
-            color="orange"
+            // color="orange"
+            variant="gradient"
             radius="md"
           >
             Add custom exercise
@@ -233,7 +236,8 @@ const ModalExers = () => {
                 data-autofocus
               />
               {errors.customExer?.message && (
-                <div>{errors.customExer.message}</div>
+                <div>{errors.customExer.message as unknown as string}</div>
+                // <div>{errors.customExer.message}</div>
               )}
               {invalidCustom && (
                 <div>Invalid exercise. Try a different name.</div>

@@ -1,5 +1,8 @@
-import { Loader } from "@mantine/core";
+import { Loader, useMantineTheme } from "@mantine/core";
 
 export default function OrangeLoader() {
-  return <Loader color="orange" size="md" variant="bars" />;
+  const theme = useMantineTheme();
+  return (
+    <Loader color={theme.colors.orange[3]} size="sm" variant={theme.loader} />
+  );
 }

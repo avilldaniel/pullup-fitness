@@ -79,7 +79,7 @@ const ModalDelete = ({
 
       {/* Deleted notification */}
       {/* {deleteMutation.isLoading ? (
-        <OrangeLoader />
+        <OrangeLoader /> // change to global loader
       ) : deleteMutation.isError ? (
         <p>
           3sec red notification: Could not delete record. Please try refreshing.

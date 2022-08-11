@@ -1,20 +1,35 @@
 /* color pallette */
 /* https://coolors.co/palette/8ecae6-219ebc-023047-ffb703-fb8500 */
 
-/* font */
-/* @import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap"); */
-
-.color {
-  background-color: #023047;
+.default {
+  /* background-color: var(--mantine-color-cyan-8); */
+  /* background-color: var(--mantine-color-cyan-1); */
+  background-image: linear-gradient(
+    var(--mantine-color-cyan-9),
+    var(--mantine-color-cyan-7)
+  );
   color: white;
-  /* background-color: whitesmoke;
-  color: #023047; */
-  /* font-family: "Ubuntu", sans-serif; */
   height: 100vh;
   width: 100vw;
-  /* font-family: "DM Sans"; */
 }
 
-.text-color {
-  color: white;
+/* signin.tsx */
+.signin {
+  /* dev */
+  /* border: 2px dashed cyan; */
+
+  height: 100vh;
+  width: 100vw;
+  background-image: url(../../public/polygon-scatter-haikei.svg);
+  background-size: cover;
+  background-position-y: bottom;
+  background-position: 3%;
+
+  /* margin: auto; */
+
+  /* flex */
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; */
 }
