@@ -2,7 +2,7 @@
   /* dev */
   /* border: 1px solid pink; */
 
-  height: 50%;
+  /* height: 50%; */
   padding-top: 15px;
   /* padding-top: 50px; */
   width: 300px;
@@ -17,9 +17,10 @@
 
 .container h3 {
   align-self: flex-start;
+  padding-bottom: 90px;
 }
 
-.card {
+.loginCard {
   /* dev */
   /* border: 5px solid red; */
 
@@ -31,6 +32,20 @@
   -webkit-backdrop-filter: blur(6.5px);
   border: 1px solid rgba(17, 84, 122, 0.5);
   height: 200px;
+  width: 100%;
+}
+.regCard {
+  /* dev */
+  /* border: 5px solid red; */
+
+  /* From https://css.glass */
+  background: rgba(29, 117, 170, 0.8);
+  border-radius: 12px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6.5px);
+  -webkit-backdrop-filter: blur(6.5px);
+  border: 1px solid rgba(17, 84, 122, 0.5);
+  height: 290px;
   width: 100%;
 }
 

@@ -37,10 +37,14 @@ any) => {
 
   return (
     <tr key={theKey}>
-      <td>{stat.exerciseName}</td>
+      <td style={{ maxWidth: 20, wordWrap: "break-word" }}>
+        {/* <td> */}
+        {stat.exerciseName}
+      </td>
+      {/* <td style={{ maxWidth: 120, flexWrap: "wrap" }}>{stat.exerciseName}</td> */}
 
       {/* Weight */}
-      <td>
+      <td style={{ maxWidth: 10 }}>
         {inEditMode.status && inEditMode.rowKey === theKey ? (
           <NumberInput value={weight} min={0} onChange={(e) => setWeight(e!)} />
         ) : (
@@ -49,7 +53,7 @@ any) => {
       </td>
 
       {/* Sets */}
-      <td>
+      <td style={{ maxWidth: 10 }}>
         {inEditMode.status && inEditMode.rowKey === theKey ? (
           <NumberInput value={sets} min={0} onChange={(e) => setSets(e!)} />
         ) : (
@@ -58,7 +62,7 @@ any) => {
       </td>
 
       {/* Reps */}
-      <td>
+      <td style={{ maxWidth: 10 }}>
         {inEditMode.status && inEditMode.rowKey === theKey ? (
           <NumberInput value={reps} min={0} onChange={(e) => setReps(e!)} />
         ) : (
@@ -67,10 +71,10 @@ any) => {
       </td>
 
       {/* Last Updated */}
-      <td>{date}</td>
+      <td style={{ maxWidth: 10 }}>{date}</td>
 
-      {/* Action */}
-      <td>
+      {/* Edit */}
+      <td style={{ maxWidth: 10 }}>
         {/* In edit mode */}
         {inEditMode.status && inEditMode.rowKey === theKey ? (
           <>

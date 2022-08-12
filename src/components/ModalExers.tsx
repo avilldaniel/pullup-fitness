@@ -90,14 +90,14 @@ const ModalExers = () => {
     register,
     handleSubmit,
     reset,
-    setError,
     formState,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(customExerSchema),
   });
 
-  // Recommended way to reset a form after submission
+  // Recommended way to reset a form's schema after submission
+  // We clear that actual input form in onCustomSubmit()
   // from react-hook-form docs
   useEffect(() => {
     if (formState.isSubmitSuccessful) {
@@ -149,6 +149,7 @@ const ModalExers = () => {
       // and close modal
       setInvalidCustom(false);
       setCustomOpened(false);
+      reset();
     } catch (e) {
       // if not able to query db with new exercise (ex. exercise name already exists),
       // prompt user for "Invalid exercise."
@@ -158,18 +159,43 @@ const ModalExers = () => {
   };
 
   return (
-    <>
+    <div
+    // style={{
+    //   display: muscleGrp === "ALL" ? "none" : "block",
+    // }}
+    >
       {muscleGrp !== "ALL" && typeof username === "string" && (
         <>
-          {/* Add preset exercise */}
-          <Button
-            onClick={() => setPresetOpened(true)}
-            // color="orange"
-            variant="gradient"
-            radius="md"
+          <main
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
           >
-            Add preset exercise
-          </Button>
+            {/* Add preset exercise */}
+            <Button
+              onClick={() => setPresetOpened(true)}
+              // color="orange"
+              // variant="gradient"
+              // radius="md"
+              style={{ width: "12.2em" }}
+            >
+              Add preset exercise
+            </Button>
+
+            {/* Add custom exercise */}
+            <Button
+              onClick={() => setCustomOpened(true)}
+              // color="orange"
+              // variant="gradient"
+              // radius="md"
+              style={{ width: "12.2em" }}
+            >
+              Add custom exercise
+            </Button>
+          </main>
+
+          {/* Modals */}
           <Modal
             opened={presetOpened}
             onClose={() => setPresetOpened(false)}
@@ -213,15 +239,15 @@ const ModalExers = () => {
             )}
           </Modal>
 
-          {/* Add custom exercise */}
+          {/* Add custom exercise
           <Button
             onClick={() => setCustomOpened(true)}
             // color="orange"
-            variant="gradient"
-            radius="md"
+            // variant="gradient"
+            // radius="md"
           >
             Add custom exercise
-          </Button>
+          </Button> */}
           <Modal
             opened={customOpened}
             onClose={() => setCustomOpened(false)}
@@ -256,7 +282,7 @@ const ModalExers = () => {
           </Modal>
         </>
       )}
-    </>
+    </div>
   );
 };
 

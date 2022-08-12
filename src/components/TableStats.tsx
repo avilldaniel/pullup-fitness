@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Table } from "@mantine/core";
+import { ScrollArea, Table } from "@mantine/core";
 import { Exercise_stat } from "@prisma/client";
 import {
   IEditMode,
@@ -165,30 +165,34 @@ const TableStats = () => {
   // Individual rows to render
   let rows: React.ReactNode[] = [];
   if (stats) {
-    rows = stats.map((stat: Exercise_stat, key: number) => {
-      if (stat.muscleGroup === muscleGrp || muscleGrp === "ALL") {
-        return (
-          <TableRow
-            key={key}
-            theKey={key}
-            // username={username}
-            stat={stat}
-            onEdit={onEdit}
-            inEditMode={inEditMode}
-            updateStats={updateStats}
-            onSave={onSave}
-            onCancel={onCancel}
-            onDelete={onDelete}
-            setWeight={setWeight}
-            setSets={setSets}
-            setReps={setReps}
-            weight={weight!}
-            sets={sets!}
-            reps={reps!}
-          />
-        );
-      }
-    });
+    rows = stats
+      .slice(0)
+      .reverse()
+      .map((stat: Exercise_stat, key: number) => {
+        // rows = stats.map((stat: Exercise_stat, key: number) => {
+        if (stat.muscleGroup === muscleGrp || muscleGrp === "ALL") {
+          return (
+            <TableRow
+              key={key}
+              theKey={key}
+              // username={username}
+              stat={stat}
+              onEdit={onEdit}
+              inEditMode={inEditMode}
+              updateStats={updateStats}
+              onSave={onSave}
+              onCancel={onCancel}
+              onDelete={onDelete}
+              setWeight={setWeight}
+              setSets={setSets}
+              setReps={setReps}
+              weight={weight!}
+              sets={sets!}
+              reps={reps!}
+            />
+          );
+        }
+      });
 
     // Remove undefined values in array
     rows = rows.filter((stat) => stat);
@@ -207,19 +211,37 @@ const TableStats = () => {
         </p>
       ) : (
         <>
-          <Table fontSize="sm" horizontalSpacing={4} highlightOnHover>
-            <thead>
-              <tr>
-                <th>Exercise</th>
-                <th>Weight</th>
-                <th>Sets</th>
-                <th>Reps</th>
-                <th>Last Updated</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>{rows}</tbody>
-          </Table>
+          <ScrollArea
+            // style={{ height: "22em" }}
+            style={{ height: "78%" }}
+            // style={{ height: 380 }}
+            type="scroll"
+            offsetScrollbars
+            scrollbarSize={6}
+          >
+            <Table
+              fontSize="sm"
+              horizontalSpacing={8}
+              // horizontalSpacing={4}
+              highlightOnHover
+              style={{ tableLayout: "auto" }}
+              // style={{ tableLayout: "fixed" }}
+            >
+              <thead>
+                <tr>
+                  <th>Exercise</th>
+                  <th>Wgt.</th>
+                  {/* <th>Weight</th> */}
+                  <th>Sets</th>
+                  <th>Reps</th>
+                  <th>Updated</th>
+                  {/* <th>Last Updated</th> */}
+                  <th>Edit</th>
+                </tr>
+              </thead>
+              <tbody>{rows}</tbody>
+            </Table>
+          </ScrollArea>
 
           <ModalDelete
             delModalOpened={delModalOpened}

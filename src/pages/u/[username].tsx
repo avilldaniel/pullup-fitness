@@ -3,14 +3,14 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import TableStats from "../../components/TableStats";
 import ModalExers from "../../components/ModalExers";
-import { TableStatsProvider } from "../../components/TableStatsProvider";
 import SelectMuscleGrp from "../../components/SelectMuscleGrp";
+import OrangeLoader from "../../components/OrangeLoader";
+import { TableStatsProvider } from "../../components/TableStatsProvider";
 import { useUserStore } from "../../utils/zustand-stores";
 import { useFetchStats } from "../../react-query-hooks/useFetchStats";
-import OrangeLoader from "../../components/OrangeLoader";
-import exercises from "../../styles/ExercisesTableLayout.module.css";
+import { Button, useMantineTheme } from "@mantine/core";
 import bg from "../../styles/Background.module.css";
-import { useMantineTheme } from "@mantine/core";
+import statStyles from "../../styles/Stats.module.css";
 
 const Username: NextPage = () => {
   // Theme
@@ -45,21 +45,28 @@ const Username: NextPage = () => {
           <h1>Invalid user.</h1>
         ) : (
           <>
-            <h1 style={{ fontSize: theme.fontSizes.xl }}>
-              Username: {username}
-            </h1>
-            {/* <h3>Username: {username}</h3> */}
-
-            <div>
+            <header className={statStyles.header}>
+              <h3 style={{ color: theme.colors.dark[0] }}>
+                {`<App Name, aha>`}
+              </h3>
+              {/* <h4>{`<App Name, aha>`}</h4> */}
+              <h5>
+                Hi,{" "}
+                <span style={{ color: theme.colors.orange[4] }}>
+                  {username}
+                </span>
+              </h5>
+            </header>
+            <div className={statStyles.container}>
               {/* Select dropdown */}
               <SelectMuscleGrp />
-              will be side-by-side
+
+              {/* Table */}
+              <TableStats />
+
               {/* Modal buttons to add exercises */}
               <ModalExers />
             </div>
-
-            {/* Table */}
-            <TableStats />
           </>
         )}
       </TableStatsProvider>

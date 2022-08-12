@@ -1,4 +1,4 @@
-import { Select } from "@mantine/core";
+import { MantineProvider, Select, useMantineTheme } from "@mantine/core";
 import { Muscle_grp } from "@prisma/client";
 import React, { useContext } from "react";
 import { TableStatsContext } from "../utils/contexts";
@@ -21,16 +21,21 @@ const SelectMuscleGrp = () => {
 
   return (
     <>
-      <Select
-        label="Select a muscle group"
-        defaultValue={"All"}
-        value={muscleGrp}
-        onChange={(e: string) => setMuscleGrp(e)}
-        data={selectOptions}
-        transition="scale-y"
-        transitionDuration={100}
-        transitionTimingFunction="ease"
-      />
+      <MantineProvider theme={{ colorScheme: "light" }}>
+        <Select
+          label="Select a muscle group"
+          defaultValue={"All"}
+          value={muscleGrp}
+          onChange={(e: string) => setMuscleGrp(e)}
+          data={selectOptions}
+          transition="scale-y"
+          transitionDuration={100}
+          transitionTimingFunction="ease"
+          styles={{
+            label: { color: "white" },
+          }}
+        />
+      </MantineProvider>
     </>
   );
 };

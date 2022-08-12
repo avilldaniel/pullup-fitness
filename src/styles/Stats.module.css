@@ -1,0 +1,39 @@
+.container {
+  /* dev */
+  /* border: 2px dashed cyan; */
+
+  margin: auto;
+  width: 17.5em;
+  /* padding-top: 2em; */
+  height: 90%;
+  /* height: ; */
+
+  /* flex */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  /* grid */
+  /* display: grid; */
+  /* row-gap: 5px; */
+}
+
+.header {
+  /* dev */
+  /* border: 1px solid cyan; */
+
+  /* flex */
+  display: flex;
+  align-items: flex-end;
+  /* align-items: center; */
+  justify-content: space-between;
+
+  margin: auto;
+  max-width: 45em;
+  padding: 1em 1em 0.2em;
+}
+
+.content {
+  /* dev */
+  border: 1px solid cyan;
+}

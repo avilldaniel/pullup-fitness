@@ -9,7 +9,7 @@ import MyGlobalStyles from "../styles/MyGlobalStyles";
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
 
-  // instantiate react query client
+  // Instantiate react query client
   const queryClient = new QueryClient();
 
   return (
@@ -73,17 +73,33 @@ export default function App(props: AppProps) {
                 "#262626",
                 "#0d0d0d",
               ],
+
+              // kinda light blue
+              // dark: [
+              //   "#F2F8FA",
+              //   "#F2F8FA",
+              //   "#BFDEEC",
+              //   "#8ECAE6",
+              //   "#69B1D3",
+              //   "#4D9BBF",
+              //   "#4483A1",
+              //   "#3F6D83",
+              //   "#3A5C6B",
+              //   "#344D58",
+              // ],
+
+              // matUI Blue Grey
               dark: [
-                "#F2F8FA",
-                "#F2F8FA",
-                "#BFDEEC",
-                "#8ECAE6",
+                "#ECEFF1",
+                "#CFD8DC",
+                "#B0BEC5",
+                "#90A4AE",
                 "#69B1D3",
-                "#4D9BBF",
-                "#4483A1",
-                "#3F6D83",
-                "#3A5C6B",
-                "#344D58",
+                "#607D8B",
+                "#546E7A",
+                "#455A64",
+                "#37474F",
+                "#263238",
               ],
             },
             defaultGradient: { deg: 45, from: "#ff8b1a", to: "#e67a00" },
@@ -95,7 +111,42 @@ export default function App(props: AppProps) {
             loader: "bars",
             fontFamily: "DM Sans",
             fontSizes: { xs: 12, sm: 14, md: 20, lg: 26, xl: 30 },
+            components: {
+              Button: {
+                defaultProps: {
+                  variant: "gradient",
+                  gradient: {
+                    // from: "#ff8b1a",
+                    // to: "#e67a00",
+                    from: "#e67a00",
+                    to: "#b35300",
+                    deg: 45,
+                  },
+                  radius: "md",
+                },
+                styles: (theme) => ({
+                  root: {
+                    // backgroundColor: "black",
+                    // backgroundColor: theme.colors.orange[5],
+
+                    // variant="gradient"
+                    // radius="md"
+
+                    "&:hover": {
+                      // backgroundColor: theme.colors.orange[9],
+                    },
+                  },
+                }),
+              },
+            },
           }}
+          // styles={{
+          //   Button: (theme) => ({
+          //     root: {
+          //       backgroundColor: theme.colors.orange[8],
+          //     },
+          //   }),
+          // }}
         >
           <MyGlobalStyles />
           <Component {...pageProps} />

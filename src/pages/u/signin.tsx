@@ -76,60 +76,86 @@ const Login: NextPage = () => {
       <div className={bg.signin}>
         <main className={login.container}>
           <h3>{`<App Name, aha>`}</h3>
-          <div className={login.card}>
-            {showRegister ? (
-              <>
-                {/* Register form */}
-                <form onSubmit={handleRegSubmit(newAccount)}>
-                  <TextInput
-                    placeholder="Email"
-                    variant="filled"
-                    radius="md"
-                    size="md"
-                    required
-                    {...registerReg("email")}
-                  />
-                  {errors.email?.message && (
-                    <div>{errors.email?.message as unknown as string}</div>
-                  )}
-                  {/* {errors.email?.message && <div>{errors.email?.message}</div>} */}
+          {/* <div className={login.card}> */}
+          {showRegister ? (
+            <div className={login.regCard}>
+              {/* Register form */}
+              <form
+                className={login.form}
+                onSubmit={handleRegSubmit(newAccount)}
+              >
+                <h5>Register</h5>
+                <TextInput
+                  placeholder="Email"
+                  variant="default"
+                  radius="md"
+                  size="md"
+                  required
+                  {...registerReg("email")}
+                  className={login.textInput}
+                />
+                {errors.email?.message && (
+                  <div>{errors.email?.message as unknown as string}</div>
+                )}
+                {/* {errors.email?.message && <div>{errors.email?.message}</div>} */}
 
-                  <TextInput
-                    placeholder="Name"
-                    variant="filled"
-                    radius="md"
-                    size="md"
-                    required
-                    {...registerReg("name")}
-                  />
-                  {errors.name?.message && (
-                    <div>{errors.name?.message as unknown as string}</div>
-                  )}
-                  {/* {errors.name?.message && <div>{errors.name?.message}</div>} */}
+                <TextInput
+                  placeholder="Name"
+                  variant="filled"
+                  radius="md"
+                  size="md"
+                  required
+                  {...registerReg("name")}
+                  className={login.textInput}
+                />
+                {errors.name?.message && (
+                  <div>{errors.name?.message as unknown as string}</div>
+                )}
+                {/* {errors.name?.message && <div>{errors.name?.message}</div>} */}
 
-                  <TextInput
-                    placeholder="Username"
-                    variant="filled"
-                    radius="md"
-                    size="md"
-                    required
-                    {...registerReg("username")}
-                  />
-                  {errors.username?.message && (
-                    <div>{errors.username?.message as unknown as string}</div>
-                  )}
-                  {/* {errors.username?.message && <div>{errors.username?.message}</div>} */}
+                <TextInput
+                  placeholder="Username"
+                  variant="filled"
+                  radius="md"
+                  size="md"
+                  required
+                  {...registerReg("username")}
+                  className={login.textInput}
+                />
+                {errors.username?.message && (
+                  <div>{errors.username?.message as unknown as string}</div>
+                )}
+                {/* {errors.username?.message && <div>{errors.username?.message}</div>} */}
 
-                  <Button type="submit" color="orange">
+                <div className={login.registerOrLogin}>
+                  <Button
+                    variant="subtle"
+                    compact
+                    style={{ color: theme.colors.cyan[1] }}
+                    onClick={() => setShowRegister(false)}
+                  >
+                    Log in
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="gradient"
+                    gradient={{
+                      from: theme.colors.rose[4],
+                      to: theme.colors.rose[5],
+                      deg: 45,
+                    }}
+                  >
                     Sign up
                   </Button>
-                </form>
-                {/* Invalid message, if cannot register user */}
-                {invalidRegister && <p>Invalid {invalidRegister}</p>}
-              </>
-            ) : (
-              /*******************************************************************/
-              // Login form
+                </div>
+              </form>
+              {/* Invalid message, if cannot register user */}
+              {invalidRegister && <p>Invalid {invalidRegister}</p>}
+            </div>
+          ) : (
+            /*******************************************************************/
+            // Login form
+            <div className={login.loginCard}>
               <form className={login.form} onSubmit={handleSubmit(submitLogin)}>
                 <h5>Sign in</h5>
                 <TextInput
@@ -177,8 +203,9 @@ const Login: NextPage = () => {
                 {/* Invalid message, if login is incorrect */}
                 {invalidLogin && <p>{invalidLogin}</p>}
               </form>
-            )}
-          </div>
+            </div>
+          )}
+          {/* </div> */}
         </main>
       </div>
     </MantineProvider>
