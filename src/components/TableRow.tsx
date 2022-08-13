@@ -1,4 +1,4 @@
-import { ActionIcon, NumberInput } from "@mantine/core";
+import { ActionIcon, NumberInput, useMantineTheme } from "@mantine/core";
 import {
   IconBarbell,
   IconCircleCheck,
@@ -27,57 +27,142 @@ const TableRow = ({
 }: // username,
 any) => {
   // }: ITableRow) => {
+  // Theme
+  const theme = useMantineTheme();
 
   // Zustand
   const username = useUserStore((state) => state.username);
 
   // Format date
   const d = new Date(stat.updatedAt);
-  const date = d.toLocaleDateString("en-US");
+  const month = ("0" + d.getMonth()).slice(-2).toString();
+  const day = ("0" + d.getDate()).slice(-2).toString();
+  const date = month.concat("/" + day);
+  // const date = d.toLocaleDateString("en-US");
+
+  // Format weight
+  const w = parseFloat(weight);
 
   return (
     <tr key={theKey}>
-      <td style={{ maxWidth: 20, wordWrap: "break-word" }}>
-        {/* <td> */}
+      {/* Exercise name */}
+      <td style={{ wordWrap: "break-word", textAlign: "start" }}>
         {stat.exerciseName}
       </td>
-      {/* <td style={{ maxWidth: 120, flexWrap: "wrap" }}>{stat.exerciseName}</td> */}
 
       {/* Weight */}
-      <td style={{ maxWidth: 10 }}>
+      <td>
+        {/* <td style={{ textAlign: "center" }}> */}
         {inEditMode.status && inEditMode.rowKey === theKey ? (
-          <NumberInput value={weight} min={0} onChange={(e) => setWeight(e!)} />
+          <NumberInput
+            size="sm"
+            value={w}
+            // value={weight}
+            onChange={(e) => setWeight(e!)}
+            min={0}
+            hideControls
+            precision={1}
+            // step={0.5}
+            // style={{ minWidth: "3em", maxWidth: "6em" }}
+            styles={{
+              input: {
+                // dev
+                // border: "1px solid yellow",
+
+                padding: "0.2em",
+                width: "5em",
+                display: "flex",
+                textAlign: "center",
+              },
+            }}
+          />
         ) : (
           stat.weight
         )}
       </td>
 
       {/* Sets */}
-      <td style={{ maxWidth: 10 }}>
+      <td>
+        {/* <td style={{ textAlign: "center" }}> */}
         {inEditMode.status && inEditMode.rowKey === theKey ? (
-          <NumberInput value={sets} min={0} onChange={(e) => setSets(e!)} />
+          <NumberInput
+            size="sm"
+            value={sets}
+            onChange={(e) => setSets(e!)}
+            min={0}
+            hideControls
+            styles={{
+              input: {
+                // dev
+                // border: "1px solid yellow",
+
+                padding: "0.2em",
+                width: "3em",
+                display: "flex",
+                textAlign: "center",
+              },
+            }}
+            // style={{ minWidth: "3em", maxWidth: "6em" }}
+          />
         ) : (
           stat.sets
         )}
       </td>
 
       {/* Reps */}
-      <td style={{ maxWidth: 10 }}>
+      <td>
+        {/* <td style={{ textAlign: "center" }}> */}
         {inEditMode.status && inEditMode.rowKey === theKey ? (
-          <NumberInput value={reps} min={0} onChange={(e) => setReps(e!)} />
+          <NumberInput
+            size="sm"
+            value={reps}
+            onChange={(e) => setReps(e!)}
+            min={0}
+            hideControls
+            styles={{
+              input: {
+                // dev
+                // border: "1px solid yellow",
+
+                padding: "0.2em",
+                width: "3em",
+                display: "flex",
+                textAlign: "center",
+              },
+            }}
+            // style={{ minWidth: "3em", maxWidth: "6em" }}
+          />
         ) : (
           stat.reps
         )}
       </td>
 
       {/* Last Updated */}
-      <td style={{ maxWidth: 10 }}>{date}</td>
+      <td
+        style={{
+          display: inEditMode.status ? "none" : "",
+          textAlign: "center",
+        }}
+      >
+        {date}
+      </td>
 
       {/* Edit */}
-      <td style={{ maxWidth: 10 }}>
+      <td>
         {/* In edit mode */}
         {inEditMode.status && inEditMode.rowKey === theKey ? (
-          <>
+          <div
+            style={{
+              // dev
+              // border: "1px solid yellow",
+
+              display: "flex",
+              flexDirection: "column",
+              height: "4em",
+              alignItems: "start",
+              justifyContent: "space-between",
+            }}
+          >
             {/* Save changes */}
             <ActionIcon
               onClick={() =>
@@ -108,10 +193,22 @@ any) => {
             >
               <IconCircleX color="red" />
             </ActionIcon>
-          </>
+          </div>
         ) : (
           // Not in edit mode
-          <>
+          <div
+            style={{
+              // dev
+              // border: "1px solid yellow",
+
+              display: "flex",
+              flexDirection: "column",
+              height: "3.3em",
+              alignItems: "start",
+              // alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
             {/* Click to enter edit mode */}
             <ActionIcon
               onClick={() =>
@@ -145,9 +242,9 @@ any) => {
               aria-label="Delete record"
               title="Delete"
             >
-              <IconTrash color="red" />
+              <IconTrash color={theme.colors.orange[5]} />
             </ActionIcon>
-          </>
+          </div>
         )}
       </td>
     </tr>

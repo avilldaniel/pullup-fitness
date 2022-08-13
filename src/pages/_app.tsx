@@ -126,6 +126,10 @@ export default function App(props: AppProps) {
                 },
                 styles: (theme) => ({
                   root: {
+                    "*:focus": {
+                      // backgroundColor: theme.colors.orange[4],
+                      outline: "1px dotted white",
+                    },
                     // backgroundColor: "black",
                     // backgroundColor: theme.colors.orange[5],
 

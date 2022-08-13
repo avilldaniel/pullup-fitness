@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
+import { useMantineTheme } from "@mantine/core";
 import TableStats from "../../components/TableStats";
 import ModalExers from "../../components/ModalExers";
 import SelectMuscleGrp from "../../components/SelectMuscleGrp";
@@ -8,7 +9,6 @@ import OrangeLoader from "../../components/OrangeLoader";
 import { TableStatsProvider } from "../../components/TableStatsProvider";
 import { useUserStore } from "../../utils/zustand-stores";
 import { useFetchStats } from "../../react-query-hooks/useFetchStats";
-import { Button, useMantineTheme } from "@mantine/core";
 import bg from "../../styles/Background.module.css";
 import statStyles from "../../styles/Stats.module.css";
 
@@ -57,7 +57,12 @@ const Username: NextPage = () => {
                 </span>
               </h5>
             </header>
-            <div className={statStyles.container}>
+            <div
+              className={statStyles.container}
+              style={{
+                justifyContent: stats.length ? "space-between" : "flex-start",
+              }}
+            >
               {/* Select dropdown */}
               <SelectMuscleGrp />
 

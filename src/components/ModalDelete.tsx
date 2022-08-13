@@ -1,4 +1,4 @@
-import { Button, Modal } from "@mantine/core";
+import { Button, Modal, useMantineTheme } from "@mantine/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserStore } from "../utils/zustand-stores";
 import axios from "axios";
@@ -10,6 +10,9 @@ const ModalDelete = ({
   invalidDelete,
   deleteQueue,
 }: any) => {
+  // Theme
+  const theme = useMantineTheme();
+
   // Zustand
   const username = useUserStore((state) => state.username);
 
@@ -51,29 +54,37 @@ const ModalDelete = ({
       <Modal
         opened={delModalOpened}
         onClose={() => setDelModalOpened(false)}
-        // title="Are you sure you want to delete this exercise?"
+        title="Are you sure you want to delete this exercise?"
         withCloseButton={false}
         centered
       >
-        Are you sure you want to delete this exercise?
-        <Button
-          onClick={
-            deleteSubmitted
-            // () => deleteMutation.mutate(deleteQueue)
-          }
-          color="red"
-          variant="subtle"
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
         >
-          {/* <Button onClick={deleteSubmitted} color="red" variant="subtle"> */}
-          Yes.
-        </Button>
-        <Button
-          onClick={() => setDelModalOpened(false)}
-          color="gray"
-          variant="subtle"
-        >
-          No.
-        </Button>
+          <Button
+            onClick={
+              deleteSubmitted
+              // () => deleteMutation.mutate(deleteQueue)
+            }
+            variant="filled"
+            color="red"
+            // variant="subtle"
+          >
+            {/* <Button onClick={deleteSubmitted} color="red" variant="subtle"> */}
+            Yes.
+          </Button>
+          <Button
+            onClick={() => setDelModalOpened(false)}
+            variant="subtle"
+            color="white"
+          >
+            No.
+          </Button>
+        </div>
         {invalidDelete && <p>Cannot delete record. Try refreshing.</p>}
       </Modal>
 

@@ -9,8 +9,11 @@ const Home: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("/u/login");
-  }, []);
+    router.push("/u/signin");
+  }, [router]);
+  // useEffect(() => {
+  //   router.push("/u/login");
+  // }, []);
 
   return <div>home</div>;
 };

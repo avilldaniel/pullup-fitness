@@ -134,7 +134,8 @@ const Login: NextPage = () => {
                     style={{ color: theme.colors.cyan[1] }}
                     onClick={() => setShowRegister(false)}
                   >
-                    Log in
+                    {/* Back to sign in */}
+                    Cancel
                   </Button>
                   <Button
                     type="submit"

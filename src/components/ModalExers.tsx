@@ -1,6 +1,14 @@
 import { FormEvent, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Checkbox, Modal, TextInput } from "@mantine/core";
+import {
+  Button,
+  Checkbox,
+  MantineProvider,
+  Modal,
+  ScrollArea,
+  TextInput,
+  useMantineTheme,
+} from "@mantine/core";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { customExerSchema } from "../schemas/zodSchemas";
@@ -11,6 +19,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Exercise, Exercise_stat } from "@prisma/client";
 
 const ModalExers = () => {
+  // Theme
+  const theme = useMantineTheme();
+
   // Zustand
   const username = useUserStore((state) => state.username);
 
@@ -159,17 +170,16 @@ const ModalExers = () => {
   };
 
   return (
-    <div
-    // style={{
-    //   display: muscleGrp === "ALL" ? "none" : "block",
-    // }}
-    >
+    <div>
       {muscleGrp !== "ALL" && typeof username === "string" && (
         <>
           <main
             style={{
+              // dev
+              // border: "1px solid yellow",
+
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent: "space-around",
             }}
           >
             {/* Add preset exercise */}
@@ -178,7 +188,8 @@ const ModalExers = () => {
               // color="orange"
               // variant="gradient"
               // radius="md"
-              style={{ width: "12.2em" }}
+              style={{ width: "12.9em" }}
+              // size="xs"
             >
               Add preset exercise
             </Button>
@@ -189,7 +200,8 @@ const ModalExers = () => {
               // color="orange"
               // variant="gradient"
               // radius="md"
-              style={{ width: "12.2em" }}
+              style={{ width: "12.9em" }}
+              // size="xs"
             >
               Add custom exercise
             </Button>
@@ -201,6 +213,15 @@ const ModalExers = () => {
             onClose={() => setPresetOpened(false)}
             title={`Add ${muscleGrp.toLowerCase()} exercise(s)`}
             centered
+            size="90%"
+            style={
+              {
+                // maxHeight: "28em",
+                // display: "flex",
+                // justifyContent: "center",
+                // alignItems: "center",
+              }
+            }
           >
             {/* List available exercises to add */}
             {isLoading ? (
@@ -213,15 +234,22 @@ const ModalExers = () => {
             ) : (
               // ) : diffArray ? (
               <form onSubmit={onPresetSubmit}>
-                <Checkbox.Group
-                  // value={presetExer}
-                  onChange={setPresetExers}
-                  orientation="vertical"
-                  spacing="md"
-                  size="md"
+                <ScrollArea
+                  style={{ height: "20em" }}
+                  type="always"
+                  offsetScrollbars
+                  scrollbarSize={6}
                 >
-                  {checkItems!}
-                </Checkbox.Group>
+                  <Checkbox.Group
+                    // value={presetExer}
+                    onChange={setPresetExers}
+                    orientation="vertical"
+                    spacing="md"
+                    size="md"
+                  >
+                    {checkItems!}
+                  </Checkbox.Group>
+                </ScrollArea>
                 {invalidPreset && (
                   <div>Unable to add new exercises. Please try refreshing.</div>
                 )}
@@ -258,8 +286,16 @@ const ModalExers = () => {
               <TextInput
                 {...register("customExer")}
                 // onChange={(event) => setNewExers(event.target.value)}
-                placeholder="Name of new exercise"
+                placeholder="Example: Assisted Pull Ups"
+                // placeholder="Name of new exercise"
                 data-autofocus
+                styles={{
+                  input: {
+                    "::placeholder": {
+                      color: theme.colors.cyan[1],
+                    },
+                  },
+                }}
               />
               {errors.customExer?.message && (
                 <div>{errors.customExer.message as unknown as string}</div>

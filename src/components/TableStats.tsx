@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { ScrollArea, Table } from "@mantine/core";
+import { ScrollArea, Table, useMantineTheme } from "@mantine/core";
 import { Exercise_stat } from "@prisma/client";
 import {
   IEditMode,
@@ -19,6 +19,9 @@ import { useFetchStats } from "../react-query-hooks/useFetchStats";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const TableStats = () => {
+  // Theme
+  const theme = useMantineTheme();
+
   // Router
   const router = useRouter();
   const { username: queryUsername } = router.query;
@@ -80,11 +83,13 @@ const TableStats = () => {
   const [invalidDelete, setInvalidDelete] = useState(false);
   const [deleteQueue, setDeleteQueue] = useState({});
 
-  const [weight, setWeight] = useState<number | null>(null);
+  // const [weight, setWeight] = useState<number | null>(null);
+  const [weight, setWeight] = useState<string | null>(null);
   const [sets, setSets] = useState<number | null>(null);
   const [reps, setReps] = useState<number | null>(null);
 
-  const onEdit = ({ id, weight, sets, reps }: IOnEdit) => {
+  const onEdit = ({ id, weight, sets, reps }: any) => {
+    // const onEdit = ({ id, weight, sets, reps }: IOnEdit) => {
     setInEditMode({
       status: true,
       rowKey: id,
@@ -169,7 +174,6 @@ const TableStats = () => {
       .slice(0)
       .reverse()
       .map((stat: Exercise_stat, key: number) => {
-        // rows = stats.map((stat: Exercise_stat, key: number) => {
         if (stat.muscleGroup === muscleGrp || muscleGrp === "ALL") {
           return (
             <TableRow
@@ -205,48 +209,76 @@ const TableStats = () => {
         <OrangeLoader /> // change to global loader
       ) : !rows.length ? (
         // ) : isError ? (
-        <p>
-          To add exercises, select a muscle group. <br />
-          Then add from a list of preset exercises, or create your own exercise.
-        </p>
+        <section
+          style={{
+            // border: "2px solid pink",
+            fontSize: theme.fontSizes.sm,
+            // margin: "auto",
+            // display: "flex",
+            // alignItems: "center",
+            padding: "5%",
+          }}
+        >
+          To add exercises, select a muscle group. Then add from a list of
+          preset exercises, or create your own exercise.
+        </section>
       ) : (
         <>
           <ScrollArea
-            // style={{ height: "22em" }}
             style={{ height: "78%" }}
-            // style={{ height: 380 }}
-            type="scroll"
+            // type="scroll"
+            // type="auto"
+            type="always"
             offsetScrollbars
             scrollbarSize={6}
           >
             <Table
               fontSize="sm"
               horizontalSpacing={8}
-              // horizontalSpacing={4}
               highlightOnHover
-              style={{ tableLayout: "auto" }}
-              // style={{ tableLayout: "fixed" }}
+              style={{ tableLayout: "fixed", minWidth: "17.6em" }}
+              // style={{ tableLayout: "fixed", minWidth: "17em" }}
             >
               <thead>
                 <tr>
-                  <th>Exercise</th>
-                  <th>Wgt.</th>
-                  {/* <th>Weight</th> */}
-                  <th>Sets</th>
-                  <th>Reps</th>
-                  <th>Updated</th>
-                  {/* <th>Last Updated</th> */}
-                  <th>Edit</th>
+                  <th style={{ width: "4em" }}>Exercise</th>
+                  <th style={{ width: inEditMode.status ? "5.3em" : "3em" }}>
+                    {/* Wgt. */}
+                    {inEditMode.status ? "Weight" : "Wgt."}
+                  </th>
+                  <th style={{ width: inEditMode.status ? "3.7em" : "2.5em" }}>
+                    Sets
+                  </th>
+                  <th style={{ width: inEditMode.status ? "3.7em" : "2.5em" }}>
+                    Reps
+                  </th>
+                  <th
+                    style={{
+                      width: "3.8em",
+                      display: inEditMode.status ? "none" : "",
+                      textAlign: "center",
+                    }}
+                  >
+                    Updated
+                  </th>
+                  <th
+                    style={{
+                      width: "3em",
+                      textAlign: "start",
+                    }}
+                  >
+                    Edit
+                  </th>
                 </tr>
               </thead>
-              <tbody>{rows}</tbody>
+              {/* <tbody style={{ textAlign: "center" }}>{rows}</tbody> */}
+              <tbody style={{ textAlign: "start" }}>{rows}</tbody>
             </Table>
           </ScrollArea>
 
           <ModalDelete
             delModalOpened={delModalOpened}
             setDelModalOpened={setDelModalOpened}
-            // deleteSubmitted={deleteSubmitted}
             invalidDelete={invalidDelete}
             deleteQueue={deleteQueue}
           />
