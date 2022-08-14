@@ -77,7 +77,8 @@ any) => {
             }}
           />
         ) : (
-          stat.weight
+          parseFloat(stat.weight).toFixed(1)
+          // stat.weight
         )}
       </td>
 

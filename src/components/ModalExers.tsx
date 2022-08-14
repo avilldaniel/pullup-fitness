@@ -15,7 +15,7 @@ import { customExerSchema } from "../schemas/zodSchemas";
 import { TableStatsContext } from "../utils/contexts";
 import { useUserStore } from "../utils/zustand-stores";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Exercise, Exercise_stat } from "@prisma/client";
+import { Exercise, Exercise_stat, Muscle_grp, Prisma } from "@prisma/client";
 import OrangeLoader from "./OrangeLoader";
 
 const ModalExers = () => {
@@ -99,8 +99,9 @@ const ModalExers = () => {
 
   // attempt at Optimistic Updates
   const addStatsMutation = useMutation(
-    async (exercises: string | string[]) => {
-      const res = await axios.post("/api/stats/addStats", {
+    // ["stats", username],
+    (exercises: string | string[]) => {
+      return axios.post("/api/stats/addStats", {
         username,
         muscleGroup: muscleGrp,
         newExers: exercises,
@@ -110,41 +111,101 @@ const ModalExers = () => {
           : { creatorName: "admin" }),
         // creatorName: username,
       });
-      return res.data;
     },
+    // async (exercises: string | string[]) => {
+    //   const res = await axios.post("/api/stats/addStats", {
+    //     username,
+    //     muscleGroup: muscleGrp,
+    //     newExers: exercises,
+    //     // conditionally create object property based on type of exercises
+    //     ...(typeof exercises === "string"
+    //       ? { creatorName: username }
+    //       : { creatorName: "admin" }),
+    //     // creatorName: username,
+    //   });
+    //   return res.data;
+    // },
     {
-      onMutate: async (data: any) => {
+      onMutate: async (newExer: any) => {
         // Optimistically update the cache value on mutate, but store
         // the old value and return it so that it's accessible in case of
         // an error
+        console.log("newExer based on", typeof newExer, newExer);
+        // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
         await queryClient.cancelQueries(["stats", username]);
-        const previousValue = queryClient.getQueriesData(["stats", username]);
-        // queryClient.setQueriesData(["stats", username])
-        queryClient.setQueriesData(
-          ["stats", username],
-          (oldData: Exercise_stat[] | undefined) => {
-            console.log([...data]);
-            return [...oldData!, ...data];
-          }
-        );
+
+        // Snapshot previous value
+        const previousExers = queryClient.getQueriesData(["stats", username]);
+
+        // Optimistically update to new value
+        if (previousExers) {
+          queryClient.setQueriesData(
+            ["stats", username],
+            (oldData: Exercise_stat[] | undefined) => {
+              // Preset exercise
+              if (typeof newExer !== "string") {
+                let newData: Exercise_stat[] = [];
+                newExer.forEach((exercise: string) => {
+                  newData.push({
+                    creatorName: "admin",
+                    exerciseName: exercise,
+                    muscleGroup: muscleGrp as Muscle_grp,
+                    reps: 0,
+                    sets: 0,
+                    updatedAt: new Date(),
+                    userName: username,
+                    weight: new Prisma.Decimal(0),
+                  });
+                });
+
+                // Return snapshotted value
+                return [...oldData!, ...newData];
+              }
+              // Custom exercise
+              else {
+                const newData: Exercise_stat[] = [
+                  {
+                    creatorName: username,
+                    exerciseName: newExer,
+                    muscleGroup: muscleGrp as Muscle_grp,
+                    reps: 0,
+                    sets: 0,
+                    updatedAt: new Date(),
+                    userName: username,
+                    weight: new Prisma.Decimal(0),
+                  },
+                ];
+
+                // Return snapshotted value
+                return [...oldData!, ...newData];
+              }
+            }
+          );
+        }
+
+        //
         queryClient.setQueriesData(
           ["exercise-diff"],
           (oldData: Exercise[] | undefined) => {
             return oldData?.filter((exercise) => {
-              exercise.id !== data.id;
+              exercise.id !== newExer.id;
+              // exercise.id !== data.id;
             });
           }
         );
-        return { previousValue };
+
+        return { previousExers };
       },
 
       // On failure, roll back to the previous value
-      onError: (err, variables, previousValue) => {
-        queryClient.setQueriesData(["stats", username], previousValue);
+      onError: (previousExers) => {
+        console.log("trigger onError");
+        queryClient.setQueriesData(["stats", username], previousExers);
       },
 
       // After success or failure, refetch the todos query
       onSettled: () => {
+        console.log("trigger onSettled");
         queryClient.invalidateQueries(["stats", username]);
       },
     }

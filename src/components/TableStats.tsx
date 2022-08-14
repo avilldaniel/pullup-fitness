@@ -23,25 +23,25 @@ const TableStats = () => {
   const theme = useMantineTheme();
 
   // Router
-  const router = useRouter();
-  const { username: queryUsername } = router.query;
+  // const router = useRouter();
+  // const { username: queryUsername } = router.query;
 
   // Zustand
   const username = useUserStore((state) => state.username);
   const setUsername = useUserStore((state) => state.setUsername);
 
   // Set username on loadup
-  useEffect(() => {
-    if (queryUsername && typeof queryUsername === "string") {
-      setUsername(queryUsername);
-    }
-  });
+  // useEffect(() => {
+  //   if (queryUsername && typeof queryUsername === "string") {
+  //     setUsername(queryUsername);
+  //   }
+  // });
 
   // Context
   const { muscleGrp } = useContext(TableStatsContext);
 
   // Fetch user stats
-  const { isLoading, isError, data: stats } = useFetchStats();
+  const { isLoading, data: stats } = useFetchStats();
 
   // Mutation for updating stats
   const queryClient = useQueryClient();
@@ -168,46 +168,46 @@ const TableStats = () => {
 
   /****************************************************************************/
   // Individual rows to render
-  let rows: React.ReactNode[] = [];
-  if (stats) {
-    rows = stats
-      .slice(0)
-      .reverse()
-      .map((stat: Exercise_stat, key: number) => {
-        if (stat.muscleGroup === muscleGrp || muscleGrp === "ALL") {
-          return (
-            <TableRow
-              key={key}
-              theKey={key}
-              // username={username}
-              stat={stat}
-              onEdit={onEdit}
-              inEditMode={inEditMode}
-              updateStats={updateStats}
-              onSave={onSave}
-              onCancel={onCancel}
-              onDelete={onDelete}
-              setWeight={setWeight}
-              setSets={setSets}
-              setReps={setReps}
-              weight={weight!}
-              sets={sets!}
-              reps={reps!}
-            />
-          );
-        }
-      });
+  // let rows: React.ReactNode[] = [];
+  // if (stats) {
+  //   rows = stats
+  //     .slice(0)
+  //     .reverse()
+  //     .map((stat: Exercise_stat, key: number) => {
+  //       if (stat.muscleGroup === muscleGrp || muscleGrp === "ALL") {
+  //         return (
+  //           <TableRow
+  //             key={key}
+  //             theKey={key}
+  //             // username={username}
+  //             stat={stat}
+  //             onEdit={onEdit}
+  //             inEditMode={inEditMode}
+  //             updateStats={updateStats}
+  //             onSave={onSave}
+  //             onCancel={onCancel}
+  //             onDelete={onDelete}
+  //             setWeight={setWeight}
+  //             setSets={setSets}
+  //             setReps={setReps}
+  //             weight={weight!}
+  //             sets={sets!}
+  //             reps={reps!}
+  //           />
+  //         );
+  //       }
+  //     });
 
-    // Remove undefined values in array
-    rows = rows.filter((stat) => stat);
-  }
+  //   // Remove undefined values in array
+  //   rows = rows.filter((stat) => stat);
+  // }
 
   return (
     <>
       {/* Table of stats */}
       {isLoading ? (
         <OrangeLoader />
-      ) : !rows.length ? (
+      ) : !stats.length ? (
         // ) : isError ? (
         <section
           style={{
@@ -280,8 +280,39 @@ const TableStats = () => {
                   </th>
                 </tr>
               </thead>
-              {/* <tbody style={{ textAlign: "center" }}>{rows}</tbody> */}
-              <tbody style={{ textAlign: "start" }}>{rows}</tbody>
+              {/* <tbody style={{ textAlign: "start" }}>{rows}</tbody> */}
+              <tbody style={{ textAlign: "start" }}>
+                {/* Table rows to render */}
+                {stats
+                  .slice(0)
+                  .reverse()
+                  .map((stat: Exercise_stat, key: number) => {
+                    if (stat.muscleGroup === muscleGrp || muscleGrp === "ALL") {
+                      return (
+                        <TableRow
+                          key={key}
+                          theKey={key}
+                          // username={username}
+                          stat={stat}
+                          onEdit={onEdit}
+                          inEditMode={inEditMode}
+                          updateStats={updateStats}
+                          onSave={onSave}
+                          onCancel={onCancel}
+                          onDelete={onDelete}
+                          setWeight={setWeight}
+                          setSets={setSets}
+                          setReps={setReps}
+                          weight={weight!}
+                          sets={sets!}
+                          reps={reps!}
+                        />
+                      );
+                    }
+                  })
+                  // Remove undefined values in array
+                  .filter((stat: any) => stat)}
+              </tbody>
             </Table>
           </ScrollArea>
 
