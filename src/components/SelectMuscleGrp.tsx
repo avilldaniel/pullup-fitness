@@ -28,6 +28,7 @@ const SelectMuscleGrp = () => {
           value={muscleGrp}
           onChange={(e: string) => setMuscleGrp(e)}
           data={selectOptions}
+          maxDropdownHeight={420}
           transition="scale-y"
           transitionDuration={100}
           transitionTimingFunction="ease"

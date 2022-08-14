@@ -50,6 +50,7 @@ export default async function handler(
             },
           },
         });
+        console.log({ addedStat });
         arrayAdded.push(addedStat);
       } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {

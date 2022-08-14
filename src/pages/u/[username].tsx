@@ -40,7 +40,7 @@ const Username: NextPage = () => {
     <div className={bg.default}>
       <TableStatsProvider>
         {isLoading ? (
-          <OrangeLoader /> // change to global loader
+          <OrangeLoader />
         ) : isError ? (
           <h1>Invalid user.</h1>
         ) : (
@@ -57,12 +57,7 @@ const Username: NextPage = () => {
                 </span>
               </h5>
             </header>
-            <div
-              className={statStyles.container}
-              style={{
-                justifyContent: stats.length ? "space-between" : "flex-start",
-              }}
-            >
+            <div className={statStyles.container}>
               {/* Select dropdown */}
               <SelectMuscleGrp />
 

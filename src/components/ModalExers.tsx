@@ -3,7 +3,7 @@ import axios from "axios";
 import {
   Button,
   Checkbox,
-  MantineProvider,
+  Loader,
   Modal,
   ScrollArea,
   TextInput,
@@ -12,11 +12,11 @@ import {
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { customExerSchema } from "../schemas/zodSchemas";
-import OrangeLoader from "./OrangeLoader";
 import { TableStatsContext } from "../utils/contexts";
 import { useUserStore } from "../utils/zustand-stores";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Exercise, Exercise_stat } from "@prisma/client";
+import OrangeLoader from "./OrangeLoader";
 
 const ModalExers = () => {
   // Theme
@@ -60,6 +60,44 @@ const ModalExers = () => {
 
   // Add new stats to query cache
   const queryClient = useQueryClient();
+
+  // // Mutation to update existing query
+  // const addStatsMutation = useMutation(
+  //   async (exercises: string | string[]) => {
+  //     const res = await axios.post("/api/stats/addStats", {
+  //       username,
+  //       muscleGroup: muscleGrp,
+  //       newExers: exercises,
+  //       // conditionally create object property based on type of exercises
+  //       ...(typeof exercises === "string"
+  //         ? { creatorName: username }
+  //         : { creatorName: "admin" }),
+  //       // creatorName: username,
+  //     });
+  //     return res.data;
+  //   },
+  //   {
+  //     // Update query cache of two arrays
+  //     onSuccess: (data) => {
+  //       queryClient.setQueriesData(
+  //         ["stats", username],
+  //         (oldData: Exercise_stat[] | undefined) => {
+  //           return [...oldData!, ...data];
+  //         }
+  //       );
+  //       queryClient.setQueriesData(
+  //         ["exercise-diff"],
+  //         (oldData: Exercise[] | undefined) => {
+  //           return oldData?.filter((exercise) => {
+  //             exercise.id !== data.id;
+  //           });
+  //         }
+  //       );
+  //     },
+  //   }
+  // );
+
+  // attempt at Optimistic Updates
   const addStatsMutation = useMutation(
     async (exercises: string | string[]) => {
       const res = await axios.post("/api/stats/addStats", {
@@ -75,11 +113,17 @@ const ModalExers = () => {
       return res.data;
     },
     {
-      // Update query cache of two arrays
-      onSuccess: (data) => {
+      onMutate: async (data: any) => {
+        // Optimistically update the cache value on mutate, but store
+        // the old value and return it so that it's accessible in case of
+        // an error
+        await queryClient.cancelQueries(["stats", username]);
+        const previousValue = queryClient.getQueriesData(["stats", username]);
+        // queryClient.setQueriesData(["stats", username])
         queryClient.setQueriesData(
           ["stats", username],
           (oldData: Exercise_stat[] | undefined) => {
+            console.log([...data]);
             return [...oldData!, ...data];
           }
         );
@@ -91,6 +135,17 @@ const ModalExers = () => {
             });
           }
         );
+        return { previousValue };
+      },
+
+      // On failure, roll back to the previous value
+      onError: (err, variables, previousValue) => {
+        queryClient.setQueriesData(["stats", username], previousValue);
+      },
+
+      // After success or failure, refetch the todos query
+      onSettled: () => {
+        queryClient.invalidateQueries(["stats", username]);
       },
     }
   );
@@ -185,10 +240,11 @@ const ModalExers = () => {
             {/* Add preset exercise */}
             <Button
               onClick={() => setPresetOpened(true)}
+              style={{ width: "45%" }}
+              // style={{ width: "11em" }}
               // color="orange"
               // variant="gradient"
               // radius="md"
-              style={{ width: "12.9em" }}
               // size="xs"
             >
               Add preset exercise
@@ -197,10 +253,11 @@ const ModalExers = () => {
             {/* Add custom exercise */}
             <Button
               onClick={() => setCustomOpened(true)}
+              style={{ width: "45%" }}
+              // style={{ width: "11em" }}
               // color="orange"
               // variant="gradient"
               // radius="md"
-              style={{ width: "12.9em" }}
               // size="xs"
             >
               Add custom exercise
@@ -225,7 +282,20 @@ const ModalExers = () => {
           >
             {/* List available exercises to add */}
             {isLoading ? (
-              <OrangeLoader /> // change to global loader
+              // <OrangeLoader />
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Loader
+                  color={theme.colors.orange[3]}
+                  size="md"
+                  variant={theme.loader}
+                />
+              </div>
             ) : !diffArray.length ? (
               <p>
                 All preset {muscleGrp.toLowerCase()} exercises have already been
@@ -245,7 +315,7 @@ const ModalExers = () => {
                     onChange={setPresetExers}
                     orientation="vertical"
                     spacing="md"
-                    size="md"
+                    size="sm"
                   >
                     {checkItems!}
                   </Checkbox.Group>
@@ -254,7 +324,7 @@ const ModalExers = () => {
                   <div>Unable to add new exercises. Please try refreshing.</div>
                 )}
                 <Button
-                  fullWidth
+                  // fullWidth
                   mt="md"
                   variant="gradient"
                   gradient={{ from: "#d9480f", to: "#f08c00" }}
@@ -286,7 +356,7 @@ const ModalExers = () => {
               <TextInput
                 {...register("customExer")}
                 // onChange={(event) => setNewExers(event.target.value)}
-                placeholder="Example: Assisted Pull Ups"
+                placeholder="Example: Assisted Pull-Ups"
                 // placeholder="Name of new exercise"
                 data-autofocus
                 styles={{
@@ -305,7 +375,7 @@ const ModalExers = () => {
                 <div>Invalid exercise. Try a different name.</div>
               )}
               <Button
-                fullWidth
+                // fullWidth
                 mt="md"
                 variant="gradient"
                 gradient={{ from: "#d9480f", to: "#f08c00" }}

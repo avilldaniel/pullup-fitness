@@ -206,7 +206,7 @@ const TableStats = () => {
     <>
       {/* Table of stats */}
       {isLoading ? (
-        <OrangeLoader /> // change to global loader
+        <OrangeLoader />
       ) : !rows.length ? (
         // ) : isError ? (
         <section
@@ -219,13 +219,22 @@ const TableStats = () => {
             padding: "5%",
           }}
         >
-          To add exercises, select a muscle group. Then add from a list of
-          preset exercises, or create your own exercise.
+          To add exercises,{" "}
+          <span style={{ color: theme.colors.orange[2] }}>
+            select a muscle group
+          </span>
+          . Then add from a list of{" "}
+          <span style={{ color: theme.colors.orange[2] }}>
+            preset exercises
+          </span>
+          , or create your own{" "}
+          <span style={{ color: theme.colors.orange[2] }}>custom exercise</span>
+          .
         </section>
       ) : (
         <>
           <ScrollArea
-            style={{ height: "78%" }}
+            style={{ height: "80%" }}
             // type="scroll"
             // type="auto"
             type="always"
@@ -241,7 +250,7 @@ const TableStats = () => {
             >
               <thead>
                 <tr>
-                  <th style={{ width: "4em" }}>Exercise</th>
+                  <th style={{ width: "5em" }}>Exercise</th>
                   <th style={{ width: inEditMode.status ? "5.3em" : "3em" }}>
                     {/* Wgt. */}
                     {inEditMode.status ? "Weight" : "Wgt."}
