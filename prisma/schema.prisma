@@ -78,14 +78,26 @@ enum Muscle_grp {
   CHEST
   BACK
   LEGS
-  BICEPS
-  TRICEPS
-  SHOULDERS
+  BICEP
+  TRICEP
+  SHOULDER
   GLUTES
-  ABS
+  CORE
   CARDIO
   OTHER
 }
+// enum Muscle_grp {
+//   CHEST
+//   BACK
+//   LEGS
+//   BICEPS
+//   TRICEPS
+//   SHOULDERS
+//   GLUTES
+//   CORE
+//   CARDIO
+//   OTHER
+// }
 
 // model Post {
 //   id        Int      @id @default(autoincrement())

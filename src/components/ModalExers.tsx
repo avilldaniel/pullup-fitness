@@ -130,7 +130,7 @@ const ModalExers = () => {
         // Optimistically update the cache value on mutate, but store
         // the old value and return it so that it's accessible in case of
         // an error
-        console.log("newExer based on", typeof newExer, newExer);
+
         // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
         await queryClient.cancelQueries(["stats", username]);
 

@@ -70,6 +70,7 @@ export default async function handler(
   // If adding a custom exercise, newExers === "string"
   else if (typeof newExers === "string") {
     if (typeof username === "string") {
+      console.log({ newExers });
       try {
         // Create new custom exercises record in db,
         // then create it as a new exercise stat (w/ default stats)

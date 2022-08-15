@@ -201,37 +201,43 @@ const TableStats = () => {
   //   // Remove undefined values in array
   //   rows = rows.filter((stat) => stat);
   // }
-
+  console.log("stats:", stats);
   return (
     <>
       {/* Table of stats */}
       {isLoading ? (
         <OrangeLoader />
-      ) : !stats.length ? (
-        // ) : isError ? (
-        <section
-          style={{
-            // border: "2px solid pink",
-            fontSize: theme.fontSizes.sm,
-            // margin: "auto",
-            // display: "flex",
-            // alignItems: "center",
-            padding: "5%",
-          }}
-        >
-          To add exercises,{" "}
-          <span style={{ color: theme.colors.orange[2] }}>
-            select a muscle group
-          </span>
-          . Then add from a list of{" "}
-          <span style={{ color: theme.colors.orange[2] }}>
-            preset exercises
-          </span>
-          , or create your own{" "}
-          <span style={{ color: theme.colors.orange[2] }}>custom exercise</span>
-          .
-        </section>
       ) : (
+        stats.some((e: Exercise_stat) => e.muscleGroup !== muscleGrp) && (
+          // ) : !stats.length ? (
+          // ) : isError ? (
+          <section
+            style={{
+              // border: "2px solid pink",
+              fontSize: theme.fontSizes.sm,
+              // margin: "auto",
+              // display: "flex",
+              // alignItems: "center",
+              padding: "5%",
+            }}
+          >
+            To add exercises,{" "}
+            <span style={{ color: theme.colors.orange[2] }}>
+              select a muscle group
+            </span>
+            . Then add from a list of{" "}
+            <span style={{ color: theme.colors.orange[2] }}>
+              preset exercises
+            </span>
+            , or create your own{" "}
+            <span style={{ color: theme.colors.orange[2] }}>
+              custom exercise
+            </span>
+            .
+          </section>
+        )
+      )}
+      {stats && (
         <>
           <ScrollArea
             style={{ height: "80%" }}
