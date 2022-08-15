@@ -3,13 +3,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserStore } from "../utils/zustand-stores";
 import axios from "axios";
 import { Exercise_stat } from "@prisma/client";
+import { IModalDelete } from "../utils/types";
 
 const ModalDelete = ({
   delModalOpened,
   setDelModalOpened,
   invalidDelete,
   deleteQueue,
-}: any) => {
+}: IModalDelete) => {
   // Theme
   const theme = useMantineTheme();
 

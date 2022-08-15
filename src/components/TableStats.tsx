@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { ScrollArea, Table, useMantineTheme } from "@mantine/core";
 import { Exercise_stat } from "@prisma/client";
 import {
@@ -7,10 +7,10 @@ import {
   IOnEdit,
   ITableRowUpdates,
   ITableStats,
+  IUpdatedStat,
 } from "../utils/types";
 import TableRow from "./TableRow";
 import axios from "axios";
-import { useRouter } from "next/router";
 import { TableStatsContext } from "../utils/contexts";
 import OrangeLoader from "./OrangeLoader";
 import { useUserStore } from "../utils/zustand-stores";
@@ -22,20 +22,9 @@ const TableStats = () => {
   // Theme
   const theme = useMantineTheme();
 
-  // Router
-  // const router = useRouter();
-  // const { username: queryUsername } = router.query;
-
   // Zustand
   const username = useUserStore((state) => state.username);
   const setUsername = useUserStore((state) => state.setUsername);
-
-  // Set username on loadup
-  // useEffect(() => {
-  //   if (queryUsername && typeof queryUsername === "string") {
-  //     setUsername(queryUsername);
-  //   }
-  // });
 
   // Context
   const { muscleGrp } = useContext(TableStatsContext);
@@ -46,7 +35,7 @@ const TableStats = () => {
   // Mutation for updating stats
   const queryClient = useQueryClient();
   const updateStatsMutation = useMutation(
-    async (updatedStat: any) => {
+    async (updatedStat: IUpdatedStat) => {
       const res = await axios.put("/api/stats/updateStats", updatedStat);
       return res.data;
     },
@@ -80,21 +69,19 @@ const TableStats = () => {
     rowKey: null,
   });
   const [delModalOpened, setDelModalOpened] = useState(false);
-  const [invalidDelete, setInvalidDelete] = useState(false);
-  const [deleteQueue, setDeleteQueue] = useState({});
+  const [invalidDelete] = useState(false);
+  const [deleteQueue, setDeleteQueue] = useState<IOnDelete>({});
 
-  // const [weight, setWeight] = useState<number | null>(null);
   const [weight, setWeight] = useState<string | null>(null);
   const [sets, setSets] = useState<number | null>(null);
   const [reps, setReps] = useState<number | null>(null);
 
-  const onEdit = ({ id, weight, sets, reps }: any) => {
-    // const onEdit = ({ id, weight, sets, reps }: IOnEdit) => {
+  const onEdit = ({ id, weight, sets, reps }: IOnEdit) => {
     setInEditMode({
       status: true,
       rowKey: id,
     });
-    setWeight(weight);
+    setWeight(weight.toString());
     setSets(sets);
     setReps(reps);
   };
@@ -109,7 +96,7 @@ const TableStats = () => {
   }: ITableRowUpdates) => {
     // Update query cache
     updateStatsMutation.mutate({
-      username,
+      username: username,
       creatorName,
       exerciseName,
       newWeight,
@@ -131,7 +118,7 @@ const TableStats = () => {
     newReps,
   }: ITableRowUpdates) => {
     updateStats({
-      username,
+      // username,
       creatorName,
       exerciseName,
       newWeight,
@@ -166,78 +153,14 @@ const TableStats = () => {
     setDeleteQueue({ username, muscleGrp, exerciseName, creatorName });
   };
 
-  /****************************************************************************/
-  // Individual rows to render
-  // let rows: React.ReactNode[] = [];
-  // if (stats) {
-  //   rows = stats
-  //     .slice(0)
-  //     .reverse()
-  //     .map((stat: Exercise_stat, key: number) => {
-  //       if (stat.muscleGroup === muscleGrp || muscleGrp === "ALL") {
-  //         return (
-  //           <TableRow
-  //             key={key}
-  //             theKey={key}
-  //             // username={username}
-  //             stat={stat}
-  //             onEdit={onEdit}
-  //             inEditMode={inEditMode}
-  //             updateStats={updateStats}
-  //             onSave={onSave}
-  //             onCancel={onCancel}
-  //             onDelete={onDelete}
-  //             setWeight={setWeight}
-  //             setSets={setSets}
-  //             setReps={setReps}
-  //             weight={weight!}
-  //             sets={sets!}
-  //             reps={reps!}
-  //           />
-  //         );
-  //       }
-  //     });
-
-  //   // Remove undefined values in array
-  //   rows = rows.filter((stat) => stat);
-  // }
-  console.log("stats:", stats);
   return (
     <>
-      {/* Table of stats */}
       {isLoading ? (
         <OrangeLoader />
-      ) : (
-        stats.some((e: Exercise_stat) => e.muscleGroup !== muscleGrp) && (
-          // ) : !stats.length ? (
-          // ) : isError ? (
-          <section
-            style={{
-              // border: "2px solid pink",
-              fontSize: theme.fontSizes.sm,
-              // margin: "auto",
-              // display: "flex",
-              // alignItems: "center",
-              padding: "5%",
-            }}
-          >
-            To add exercises,{" "}
-            <span style={{ color: theme.colors.orange[2] }}>
-              select a muscle group
-            </span>
-            . Then add from a list of{" "}
-            <span style={{ color: theme.colors.orange[2] }}>
-              preset exercises
-            </span>
-            , or create your own{" "}
-            <span style={{ color: theme.colors.orange[2] }}>
-              custom exercise
-            </span>
-            .
-          </section>
-        )
-      )}
-      {stats && (
+      ) : (stats.length &&
+          // : (muscleGrp === "ALL" && stats.length) ||
+          stats.some((e: Exercise_stat) => e.muscleGroup === muscleGrp)) ||
+        muscleGrp === "ALL" ? (
         <>
           <ScrollArea
             style={{ height: "80%" }}
@@ -317,7 +240,7 @@ const TableStats = () => {
                     }
                   })
                   // Remove undefined values in array
-                  .filter((stat: any) => stat)}
+                  .filter((stat: Exercise_stat) => stat)}
               </tbody>
             </Table>
           </ScrollArea>
@@ -329,6 +252,29 @@ const TableStats = () => {
             deleteQueue={deleteQueue}
           />
         </>
+      ) : (
+        <section
+          style={{
+            // border: "2px solid pink",
+            fontSize: theme.fontSizes.sm,
+            // margin: "auto",
+            // display: "flex",
+            // alignItems: "center",
+            padding: "5%",
+          }}
+        >
+          To add exercises,{" "}
+          <span style={{ color: theme.colors.orange[2] }}>
+            select a muscle group
+          </span>
+          . Then add from a list of{" "}
+          <span style={{ color: theme.colors.orange[2] }}>
+            preset exercises
+          </span>
+          , or create your own{" "}
+          <span style={{ color: theme.colors.orange[2] }}>custom exercise</span>
+          .
+        </section>
       )}
     </>
   );

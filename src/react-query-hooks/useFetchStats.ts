@@ -1,15 +1,17 @@
 import { QueryFunctionContext, useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { useUserStore } from "../utils/zustand-stores";
 
 const getStatsFetcher = async ({ queryKey }: QueryFunctionContext) => {
   const username = queryKey[1];
-  const res = await axios.get("/api/stats/fetchStats/", {
-    params: {
-      username,
-    },
-  });
-  return res.data;
+  const res = await fetch(`/api/stats/fetchStats?username=${username}`);
+  const data = await res.json();
+  return data;
+  // const res = await axios.get("/api/stats/fetchStats/", {
+  //   params: {
+  //     username,
+  //   },
+  // });
+  // return res.data
 };
 
 export const useFetchStats = () => {
@@ -17,5 +19,4 @@ export const useFetchStats = () => {
   return useQuery(["stats", username], getStatsFetcher, {
     enabled: !!username,
   });
-  // return useQuery(["stats", username], (username) => getStatsFetcher(username));
 };

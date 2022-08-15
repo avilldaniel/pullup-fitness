@@ -1,4 +1,4 @@
-import { Exercise_stat, Muscle_grp } from "@prisma/client";
+import { Exercise_stat, Muscle_grp, Prisma } from "@prisma/client";
 import { Dispatch, SetStateAction } from "react";
 
 // export interface IPresetExerDiff {
@@ -9,6 +9,13 @@ import { Dispatch, SetStateAction } from "react";
 // export interface IGetUserExerStats {
 //   username: string;
 // }
+
+export interface IModalDelete {
+  delModalOpened: boolean;
+  setDelModalOpened: Dispatch<SetStateAction<boolean>>;
+  invalidDelete: boolean;
+  deleteQueue: IOnDelete;
+}
 
 export interface IModalExers {
   username: string;
@@ -24,10 +31,10 @@ export interface IModalExer {
 }
 
 export interface IOnDelete {
-  creatorName: string;
-  username: string;
-  exerciseName: string;
-  muscleGrp: Muscle_grp;
+  creatorName?: string;
+  username?: string;
+  exerciseName?: string;
+  muscleGrp?: Muscle_grp;
 }
 
 export interface IEditMode {
@@ -37,16 +44,27 @@ export interface IEditMode {
 
 export interface IOnEdit {
   id: number;
-  weight: number;
+  weight: Prisma.Decimal;
+  // weight: number;
   sets: number;
   reps: number;
 }
 
 export interface ITableRowUpdates {
+  // username: string;
+  creatorName: string;
+  exerciseName: string;
+  newWeight: string;
+  // newWeight: number;
+  newSets: number;
+  newReps: number;
+}
+
+export interface IUpdatedStat {
   username: string;
   creatorName: string;
   exerciseName: string;
-  newWeight: number;
+  newWeight: string;
   newSets: number;
   newReps: number;
 }
@@ -54,19 +72,19 @@ export interface ITableRowUpdates {
 export interface ITableRow {
   key: number;
   theKey: number;
-  username: string;
+  // username: string;
   stat: Exercise_stat;
   onEdit: ({ id, weight, sets, reps }: IOnEdit) => void;
   inEditMode: IEditMode;
   updateStats: ({
-    username,
+    // username,
     exerciseName,
     newWeight,
     newSets,
     newReps,
   }: ITableRowUpdates) => Promise<void>;
   onSave: ({
-    username,
+    // username,
     exerciseName,
     newWeight,
     newSets,
@@ -74,11 +92,12 @@ export interface ITableRow {
   }: ITableRowUpdates) => void;
   onCancel: () => void;
   onDelete: ({ creatorName, username, exerciseName }: IOnDelete) => void;
-  // setDelModalOpened: Dispatch<React.SetStateAction<boolean>>;
-  setWeight: (value: SetStateAction<number | null>) => void;
+  setWeight: Dispatch<SetStateAction<string | null>>;
+  // setWeight: (value: SetStateAction<number | null>) => void;
   setSets: Dispatch<SetStateAction<number | null>>;
   setReps: Dispatch<SetStateAction<number | null>>;
-  weight: number;
+  weight: string;
+  // weight: number;
   sets: number;
   reps: number;
 }

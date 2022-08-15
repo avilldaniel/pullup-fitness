@@ -16,7 +16,6 @@ import { TableStatsContext } from "../utils/contexts";
 import { useUserStore } from "../utils/zustand-stores";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Exercise, Exercise_stat, Muscle_grp, Prisma } from "@prisma/client";
-import OrangeLoader from "./OrangeLoader";
 
 const ModalExers = () => {
   // Theme
@@ -49,7 +48,8 @@ const ModalExers = () => {
           muscleGrp,
         },
       });
-      // returns array of Exercises {id, name, muscleGrp, creator}
+
+      // returns Exercise[] {id, name, muscleGrp, creator}
       return res.data;
     },
     {
@@ -126,7 +126,7 @@ const ModalExers = () => {
     //   return res.data;
     // },
     {
-      onMutate: async (newExer: any) => {
+      onMutate: async (newExer: string | string[]) => {
         // Optimistically update the cache value on mutate, but store
         // the old value and return it so that it's accessible in case of
         // an error
@@ -183,12 +183,12 @@ const ModalExers = () => {
           );
         }
 
-        //
+        // Update query cache for preset exercises difference
         queryClient.setQueriesData(
           ["exercise-diff"],
           (oldData: Exercise[] | undefined) => {
             return oldData?.filter((exercise) => {
-              exercise.id !== newExer.id;
+              exercise.name !== newExer;
               // exercise.id !== data.id;
             });
           }
@@ -332,14 +332,14 @@ const ModalExers = () => {
             title={`Add ${muscleGrp.toLowerCase()} exercise(s)`}
             centered
             size="90%"
-            style={
-              {
-                // maxHeight: "28em",
-                // display: "flex",
-                // justifyContent: "center",
-                // alignItems: "center",
-              }
-            }
+            style={{
+              // maxHeight: "28em",
+              // display: "flex",
+              // justifyContent: "center",
+              // alignItems: "center",
+              maxWidth: "30em",
+              margin: "auto",
+            }}
           >
             {/* List available exercises to add */}
             {isLoading ? (

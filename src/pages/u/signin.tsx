@@ -61,7 +61,16 @@ const Login: NextPage = () => {
     //  if success, user info can be posted into db, re-direct to user's new dashboard
     //  if fails, user info may already exist in db, render invalid error
     try {
-      const res = await axios.post("/api/user/post-user", data);
+      // const res = await fetch("/api/user/register", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json;charset=utf-8",
+      //   },
+      //   body: JSON.stringify(data),
+      // });
+      // const userRegistered = await res.json();
+      // const { username } = userRegistered;
+      const res = await axios.post("/api/user/register", data);
       setInvalidRegister("");
       const { username } = res.data;
       router.push(`/u/${username}`);
@@ -74,9 +83,8 @@ const Login: NextPage = () => {
   return (
     <MantineProvider theme={{ colorScheme: "light" }}>
       <div className={bg.signin}>
+        <h3 className={login.header}>{`<App Name, aha>`}</h3>
         <main className={login.container}>
-          <h3>{`<App Name, aha>`}</h3>
-          {/* <div className={login.card}> */}
           {showRegister ? (
             <div className={login.regCard}>
               {/* Register form */}
@@ -149,9 +157,14 @@ const Login: NextPage = () => {
                     Sign up
                   </Button>
                 </div>
+
+                {/* Invalid message, if cannot register user */}
+                {invalidRegister && (
+                  <p style={{ fontSize: theme.fontSizes.sm }}>
+                    Invalid {invalidRegister}
+                  </p>
+                )}
               </form>
-              {/* Invalid message, if cannot register user */}
-              {invalidRegister && <p>Invalid {invalidRegister}</p>}
             </div>
           ) : (
             /*******************************************************************/
@@ -202,7 +215,9 @@ const Login: NextPage = () => {
                 </div>
 
                 {/* Invalid message, if login is incorrect */}
-                {invalidLogin && <p>{invalidLogin}</p>}
+                {invalidLogin && (
+                  <p style={{ fontSize: theme.fontSizes.sm }}>{invalidLogin}</p>
+                )}
               </form>
             </div>
           )}
@@ -214,52 +229,3 @@ const Login: NextPage = () => {
 };
 
 export default Login;
-
-{
-  /* <h5>Sign in</h5>
-                  <TextInput
-                    placeholder="Email or username"
-                    variant="default"
-                    // variant="filled"
-                    radius="md"
-                    size="md"
-                    required
-                    {...register("login")}
-                    className={login.textInput}
-                  /> */
-}
-
-{
-  /* <TextInput
-                  placeholder="Password"
-                  variant="filled"
-                  radius="md"
-                  size="md"
-                  required
-                  {...register("password")}
-                  /> */
-}
-
-// <div className={login.registerOrLogin}>
-//   <Button
-//     variant="subtle"
-//     compact
-//     style={{ color: theme.colors.cyan[1] }}
-//   >
-//     Create account
-//   </Button>
-//   <Button
-//     type="submit"
-//     variant="gradient"
-//     gradient={{
-//       from: theme.colors.rose[3],
-//       to: theme.colors.rose[5],
-//       deg: 45,
-//     }}
-//   >
-//     Log In
-//   </Button>
-// </div>
-
-// {/* Invalid message, if login is incorrect */}
-// {invalidRegister && <p>{invalidRegister}</p>}

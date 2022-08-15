@@ -1,10 +1,23 @@
+.header {
+  /* dev */
+  /* border: 1px solid cyan; */
+
+  /* flex */
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  margin: auto;
+  max-width: 45em;
+  padding: 1em 1em 0.3em;
+}
+
 .container {
   /* dev */
   /* border: 1px solid pink; */
 
-  /* height: 50%; */
-  padding-top: 15px;
-  /* padding-top: 50px; */
+  padding-top: 60px;
+  /* padding-top: 15px; */
   width: 300px;
   margin: auto;
 
@@ -15,10 +28,10 @@
   justify-content: space-between;
 }
 
-.container h3 {
+/* .container h3 {
   align-self: flex-start;
   padding-bottom: 90px;
-}
+} */
 
 .loginCard {
   /* dev */
@@ -45,7 +58,8 @@
   backdrop-filter: blur(6.5px);
   -webkit-backdrop-filter: blur(6.5px);
   border: 1px solid rgba(17, 84, 122, 0.5);
-  height: 290px;
+  height: 16em;
+  /* height: 290px; */
   width: 100%;
 }
 

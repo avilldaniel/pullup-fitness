@@ -24,9 +24,7 @@ const TableRow = ({
   weight,
   sets,
   reps,
-}: // username,
-any) => {
-  // }: ITableRow) => {
+}: ITableRow) => {
   // Theme
   const theme = useMantineTheme();
 
@@ -52,18 +50,15 @@ any) => {
 
       {/* Weight */}
       <td>
-        {/* <td style={{ textAlign: "center" }}> */}
         {inEditMode.status && inEditMode.rowKey === theKey ? (
           <NumberInput
             size="sm"
             value={w}
             // value={weight}
-            onChange={(e) => setWeight(e!)}
+            onChange={(e) => setWeight(e!.toString())}
             min={0}
             hideControls
             precision={1}
-            // step={0.5}
-            // style={{ minWidth: "3em", maxWidth: "6em" }}
             styles={{
               input: {
                 // dev
@@ -77,14 +72,13 @@ any) => {
             }}
           />
         ) : (
-          parseFloat(stat.weight).toFixed(1)
-          // stat.weight
+          parseFloat(stat.weight?.toString()!).toFixed(1)
+          // parseFloat(stat.weight).toFixed(1)
         )}
       </td>
 
       {/* Sets */}
       <td>
-        {/* <td style={{ textAlign: "center" }}> */}
         {inEditMode.status && inEditMode.rowKey === theKey ? (
           <NumberInput
             size="sm"
@@ -103,7 +97,6 @@ any) => {
                 textAlign: "center",
               },
             }}
-            // style={{ minWidth: "3em", maxWidth: "6em" }}
           />
         ) : (
           stat.sets
@@ -112,7 +105,6 @@ any) => {
 
       {/* Reps */}
       <td>
-        {/* <td style={{ textAlign: "center" }}> */}
         {inEditMode.status && inEditMode.rowKey === theKey ? (
           <NumberInput
             size="sm"
@@ -131,7 +123,6 @@ any) => {
                 textAlign: "center",
               },
             }}
-            // style={{ minWidth: "3em", maxWidth: "6em" }}
           />
         ) : (
           stat.reps
@@ -206,7 +197,6 @@ any) => {
               flexDirection: "column",
               height: "3.3em",
               alignItems: "start",
-              // alignItems: "center",
               justifyContent: "space-between",
             }}
           >
@@ -223,7 +213,7 @@ any) => {
               radius="md"
               size="sm"
               aria-label="Modify stats"
-              title="Edit"
+              title="Update"
             >
               <IconBarbell />
             </ActionIcon>

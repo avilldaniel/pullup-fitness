@@ -29,8 +29,8 @@ model User {
 // note: this model does not allow for duplicate exercise stats which could be differentiated by
 // different number of sets (ex. 3x10, 5x5, hypertrohpy); i would like to implement this eventually
 model Exercise_stat {
-  // id            Int       @id @default(autoincrement())
-  @@id([userName, exerciseName, creatorName])
+  @@id([userName, exerciseName, creatorName, muscleGroup])
+  // @@id([userName, exerciseName, creatorName])
   user          User        @relation(fields: [userName], references: [username])
   userName      String
   exercise      Exercise    @relation(fields: [exerciseName, muscleGroup, creatorName], references: [name, muscleGrp, creator])
