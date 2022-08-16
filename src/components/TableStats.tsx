@@ -158,10 +158,9 @@ const TableStats = () => {
     <>
       {isLoading ? (
         <OrangeLoader />
-      ) : (stats.length &&
-          // : (muscleGrp === "ALL" && stats.length) ||
-          stats.some((e: Exercise_stat) => e.muscleGroup === muscleGrp)) ||
-        muscleGrp === "ALL" ? (
+      ) : stats.length &&
+        (stats.some((e: Exercise_stat) => e.muscleGroup === muscleGrp) ||
+          muscleGrp === "ALL") ? (
         <>
           <ScrollArea
             style={{ height: "80%" }}
