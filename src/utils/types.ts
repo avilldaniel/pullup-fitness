@@ -1,15 +1,6 @@
 import { Exercise_stat, Muscle_grp, Prisma } from "@prisma/client";
 import { Dispatch, SetStateAction } from "react";
 
-// export interface IPresetExerDiff {
-//   username: string;
-//   muscleGrp: string;
-// }
-
-// export interface IGetUserExerStats {
-//   username: string;
-// }
-
 export interface IModalDelete {
   delModalOpened: boolean;
   setDelModalOpened: Dispatch<SetStateAction<boolean>>;
@@ -46,8 +37,8 @@ export interface IOnEdit {
   id: number;
   weight: Prisma.Decimal;
   // weight: number;
-  sets: number;
-  reps: number;
+  sets: string;
+  reps: string;
 }
 
 export interface ITableRowUpdates {
@@ -56,8 +47,8 @@ export interface ITableRowUpdates {
   exerciseName: string;
   newWeight: string;
   // newWeight: number;
-  newSets: number;
-  newReps: number;
+  newSets: string;
+  newReps: string;
 }
 
 export interface IUpdatedStat {
@@ -66,8 +57,8 @@ export interface IUpdatedStat {
   creatorName: string;
   exerciseName: string;
   newWeight: string;
-  newSets: number;
-  newReps: number;
+  newSets: string;
+  newReps: string;
 }
 
 export interface ITableRow {
@@ -93,14 +84,14 @@ export interface ITableRow {
   }: ITableRowUpdates) => void;
   onCancel: () => void;
   onDelete: ({ creatorName, username, exerciseName }: IOnDelete) => void;
-  setWeight: Dispatch<SetStateAction<string | null>>;
+  setWeight: Dispatch<SetStateAction<string>>;
   // setWeight: (value: SetStateAction<number | null>) => void;
-  setSets: Dispatch<SetStateAction<number | null>>;
-  setReps: Dispatch<SetStateAction<number | null>>;
+  setSets: Dispatch<SetStateAction<string>>;
+  setReps: Dispatch<SetStateAction<string>>;
   weight: string;
   // weight: number;
-  sets: number;
-  reps: number;
+  sets: string;
+  reps: string;
 }
 
 export interface ITableStats {

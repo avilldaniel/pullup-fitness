@@ -1,4 +1,4 @@
-import { ActionIcon, NumberInput, useMantineTheme } from "@mantine/core";
+import { ActionIcon, TextInput, useMantineTheme } from "@mantine/core";
 import {
   IconBarbell,
   IconCircleCheck,
@@ -40,14 +40,11 @@ const TableRow = ({
   const month = ("0" + d.getMonth()).slice(-2).toString();
   const day = ("0" + d.getDate()).slice(-2).toString();
   const date = month.concat("/" + day);
-  // const date = d.toLocaleDateString("en-US");
-
-  // Format weight
-  const w = parseFloat(weight);
 
   return (
     <tr key={theKey}>
       {/* Exercise name */}
+      {/* <td style={{ wordWrap: "normal", textAlign: "start" }}> */}
       <td style={{ wordWrap: "break-word", textAlign: "start" }}>
         {stat.exerciseName}
       </td>
@@ -55,14 +52,10 @@ const TableRow = ({
       {/* Weight */}
       <td>
         {inEditMode.status && inEditMode.rowKey === theKey ? (
-          <NumberInput
-            size="sm"
-            value={w}
-            // value={weight}
-            onChange={(e) => e && setWeight(e!.toString())}
-            min={0}
-            hideControls
-            precision={1}
+          <TextInput
+            type="number"
+            value={weight}
+            onChange={(e) => setWeight(e.currentTarget.value)}
             styles={{
               input: {
                 // dev
@@ -77,19 +70,37 @@ const TableRow = ({
           />
         ) : (
           parseFloat(stat.weight?.toString()!).toFixed(1)
-          // parseFloat(stat.weight).toFixed(1)
         )}
       </td>
+      {/* <NumberInput
+      //   size="sm"
+      //   value={w}
+      //   // value={weight}
+      //   onChange={(e) => e && setWeight(e!.toString())}
+      //   min={0}
+      //   hideControls
+      //   precision={1}
+      //   styles={{
+      //     input: {
+      //       // dev
+      //       // border: "1px solid yellow",
+
+      //       padding: "0.2em",
+      //       width: "5em",
+      //       display: "flex",
+      //       textAlign: "center",
+      //     },
+      //   }}
+      // /> */}
 
       {/* Sets */}
       <td>
         {inEditMode.status && inEditMode.rowKey === theKey ? (
-          <NumberInput
-            size="sm"
+          <TextInput
+            type="number"
             value={sets}
-            onChange={(e) => setSets(e!)}
-            min={0}
-            hideControls
+            onChange={(e) => setSets(e.currentTarget.value)}
+            // onChange={(e) => e && setSets(parseInt(e.currentTarget.value))}
             styles={{
               input: {
                 // dev
@@ -106,16 +117,32 @@ const TableRow = ({
           stat.sets
         )}
       </td>
+      {/* <NumberInput
+      size="sm"
+      value={sets}
+      onChange={(e) => setSets(e!)}
+      min={0}
+      hideControls
+      styles={{
+        input: {
+          // dev
+          // border: "1px solid yellow",
+
+          padding: "0.2em",
+          width: "3em",
+          display: "flex",
+          textAlign: "center",
+        },
+      }}
+      /> */}
 
       {/* Reps */}
       <td>
         {inEditMode.status && inEditMode.rowKey === theKey ? (
-          <NumberInput
-            size="sm"
+          <TextInput
+            type="number"
             value={reps}
-            onChange={(e) => setReps(e!)}
-            min={0}
-            hideControls
+            onChange={(e) => setReps(e.currentTarget.value)}
             styles={{
               input: {
                 // dev
@@ -132,6 +159,24 @@ const TableRow = ({
           stat.reps
         )}
       </td>
+      {/* <NumberInput
+            size="sm"
+            value={reps}
+            onChange={(e) => setReps(e!)}
+            min={0}
+            hideControls
+            styles={{
+              input: {
+                // dev
+                // border: "1px solid yellow",
+
+                padding: "0.2em",
+                width: "3em",
+                display: "flex",
+                textAlign: "center",
+              },
+            }}
+          /> */}
 
       {/* Last Updated */}
       <td
@@ -200,7 +245,8 @@ const TableRow = ({
 
                 display: "flex",
                 flexDirection: "column",
-                height: "3.3em",
+                height: "4em",
+                // height: "3.3em",
                 alignItems: "start",
                 justifyContent: "space-between",
               }}
@@ -211,12 +257,12 @@ const TableRow = ({
                   onEdit({
                     id: theKey,
                     weight: stat.weight!,
-                    sets: stat.sets,
-                    reps: stat.reps!,
+                    sets: stat.sets.toString(),
+                    reps: stat.reps!.toString(),
                   })
                 }
                 radius="md"
-                size="sm"
+                size="md"
                 aria-label="Modify stats"
                 title="Update"
               >
@@ -234,7 +280,7 @@ const TableRow = ({
                   })
                 }
                 radius="md"
-                size="sm"
+                size="md"
                 aria-label="Delete record"
                 title="Delete"
               >

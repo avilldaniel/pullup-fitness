@@ -20,9 +20,10 @@ export default async function handler(
     newSets,
     newReps,
   } = req.body;
-  // console.log(typeof newWeight);
-  // console.log(typeof new Prisma.Decimal(newWeight));
+  // Format
   const newWeightDeci = new Prisma.Decimal(newWeight);
+  const parsedSets = parseInt(newSets);
+  const parsedReps = parseInt(newReps);
 
   try {
     const objectUpdated = await prisma.exercise_stat.update({
@@ -43,8 +44,8 @@ export default async function handler(
         weight: newWeightDeci,
         // weight: new Prisma.Decimal(newWeight),
         // weight: newWeight,
-        sets: newSets,
-        reps: newReps,
+        sets: parsedSets,
+        reps: parsedReps,
       },
     });
 

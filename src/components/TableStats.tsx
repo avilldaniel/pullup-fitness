@@ -6,7 +6,6 @@ import {
   IOnDelete,
   IOnEdit,
   ITableRowUpdates,
-  ITableStats,
   IUpdatedStat,
 } from "../utils/types";
 import TableRow from "./TableRow";
@@ -72,9 +71,9 @@ const TableStats = () => {
   const [invalidDelete] = useState(false);
   const [deleteQueue, setDeleteQueue] = useState<IOnDelete>({});
 
-  const [weight, setWeight] = useState<string | null>(null);
-  const [sets, setSets] = useState<number | null>(null);
-  const [reps, setReps] = useState<number | null>(null);
+  const [weight, setWeight] = useState<string>("");
+  const [sets, setSets] = useState<string>("");
+  const [reps, setReps] = useState<string>("");
 
   const onEdit = ({ id, weight, sets, reps }: IOnEdit) => {
     setInEditMode({
@@ -134,9 +133,9 @@ const TableStats = () => {
       status: false,
       rowKey: null,
     });
-    setWeight(null);
-    setSets(null);
-    setReps(null);
+    setWeight("");
+    setSets("");
+    setReps("");
   };
 
   // Invoke when user wants to delete a record
@@ -163,33 +162,36 @@ const TableStats = () => {
           muscleGrp === "ALL") ? (
         <>
           <ScrollArea
-            style={{ height: "80%" }}
             // type="scroll"
             // type="auto"
             type="always"
             offsetScrollbars
-            scrollbarSize={6}
+            // scrollbarSize={6}
+            style={{ height: "80%" }}
           >
             <Table
               fontSize="sm"
               horizontalSpacing={8}
               highlightOnHover
               style={{ tableLayout: "fixed", minWidth: "17.6em" }}
-              // style={{ tableLayout: "fixed", minWidth: "17em" }}
             >
               <thead>
                 <tr>
-                  <th style={{ width: "5em" }}>Exercise</th>
-                  <th style={{ width: inEditMode.status ? "5.3em" : "3em" }}>
+                  <th style={{ width: "4.5em" }}>Exercise</th>
+
+                  <th style={{ width: inEditMode.status ? "3.7em" : "3em" }}>
                     {/* Wgt. */}
                     {inEditMode.status ? "Weight" : "Wgt."}
                   </th>
-                  <th style={{ width: inEditMode.status ? "3.7em" : "2.5em" }}>
+
+                  <th style={{ width: inEditMode.status ? "2.5em" : "2.5em" }}>
                     Sets
                   </th>
-                  <th style={{ width: inEditMode.status ? "3.7em" : "2.5em" }}>
+
+                  <th style={{ width: inEditMode.status ? "2.5em" : "2.5em" }}>
                     Reps
                   </th>
+
                   <th
                     style={{
                       width: "3.8em",
@@ -210,14 +212,6 @@ const TableStats = () => {
                       Edit
                     </th>
                   )}
-                  {/* <th
-                    style={{
-                      width: "3em",
-                      textAlign: "start",
-                    }}
-                  >
-                    Edit
-                  </th> */}
                 </tr>
               </thead>
               {/* <tbody style={{ textAlign: "start" }}>{rows}</tbody> */}
@@ -266,11 +260,10 @@ const TableStats = () => {
       ) : (
         <section
           style={{
+            // dev
             // border: "2px solid pink",
+
             fontSize: theme.fontSizes.sm,
-            // margin: "auto",
-            // display: "flex",
-            // alignItems: "center",
             padding: "5%",
           }}
         >
