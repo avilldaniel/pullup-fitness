@@ -43,11 +43,17 @@ export default async function handler(
         // create new presets[] records in db
         const addedStat = await prisma.exercise_stat.findUniqueOrThrow({
           where: {
-            userName_exerciseName_creatorName: {
+            userName_exerciseName_creatorName_muscleGroup: {
               userName: username,
               exerciseName: newExers[i],
               creatorName: creatorName,
+              muscleGroup: muscleGroup,
             },
+            // userName_exerciseName_creatorName: {
+            //   userName: username,
+            //   exerciseName: newExers[i],
+            //   creatorName: creatorName,
+            // },
           },
         });
         console.log({ addedStat });
@@ -93,11 +99,17 @@ export default async function handler(
         // Fetch all of user's updated exercise stats
         const objectAdded = await prisma.exercise_stat.findUniqueOrThrow({
           where: {
-            userName_exerciseName_creatorName: {
+            userName_exerciseName_creatorName_muscleGroup: {
               userName: username,
               exerciseName: newExers,
               creatorName: creatorName,
+              muscleGroup: muscleGroup,
             },
+            // userName_exerciseName_creatorName: {
+            //   userName: username,
+            //   exerciseName: newExers,
+            //   creatorName: creatorName,
+            // },
           },
         });
 

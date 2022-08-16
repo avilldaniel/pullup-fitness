@@ -20,11 +20,17 @@ export default async function handler(
     // Delete exercise stat
     const objectDeleted = await prisma.exercise_stat.delete({
       where: {
-        userName_exerciseName_creatorName: {
+        userName_exerciseName_creatorName_muscleGroup: {
           userName: username,
           exerciseName: exerciseName,
           creatorName: creatorName,
+          muscleGroup: muscleGrp,
         },
+        // userName_exerciseName_creatorName: {
+        //   userName: username,
+        //   exerciseName: exerciseName,
+        //   creatorName: creatorName,
+        // },
       },
     });
 

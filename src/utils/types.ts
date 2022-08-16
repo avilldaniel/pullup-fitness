@@ -62,6 +62,7 @@ export interface ITableRowUpdates {
 
 export interface IUpdatedStat {
   username: string;
+  muscleGrp: string;
   creatorName: string;
   exerciseName: string;
   newWeight: string;

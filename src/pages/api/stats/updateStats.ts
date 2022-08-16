@@ -11,8 +11,15 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { username, creatorName, exerciseName, newWeight, newSets, newReps } =
-    req.body;
+  const {
+    username,
+    muscleGrp,
+    creatorName,
+    exerciseName,
+    newWeight,
+    newSets,
+    newReps,
+  } = req.body;
   // console.log(typeof newWeight);
   // console.log(typeof new Prisma.Decimal(newWeight));
   const newWeightDeci = new Prisma.Decimal(newWeight);
@@ -20,12 +27,17 @@ export default async function handler(
   try {
     const objectUpdated = await prisma.exercise_stat.update({
       where: {
-        userName_exerciseName_creatorName: {
+        userName_exerciseName_creatorName_muscleGroup: {
           userName: username,
           exerciseName: exerciseName,
           creatorName: creatorName,
-          // creatorName: username || "admin",
+          muscleGroup: muscleGrp,
         },
+        // userName_exerciseName_creatorName: {
+        //   userName: username,
+        //   exerciseName: exerciseName,
+        //   creatorName: creatorName,
+        // },
       },
       data: {
         weight: newWeightDeci,

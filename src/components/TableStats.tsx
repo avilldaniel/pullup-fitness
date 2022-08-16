@@ -97,6 +97,7 @@ const TableStats = () => {
     // Update query cache
     updateStatsMutation.mutate({
       username: username,
+      muscleGrp: muscleGrp,
       creatorName,
       exerciseName,
       newWeight,
