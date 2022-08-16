@@ -5,7 +5,8 @@ import {
   IconCircleX,
   IconTrash,
 } from "@tabler/icons";
-import React from "react";
+import React, { useContext } from "react";
+import { TableStatsContext } from "../utils/contexts";
 import { ITableRow } from "../utils/types";
 import { useUserStore } from "../utils/zustand-stores";
 
@@ -31,6 +32,9 @@ const TableRow = ({
   // Zustand
   const username = useUserStore((state) => state.username);
 
+  // Context
+  const { muscleGrp } = useContext(TableStatsContext);
+
   // Format date
   const d = new Date(stat.updatedAt);
   const month = ("0" + d.getMonth()).slice(-2).toString();
@@ -55,7 +59,7 @@ const TableRow = ({
             size="sm"
             value={w}
             // value={weight}
-            onChange={(e) => setWeight(e!.toString())}
+            onChange={(e) => e && setWeight(e!.toString())}
             min={0}
             hideControls
             precision={1}
@@ -140,104 +144,106 @@ const TableRow = ({
       </td>
 
       {/* Edit */}
-      <td>
-        {/* In edit mode */}
-        {inEditMode.status && inEditMode.rowKey === theKey ? (
-          <div
-            style={{
-              // dev
-              // border: "1px solid yellow",
+      {muscleGrp !== "ALL" && (
+        <td>
+          {/* In edit mode */}
+          {inEditMode.status && inEditMode.rowKey === theKey ? (
+            <div
+              style={{
+                // dev
+                // border: "1px solid yellow",
 
-              display: "flex",
-              flexDirection: "column",
-              height: "4em",
-              alignItems: "start",
-              justifyContent: "space-between",
-            }}
-          >
-            {/* Save changes */}
-            <ActionIcon
-              onClick={() =>
-                onSave({
-                  // username: username,
-                  creatorName: stat.creatorName,
-                  exerciseName: stat.exerciseName,
-                  newWeight: weight,
-                  newSets: sets,
-                  newReps: reps,
-                })
-              }
-              radius="md"
-              size="md"
-              aria-label="Save changes"
-              title="Save"
+                display: "flex",
+                flexDirection: "column",
+                height: "4em",
+                alignItems: "start",
+                justifyContent: "space-between",
+              }}
             >
-              <IconCircleCheck color="green" />
-            </ActionIcon>
+              {/* Save changes */}
+              <ActionIcon
+                onClick={() =>
+                  onSave({
+                    // username: username,
+                    creatorName: stat.creatorName,
+                    exerciseName: stat.exerciseName,
+                    newWeight: weight,
+                    newSets: sets,
+                    newReps: reps,
+                  })
+                }
+                radius="md"
+                size="md"
+                aria-label="Save changes"
+                title="Save"
+              >
+                <IconCircleCheck color="green" />
+              </ActionIcon>
 
-            {/* Cancel changes */}
-            <ActionIcon
-              onClick={() => onCancel()}
-              radius="md"
-              size="md"
-              aria-label="Cancel changes"
-              title="Cancel"
-            >
-              <IconCircleX color="red" />
-            </ActionIcon>
-          </div>
-        ) : (
-          // Not in edit mode
-          <div
-            style={{
-              // dev
-              // border: "1px solid yellow",
+              {/* Cancel changes */}
+              <ActionIcon
+                onClick={() => onCancel()}
+                radius="md"
+                size="md"
+                aria-label="Cancel changes"
+                title="Cancel"
+              >
+                <IconCircleX color="red" />
+              </ActionIcon>
+            </div>
+          ) : (
+            // Not in edit mode
+            <div
+              style={{
+                // dev
+                // border: "1px solid yellow",
 
-              display: "flex",
-              flexDirection: "column",
-              height: "3.3em",
-              alignItems: "start",
-              justifyContent: "space-between",
-            }}
-          >
-            {/* Click to enter edit mode */}
-            <ActionIcon
-              onClick={() =>
-                onEdit({
-                  id: theKey,
-                  weight: stat.weight!,
-                  sets: stat.sets,
-                  reps: stat.reps!,
-                })
-              }
-              radius="md"
-              size="sm"
-              aria-label="Modify stats"
-              title="Update"
+                display: "flex",
+                flexDirection: "column",
+                height: "3.3em",
+                alignItems: "start",
+                justifyContent: "space-between",
+              }}
             >
-              <IconBarbell />
-            </ActionIcon>
+              {/* Click to enter edit mode */}
+              <ActionIcon
+                onClick={() =>
+                  onEdit({
+                    id: theKey,
+                    weight: stat.weight!,
+                    sets: stat.sets,
+                    reps: stat.reps!,
+                  })
+                }
+                radius="md"
+                size="sm"
+                aria-label="Modify stats"
+                title="Update"
+              >
+                <IconBarbell />
+              </ActionIcon>
 
-            {/* Delete exercise */}
-            <ActionIcon
-              onClick={() =>
-                onDelete({
-                  username: username,
-                  creatorName: stat.creatorName,
-                  exerciseName: stat.exerciseName,
-                  muscleGrp: stat.muscleGroup,
-                })
-              }
-              radius="md"
-              size="sm"
-              aria-label="Delete record"
-              title="Delete"
-            >
-              <IconTrash color={theme.colors.orange[5]} />
-            </ActionIcon>
-          </div>
-        )}
-      </td>
+              {/* Delete exercise */}
+              <ActionIcon
+                onClick={() =>
+                  onDelete({
+                    username: username,
+                    creatorName: stat.creatorName,
+                    exerciseName: stat.exerciseName,
+                    muscleGrp: stat.muscleGroup,
+                  })
+                }
+                radius="md"
+                size="sm"
+                aria-label="Delete record"
+                title="Delete"
+              >
+                <IconTrash color={theme.colors.orange[5]} />
+              </ActionIcon>
+            </div>
+          )}
+        </td>
+      )}
     </tr>
   );
 };

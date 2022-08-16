@@ -199,14 +199,25 @@ const TableStats = () => {
                   >
                     Updated
                   </th>
-                  <th
+
+                  {muscleGrp !== "ALL" && (
+                    <th
+                      style={{
+                        width: "3em",
+                        textAlign: "start",
+                      }}
+                    >
+                      Edit
+                    </th>
+                  )}
+                  {/* <th
                     style={{
                       width: "3em",
                       textAlign: "start",
                     }}
                   >
                     Edit
-                  </th>
+                  </th> */}
                 </tr>
               </thead>
               {/* <tbody style={{ textAlign: "start" }}>{rows}</tbody> */}
