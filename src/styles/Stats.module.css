@@ -5,7 +5,8 @@
   margin: auto;
   min-width: 17em;
   max-width: 30em;
-  height: 90%;
+  height: 80%;
+  /* height: 90%; */
   padding: 0 0.5em;
 
   /* flex */
