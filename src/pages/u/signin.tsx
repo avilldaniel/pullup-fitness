@@ -83,7 +83,7 @@ const Login: NextPage = () => {
   return (
     <MantineProvider theme={{ colorScheme: "light" }}>
       <div className={bg.signin}>
-        <h3 className={login.header}>{`<App Name, aha>`}</h3>
+        <h3 className={login.header}>{`<App Name TBD, aha>`}</h3>
         <main className={login.container}>
           {showRegister ? (
             <div className={login.regCard}>

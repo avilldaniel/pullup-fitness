@@ -47,9 +47,8 @@ const Username: NextPage = () => {
           <>
             <header className={statStyles.header}>
               <h3 style={{ color: theme.colors.dark[0] }}>
-                {`<App Name, aha>`}
+                {`<Name TBD, aha>`}
               </h3>
-              {/* <h4>{`<App Name, aha>`}</h4> */}
               <h5>
                 Hi,{" "}
                 <span style={{ color: theme.colors.orange[4] }}>

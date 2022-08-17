@@ -39,7 +39,8 @@ const TableRow = ({
   const d = new Date(stat.updatedAt);
   const month = ("0" + d.getMonth()).slice(-2).toString();
   const day = ("0" + d.getDate()).slice(-2).toString();
-  const date = month.concat("/" + day);
+  const year = ("0" + d.getFullYear()).slice(-2).toString();
+  const date = month.concat("/" + day).concat("/" + year);
 
   return (
     <tr key={theKey}>
@@ -222,7 +223,8 @@ const TableRow = ({
                 aria-label="Save changes"
                 title="Save"
               >
-                <IconCircleCheck color="green" />
+                <IconCircleCheck color={theme.colors.green[7]} />
+                {/* <IconCircleCheck color="green" /> */}
               </ActionIcon>
 
               {/* Cancel changes */}

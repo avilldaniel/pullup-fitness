@@ -420,6 +420,7 @@ const ModalExers = () => {
                 placeholder="Example: Assisted Pull-Ups"
                 // placeholder="Name of new exercise"
                 data-autofocus
+                // autoFocus={true}
                 styles={{
                   input: {
                     "::placeholder": {

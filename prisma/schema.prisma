@@ -37,7 +37,7 @@ model Exercise_stat {
   exerciseName  String
   muscleGroup   Muscle_grp
   creatorName   String
-  sets          Int         @default(0) @db.Integer
+  sets          Int         @default(3) @db.Integer
   // weight        Int?        @default(0) @db.Integer
   weight        Decimal?    @default(0.0) @db.Decimal(5,1)
   reps          Int?        @default(0) @db.Integer
