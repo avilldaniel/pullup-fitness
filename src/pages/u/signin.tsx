@@ -83,7 +83,7 @@ const Login: NextPage = () => {
   return (
     <MantineProvider theme={{ colorScheme: "light" }}>
       <div className={bg.signin}>
-        <h3 className={login.header}>{`<App Name TBD, aha>`}</h3>
+        <h3 className={login.header}>{`PulluP Fitness`}</h3>
         <main className={login.container}>
           {showRegister ? (
             <div className={login.regCard}>
@@ -141,6 +141,7 @@ const Login: NextPage = () => {
                     compact
                     style={{ color: theme.colors.cyan[1] }}
                     onClick={() => setShowRegister(false)}
+                    className={login.subtleBtn}
                   >
                     {/* Back to sign in */}
                     Cancel
@@ -198,6 +199,7 @@ const Login: NextPage = () => {
                     compact
                     style={{ color: theme.colors.cyan[1] }}
                     onClick={() => setShowRegister(true)}
+                    className={login.subtleBtn}
                   >
                     Create account
                   </Button>

@@ -42,6 +42,7 @@
   height: 200px;
   width: 100%;
 }
+
 .regCard {
   /* dev */
   /* border: 5px solid red; */
@@ -81,16 +82,14 @@
 }
 
 .registerOrLogin {
-  /* dev */
   /* border: 1px solid pink; */
-
   width: 100%;
 
-  /* flex */
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-/* .form Button {
-  align-self: flex-end;
-} */
+
+.subtleBtn:hover {
+  background-color: #02324a;
+}

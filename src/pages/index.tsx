@@ -4,18 +4,18 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import bg from "../styles/Background.module.css";
 
 const Home: NextPage = () => {
   const router = useRouter();
 
+  // implement a check for auth token?
+
   useEffect(() => {
     router.push("/u/signin");
   }, [router]);
-  // useEffect(() => {
-  //   router.push("/u/login");
-  // }, []);
 
-  return <div>home</div>;
+  return <div className={bg.signin}></div>;
 };
 
 export default Home;

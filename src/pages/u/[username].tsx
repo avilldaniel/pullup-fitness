@@ -46,9 +46,7 @@ const Username: NextPage = () => {
         ) : (
           <>
             <header className={statStyles.header}>
-              <h3 style={{ color: theme.colors.dark[0] }}>
-                {`<Name TBD, aha>`}
-              </h3>
+              <h3 style={{ color: theme.colors.dark[0] }}>PulluP Fitness</h3>
               <h5>
                 Hi,{" "}
                 <span style={{ color: theme.colors.orange[4] }}>
