@@ -13,7 +13,7 @@ export default async function handler(
     const user = userSchema.parse(req.body);
 
     // if data passes validation, invoke db query with it
-    const newUser = await prisma.user.create({
+    const newUser = await prisma.appUser.create({
       data: {
         email: user.email,
         name: user.name,

@@ -14,7 +14,7 @@ export default async function handler(
   if (login && typeof login === "string") {
     try {
       // Check if api query (login) matches with an existing user
-      const getUser = await prisma.user.findFirstOrThrow({
+      const getUser = await prisma.appUser.findFirstOrThrow({
         where: {
           // login === username || login === email
           OR: [{ email: { equals: login } }, { username: { equals: login } }],

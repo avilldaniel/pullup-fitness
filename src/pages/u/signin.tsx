@@ -10,6 +10,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import LoginBtn from "../../components/LoginBtn";
 import { loginSchema, userSchema } from "../../schemas/zodSchemas";
 import bg from "../../styles/Background.module.css";
 import login from "../../styles/Login.module.css";
@@ -82,6 +83,7 @@ const Login: NextPage = () => {
 
   return (
     <MantineProvider theme={{ colorScheme: "light" }}>
+      <LoginBtn />
       <div className={bg.signin}>
         <h3 className={login.header}>{`PulluP Fitness`}</h3>
         <main className={login.container}>

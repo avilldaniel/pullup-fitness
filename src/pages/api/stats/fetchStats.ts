@@ -14,7 +14,7 @@ export default async function handler(
   if (username && typeof username === "string") {
     try {
       // Confirm username is a registered user
-      await prisma.user.findFirstOrThrow({
+      await prisma.appUser.findFirstOrThrow({
         where: {
           username: {
             equals: username,
