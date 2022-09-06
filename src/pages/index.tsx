@@ -9,10 +9,12 @@ import bg from "../styles/Background.module.css";
 const Home: NextPage = () => {
   const router = useRouter();
 
-  // implement a check for auth token?
+  // implement a check for auth session,
+  // if session, re-direct to /u/dashboard
+  // else, re-direct
 
   useEffect(() => {
-    router.push("/u/signin");
+    router.push("/signin");
   }, [router]);
 
   return <div className={bg.signin}></div>;

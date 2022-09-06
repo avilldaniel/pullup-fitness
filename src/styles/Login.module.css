@@ -9,7 +9,7 @@
 
   margin: auto;
   max-width: 45em;
-  padding: 1em 1em 0.3em;
+  padding: 1em 0.4em 0.3em;
 }
 
 .container {
@@ -85,11 +85,18 @@
   /* border: 1px solid pink; */
   width: 100%;
 
-  display: flex;
+  /* text-align: end; */
+
+  /* display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: center; */
 }
 
 .subtleBtn:hover {
   background-color: #02324a;
+}
+
+.error {
+  font-size: 0.8rem;
+  text-align: center;
 }

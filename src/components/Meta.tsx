@@ -31,8 +31,7 @@ const Meta = ({ keywords, description, title }: IMetaProps) => {
 Meta.defaultProps = {
   keywords: "Exercise, Fitness, Gym, Health",
   description: "Health is wealth.",
-  title: "Some app, ya",
-  // title: "PulluP Fitness",
+  title: "PulluP Fitness",
 };
 
 export default Meta;
