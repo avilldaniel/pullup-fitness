@@ -26,7 +26,8 @@ const LoginBtn = () => {
             to: "#c81e4c",
             deg: 45,
           }}
-          onClick={() => router.push("/u")}
+          // When homepage is defined, make onClick re-direct to "/u"
+          onClick={() => router.push("/u/stats")}
         >
           Go to dashboard
         </Button>
@@ -51,9 +52,6 @@ const LoginBtn = () => {
 
   // Else,
   return (
-    // <>
-    // {/* Not signed in <br /> */}
-    // <button onClick={() => signIn()}>Sign in</button>
     <Button
       type="button"
       size="md"
@@ -67,7 +65,6 @@ const LoginBtn = () => {
     >
       Sign In
     </Button>
-    // </>
   );
 };
 
