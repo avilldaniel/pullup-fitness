@@ -22,14 +22,15 @@ const TableStats = () => {
   const theme = useMantineTheme();
 
   // Zustand
-  const username = useUserStore((state) => state.username);
-  const setUsername = useUserStore((state) => state.setUsername);
+  // const username = useUserStore((state) => state.username);
+  const email = useUserStore((state) => state.email);
 
   // Context
   const { muscleGrp } = useContext(TableStatsContext);
 
   // Fetch user stats
-  const { isLoading, data: stats } = useFetchStats();
+  const { isLoading, data: stats } = useFetchStats(email);
+  const { username } = stats;
 
   // Mutation for updating stats
   const queryClient = useQueryClient();
@@ -43,7 +44,7 @@ const TableStats = () => {
         // Iterate thru current cache of stats, if a stat matches our current stat,
         // replace the old stat with the current updated one
         queryClient.setQueriesData(
-          ["stats", username],
+          ["stats", email],
           (oldData: Exercise_stat[] | undefined) => {
             return oldData?.map((stat) => {
               if (

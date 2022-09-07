@@ -17,12 +17,12 @@ import { useUserStore } from "../utils/zustand-stores";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Exercise, Exercise_stat, Muscle_grp, Prisma } from "@prisma/client";
 
-const ModalExers = () => {
+const ModalExers = ({ username }: any) => {
   // Theme
   const theme = useMantineTheme();
 
   // Zustand
-  const username = useUserStore((state) => state.username);
+  // const username = useUserStore((state) => state.username);
 
   // Context
   const { muscleGrp } = useContext(TableStatsContext);

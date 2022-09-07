@@ -1,6 +1,8 @@
 import { Button } from "@mantine/core";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useUserStore } from "../utils/zustand-stores";
 
 const LoginBtn = () => {
   // Get session
@@ -8,6 +10,34 @@ const LoginBtn = () => {
 
   // useRouter()
   const router = useRouter();
+
+  // Zustand
+  const setEmail = useUserStore((state) => state.setEmail);
+  const setUsername = useUserStore((state) => state.setUsername);
+
+  // On loadup, if session, set email, fetch username with email, then set username
+  useEffect(() => {
+    (async () => {
+      if (session?.user?.email) {
+        // Set client email
+        setEmail(session.user.email);
+
+        // Fetch then set client user
+        const res = await fetch(
+          `/api/user/username?email=${session.user.email}`
+        );
+        const { username } = await res.json();
+        setUsername(username);
+      }
+    })();
+  }, [session?.user?.email, setEmail, setUsername]);
+
+  // Handle sign out: clear client state (email & username), then sign out
+  const handleSignout = () => {
+    setEmail("");
+    setUsername("");
+    signOut();
+  };
 
   if (session) {
     return (
@@ -28,8 +58,10 @@ const LoginBtn = () => {
           }}
           // When homepage is defined, make onClick re-direct to "/u"
           onClick={() => router.push("/u/stats")}
+          // onClick={handleSignIn}
         >
-          Go to dashboard
+          {/* when homepage is defined, Go to dashboard */}
+          Go to app
         </Button>
 
         {/* Sign out */}
@@ -42,7 +74,7 @@ const LoginBtn = () => {
             to: "#c81e4c",
             deg: 45,
           }}
-          onClick={() => signOut()}
+          onClick={handleSignout}
         >
           Sign out
         </Button>

@@ -1,25 +1,20 @@
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import NoAuth from "../../components/NoAuth";
 
 const Workout: NextPage = () => {
   // Session
-  const { data } = useSession();
+  const { data: session } = useSession();
 
-  // useRouter()
-  const router = useRouter();
-
-  // If user is not authenticated, re-direct
-  if (!data?.user?.email) {
-    router.push("/u");
+  if (session) {
+    return (
+      <div>
+        <>Sesh is good</>
+      </div>
+    );
   }
 
-  // Else, user is authenticated
-  return (
-    <div>
-      <>Sesh is good</>
-    </div>
-  );
+  return <NoAuth />;
 };
 
 export default Workout;

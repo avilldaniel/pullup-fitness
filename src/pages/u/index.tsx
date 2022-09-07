@@ -1,16 +1,14 @@
-import { Button, useMantineTheme } from "@mantine/core";
 import type { NextPage } from "next";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import bg from "../../styles/Background.module.css";
-import login from "../../styles/Login.module.css";
-import dash from "../../styles/Dashboard.module.css";
+import NoAuth from "../../components/NoAuth";
 
 const Index: NextPage = () => {
   // Session
-  const { data } = useSession();
+  const { status } = useSession();
 
-  if (data?.user?.email) {
+  if (status === "authenticated") {
     return (
       <div className={bg.default}>
         {/* Turn this section into a nav component */}
@@ -19,32 +17,12 @@ const Index: NextPage = () => {
           <Link href={"/u/workout"}>Workouts</Link>
         </section>
 
-        {/* Add stats component here, for now. Eventually become a homepage hub */}
+        {/* Page is not used, for now. Eventually will become a homepage hub */}
       </div>
     );
   }
 
-  return (
-    <div className={bg.default}>
-      <h3 className={login.header}>{`PulluP Fitness`}</h3>
-      <main className={dash["no-auth"]}>
-        <p>You must be signed in to access this page.</p>
-        <Button
-          type="button"
-          size="lg"
-          variant="gradient"
-          gradient={{
-            from: "#e23860",
-            to: "#c81e4c",
-            deg: 45,
-          }}
-          onClick={() => signIn()}
-        >
-          Sign In
-        </Button>
-      </main>
-    </div>
-  );
+  return <NoAuth />;
 };
 
 export default Index;

@@ -11,7 +11,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import LoginBtn from "../components/LoginBtn";
+import LoginBtn from "../components/BeforeAuth";
 import { userSchema } from "../schemas/zodSchemas";
 import bg from "../styles/Background.module.css";
 import login from "../styles/Login.module.css";
@@ -28,7 +28,7 @@ const Login: NextPage = () => {
   const [showRegister, setShowRegister] = useState(false);
 
   // Session
-  const { status: session, data } = useSession();
+  const { data: session } = useSession();
 
   /*******************************************************************/
   // For register form
@@ -157,23 +157,22 @@ const Login: NextPage = () => {
             <div className={login.loginCard}>
               {/* <form className={login.form} onSubmit={handleSubmit(submitLogin)}> */}
               <div className={login.form}>
-                {!session || (!data && <h5>Click to sign in</h5>)}
+                {!session && <h5>Click to sign in</h5>}
                 <LoginBtn />
 
-                {!session ||
-                  (!data && (
-                    <div className={login.registerOrLogin}>
-                      <Button
-                        variant="subtle"
-                        compact
-                        style={{ color: theme.colors.cyan[1] }}
-                        onClick={() => setShowRegister(true)}
-                        className={login.subtleBtn}
-                      >
-                        Or, create an account
-                      </Button>
-                    </div>
-                  ))}
+                {!session && (
+                  <div className={login.registerOrLogin}>
+                    <Button
+                      variant="subtle"
+                      compact
+                      style={{ color: theme.colors.cyan[1] }}
+                      onClick={() => setShowRegister(true)}
+                      className={login.subtleBtn}
+                    >
+                      Or, create an account
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           )}

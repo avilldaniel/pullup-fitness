@@ -1,5 +1,4 @@
-// API route used to fetch a user's exercise stats
-// return array of stats
+// API route used to fetch an email's username
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { Prisma } from "@prisma/client";
@@ -15,9 +14,6 @@ export default async function handler(
       // Confirm email is a registered user, and get username
       const { username } = await prisma.appUser.findFirstOrThrow({
         where: {
-          // username: {
-          //   equals: username,
-          // },
           email: {
             equals: email,
           },
@@ -25,19 +21,8 @@ export default async function handler(
         select: { username: true },
       });
 
-      // Query db to fetch user's stats
-      const getStats = await prisma.exercise_stat.findMany({
-        where: {
-          AND: { userName: { equals: username } },
-          OR: [
-            { creatorName: { equals: username } },
-            { creatorName: { equals: "admin" } },
-          ],
-        },
-      });
-
-      // Return array of stats
-      return res.status(200).send(getStats);
+      // Return username
+      return res.status(200).json({ username: username });
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === "P2002") {
