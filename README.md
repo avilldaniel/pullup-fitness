@@ -4,7 +4,7 @@
 
 Work in progress.
 
-🖇 [PulluP Fitness](https://github.com/)
+🖇 [PulluP Fitness](https://pullup.at)
 
 [gif demo here]
 
