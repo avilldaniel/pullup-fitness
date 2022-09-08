@@ -1,3 +1,5 @@
+import React, { useContext } from "react";
+import type { FC } from "react";
 import { ActionIcon, TextInput, useMantineTheme } from "@mantine/core";
 import {
   IconBarbell,
@@ -5,12 +7,11 @@ import {
   IconCircleX,
   IconTrash,
 } from "@tabler/icons";
-import React, { useContext } from "react";
 import { TableStatsContext } from "../utils/contexts";
 import { ITableRow } from "../utils/types";
 import { useUserStore } from "../utils/zustand-stores";
 
-const TableRow = ({
+const TableRow: FC<ITableRow> = ({
   // key,
   theKey,
   stat,
@@ -25,7 +26,7 @@ const TableRow = ({
   weight,
   sets,
   reps,
-}: ITableRow) => {
+}) => {
   // Theme
   const theme = useMantineTheme();
 

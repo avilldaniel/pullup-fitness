@@ -1,6 +1,7 @@
 import { Loader, useMantineTheme } from "@mantine/core";
+import { FC } from "react";
 
-export default function OrangeLoader() {
+const OrangeLoader: FC = () => {
   const theme = useMantineTheme();
   return (
     <div
@@ -15,4 +16,6 @@ export default function OrangeLoader() {
       <Loader color={theme.colors.orange[3]} size="sm" variant={theme.loader} />
     </div>
   );
-}
+};
+
+export default OrangeLoader;

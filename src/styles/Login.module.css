@@ -9,15 +9,13 @@
 
   margin: auto;
   max-width: 45em;
-  padding: 1em 1em 0.3em;
+  padding: 1em 1em 3em;
 }
 
 .container {
   /* dev */
   /* border: 1px solid pink; */
 
-  padding-top: 60px;
-  /* padding-top: 15px; */
   width: 300px;
   margin: auto;
 

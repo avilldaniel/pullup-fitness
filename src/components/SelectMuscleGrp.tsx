@@ -1,9 +1,10 @@
-import { MantineProvider, Select, useMantineTheme } from "@mantine/core";
-import { Muscle_grp } from "@prisma/client";
 import React, { useContext } from "react";
+import type { FC } from "react";
+import { MantineProvider, Select } from "@mantine/core";
+import { Muscle_grp } from "@prisma/client";
 import { TableStatsContext } from "../utils/contexts";
 
-const SelectMuscleGrp = () => {
+const SelectMuscleGrp: FC = () => {
   // Context
   const { muscleGrp, setMuscleGrp } = useContext(TableStatsContext);
 

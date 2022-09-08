@@ -1,6 +1,6 @@
 import create from "zustand";
 
-// User state; possibly use for auth?
+// User state
 interface UserState {
   username: string;
   setUsername: (newUsername: string) => void;
@@ -8,7 +8,6 @@ interface UserState {
 export const useUserStore = create<UserState>()((set) => ({
   username: "",
   setUsername: (newUsername) => set(() => ({ username: newUsername })),
-  // setUsername: (by: string) => set((state) => ({username: ...state.username, string}))
 }));
 
 // Workout state

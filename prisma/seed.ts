@@ -2,6 +2,16 @@ import { Muscle_grp } from "@prisma/client";
 import { prisma } from "../src/utils/db";
 
 async function main() {
+  // Create admin
+  await prisma.appUser.create({
+    data: {
+      email: "avill.daniel@gmail.com",
+      name: "admin",
+      username: "admin",
+    },
+  });
+
+  // Seed data
   const chestInit = { creator: "admin", muscleGrp: "CHEST" as Muscle_grp };
   const chest = await prisma.exercise.createMany({
     data: [

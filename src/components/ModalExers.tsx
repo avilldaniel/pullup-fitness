@@ -1,4 +1,5 @@
 import { FormEvent, useContext, useEffect, useState } from "react";
+import type { FC } from "react";
 import axios from "axios";
 import {
   Button,
@@ -17,7 +18,7 @@ import { useUserStore } from "../utils/zustand-stores";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Exercise, Exercise_stat, Muscle_grp, Prisma } from "@prisma/client";
 
-const ModalExers = () => {
+const ModalExers: FC = () => {
   // Theme
   const theme = useMantineTheme();
 
