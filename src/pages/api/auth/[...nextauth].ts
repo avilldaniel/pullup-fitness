@@ -3,6 +3,8 @@ import EmailProvider from "next-auth/providers/email";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "../../../utils/db";
 
+// const urlAfterLogin = '/u/stats';
+
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
   // Configure one or more authenitcation providers
@@ -20,4 +22,12 @@ export default NextAuth({
     }),
     // ...add options
   ],
+  pages: {
+    signIn: "/signin",
+  },
+  // callbacks: {
+  //   redirect({}): {
+  //     return ;
+  //   },
+  // }I
 });
