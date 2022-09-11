@@ -1,20 +1,29 @@
 // API route used to fetch a user's exercise stats
-// needs username (which will be pulled from Context)
+// using session's email, fetch stats
 // return array of stats
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { Prisma } from "@prisma/client";
 import { prisma } from "../../../utils/db";
+import { unstable_getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // Session
+  const session = await unstable_getServerSession(req, res, authOptions);
+  if (!session) {
+    return res.status(401).json({ message: "You must be logged in." });
+  }
+
   const { username } = req.query;
+  console.log({ username });
   if (username && typeof username === "string") {
     try {
       // Confirm username is a registered user
-      await prisma.user.findFirstOrThrow({
+      await prisma.appUser.findFirstOrThrow({
         where: {
           username: {
             equals: username,

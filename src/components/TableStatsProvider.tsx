@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import type { FC } from "react";
 import { TableStatsContext, tableStatsDefault } from "../utils/contexts";
 
 interface ITableStatsProvider {
   children: React.ReactNode;
 }
-export const TableStatsProvider = ({ children }: ITableStatsProvider) => {
+export const TableStatsProvider: FC<ITableStatsProvider> = ({ children }) => {
   // const [username, setUsername] = useState<string>("");
   // const [muscleGrp, setMuscleGrp] = useState<string>("ALL");
   // const [exerciseName, setExerciseName] = useState<string>("");

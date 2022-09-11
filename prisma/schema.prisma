@@ -12,7 +12,8 @@ datasource db {
 
 // TEST AGAINST:
 //  - duplicate emails
-model User {
+// model User {
+model AppUser {
   id              Int               @id @default(autoincrement())
   memberSince     DateTime          @default(now())
   username        String            @db.VarChar(50) @unique
@@ -31,7 +32,7 @@ model User {
 model Exercise_stat {
   @@id([userName, exerciseName, creatorName, muscleGroup])
   // @@id([userName, exerciseName, creatorName])
-  user          User        @relation(fields: [userName], references: [username])
+  user          AppUser        @relation(fields: [userName], references: [username])
   userName      String
   exercise      Exercise    @relation(fields: [exerciseName, muscleGroup, creatorName], references: [name, muscleGrp, creator])
   exerciseName  String
@@ -56,7 +57,7 @@ model Exercise {
   muscleGrp       Muscle_grp
   exerciseStats   Exercise_stat[]
   workouts        Workout[]
-  create          User                @relation(fields: [creator], references: [username])
+  create          AppUser                @relation(fields: [creator], references: [username])
   creator         String
 
   // @@unique([name, muscleGrp])
@@ -69,7 +70,7 @@ model Workout {
   id          Int                 @id @default(autoincrement())
   name        String              @db.VarChar(30)
   createdAt   DateTime            @default(now())
-  creator     User                @relation(fields: [creatorId], references: [id])
+  creator     AppUser                @relation(fields: [creatorId], references: [id])
   creatorId   Int
   exercises   Exercise[]          
 }
@@ -85,4 +86,50 @@ enum Muscle_grp {
   CORE
   CARDIO
   OTHER
+}
+
+// NextAuth - authenticate user session
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.Text
+  access_token       String?  @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }

@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import type { FC } from "react";
 import { ScrollArea, Table, useMantineTheme } from "@mantine/core";
 import { Exercise_stat } from "@prisma/client";
 import {
@@ -17,13 +18,12 @@ import ModalDelete from "./ModalDelete";
 import { useFetchStats } from "../react-query-hooks/useFetchStats";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const TableStats = () => {
+const TableStats: FC = () => {
   // Theme
   const theme = useMantineTheme();
 
   // Zustand
   const username = useUserStore((state) => state.username);
-  const setUsername = useUserStore((state) => state.setUsername);
 
   // Context
   const { muscleGrp } = useContext(TableStatsContext);

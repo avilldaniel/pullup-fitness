@@ -19,9 +19,8 @@ export const userSchema = z.object({
 export type Schema = z.infer<typeof userSchema>;
 
 export const loginSchema = z.object({
-  // this can be user's email or username
+  // User's email
   login: z.string().trim(),
-  // password
 });
 
 export const customExerSchema = z.object({

@@ -1,19 +1,17 @@
-import { Button, Modal, useMantineTheme } from "@mantine/core";
+import { Button, Modal } from "@mantine/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserStore } from "../utils/zustand-stores";
 import axios from "axios";
 import { Exercise_stat } from "@prisma/client";
 import { IModalDelete } from "../utils/types";
+import type { FC } from "react";
 
-const ModalDelete = ({
+const ModalDelete: FC<IModalDelete> = ({
   delModalOpened,
   setDelModalOpened,
   invalidDelete,
   deleteQueue,
-}: IModalDelete) => {
-  // Theme
-  const theme = useMantineTheme();
-
+}) => {
   // Zustand
   const username = useUserStore((state) => state.username);
 

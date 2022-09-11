@@ -1,4 +1,5 @@
 import Head from "next/head";
+import type { FC } from "react";
 
 export interface IMetaProps {
   keywords: string;
@@ -6,7 +7,8 @@ export interface IMetaProps {
   title: string;
 }
 
-const Meta = ({ keywords, description, title }: IMetaProps) => {
+// const Meta = ({ keywords, description, title }: IMetaProps) => {
+const Meta: FC<IMetaProps> = ({ keywords, description, title }) => {
   return (
     <Head>
       {/* This tag ensures that <Select /> does not zoom in on mobile */}
@@ -28,11 +30,10 @@ const Meta = ({ keywords, description, title }: IMetaProps) => {
   );
 };
 
-Meta.defaultProps = {
-  keywords: "Exercise, Fitness, Gym, Health",
+export const defaultProps = (Meta.defaultProps = {
+  keywords: "Exercise, Fitness, Gym, Health, Tracher, Workout, Muscle",
   description: "Health is wealth.",
-  title: "Some app, ya",
-  // title: "PulluP Fitness",
-};
+  title: "PulluP Fitness",
+});
 
 export default Meta;

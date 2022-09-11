@@ -1,13 +1,15 @@
+import type { FC } from "react";
 import Meta from "./Meta";
+import { defaultProps } from "../components/Meta";
 
-export interface ILayoutProps {
+interface ILayoutProps {
   children: React.ReactNode;
 }
 
-const Layout = ({ children }: ILayoutProps) => {
+const Layout: FC<ILayoutProps> = ({ children }) => {
   return (
     <>
-      <Meta />
+      <Meta {...defaultProps} />
       <main>{children}</main>
     </>
   );
