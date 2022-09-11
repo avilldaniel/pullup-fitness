@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
+import NoAuth from "../components/NoAuth";
 import OrangeLoader from "../components/OrangeLoader";
 
 const NameOfPage: NextPage = () => {
@@ -12,22 +12,15 @@ const NameOfPage: NextPage = () => {
     return <OrangeLoader />;
   }
 
-  // Authenticated
-  else if (status === "authenticated") {
-    return (
-      <div>
-        <>Sesh is good</>
-      </div>
-    );
+  // Not authenticated
+  else if (status === "unauthenticated") {
+    return <NoAuth />;
   }
 
-  // Not authenticated
+  // Authenticated
   return (
     <div>
-      You must be signed in to access this page.
-      <Link href="/signin" aria-label="Sign-in link">
-        Go to sign-in
-      </Link>
+      <div className="content"></div>
     </div>
   );
 };

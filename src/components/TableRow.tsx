@@ -9,7 +9,7 @@ import {
 } from "@tabler/icons";
 import { TableStatsContext } from "../utils/contexts";
 import { ITableRow } from "../utils/types";
-import { useUserStore } from "../utils/zustand-stores";
+import useFetchUser from "../react-query-hooks/useFetchUser";
 
 const TableRow: FC<ITableRow> = ({
   // key,
@@ -27,11 +27,11 @@ const TableRow: FC<ITableRow> = ({
   sets,
   reps,
 }) => {
+  // Fetch username
+  const { data } = useFetchUser();
+
   // Theme
   const theme = useMantineTheme();
-
-  // Zustand
-  const username = useUserStore((state) => state.username);
 
   // Context
   const { muscleGrp } = useContext(TableStatsContext);
@@ -46,7 +46,6 @@ const TableRow: FC<ITableRow> = ({
   return (
     <tr key={theKey}>
       {/* Exercise name */}
-      {/* <td style={{ wordWrap: "normal", textAlign: "start" }}> */}
       <td style={{ wordWrap: "break-word", textAlign: "start" }}>
         {stat.exerciseName}
       </td>
@@ -74,26 +73,6 @@ const TableRow: FC<ITableRow> = ({
           parseFloat(stat.weight?.toString()!).toFixed(1)
         )}
       </td>
-      {/* <NumberInput
-      //   size="sm"
-      //   value={w}
-      //   // value={weight}
-      //   onChange={(e) => e && setWeight(e!.toString())}
-      //   min={0}
-      //   hideControls
-      //   precision={1}
-      //   styles={{
-      //     input: {
-      //       // dev
-      //       // border: "1px solid yellow",
-
-      //       padding: "0.2em",
-      //       width: "5em",
-      //       display: "flex",
-      //       textAlign: "center",
-      //     },
-      //   }}
-      // /> */}
 
       {/* Sets */}
       <td>
@@ -119,24 +98,6 @@ const TableRow: FC<ITableRow> = ({
           stat.sets
         )}
       </td>
-      {/* <NumberInput
-      size="sm"
-      value={sets}
-      onChange={(e) => setSets(e!)}
-      min={0}
-      hideControls
-      styles={{
-        input: {
-          // dev
-          // border: "1px solid yellow",
-
-          padding: "0.2em",
-          width: "3em",
-          display: "flex",
-          textAlign: "center",
-        },
-      }}
-      /> */}
 
       {/* Reps */}
       <td>
@@ -161,24 +122,6 @@ const TableRow: FC<ITableRow> = ({
           stat.reps
         )}
       </td>
-      {/* <NumberInput
-            size="sm"
-            value={reps}
-            onChange={(e) => setReps(e!)}
-            min={0}
-            hideControls
-            styles={{
-              input: {
-                // dev
-                // border: "1px solid yellow",
-
-                padding: "0.2em",
-                width: "3em",
-                display: "flex",
-                textAlign: "center",
-              },
-            }}
-          /> */}
 
       {/* Last Updated */}
       <td
@@ -249,7 +192,6 @@ const TableRow: FC<ITableRow> = ({
                 display: "flex",
                 flexDirection: "column",
                 height: "4em",
-                // height: "3.3em",
                 alignItems: "start",
                 justifyContent: "space-between",
               }}
@@ -276,7 +218,7 @@ const TableRow: FC<ITableRow> = ({
               <ActionIcon
                 onClick={() =>
                   onDelete({
-                    username: username,
+                    username: data.username,
                     creatorName: stat.creatorName,
                     exerciseName: stat.exerciseName,
                     muscleGrp: stat.muscleGroup,

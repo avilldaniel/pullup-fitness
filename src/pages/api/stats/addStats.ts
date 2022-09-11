@@ -6,12 +6,21 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Exercise_stat, Prisma } from "@prisma/client";
 import { prisma } from "../../../utils/db";
+import { unstable_getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // Session
+  const session = await unstable_getServerSession(req, res, authOptions);
+  if (!session) {
+    return res.status(401).json({ message: "You must be logged in." });
+  }
+
   const { username, muscleGroup, newExers, creatorName } = req.body;
+
   // If adding from preset exercises, newExers === []
   if (Array.isArray(newExers) && typeof username === "string") {
     for (let i = 0; i < newExers.length; i++) {
@@ -49,14 +58,9 @@ export default async function handler(
               creatorName: creatorName,
               muscleGroup: muscleGroup,
             },
-            // userName_exerciseName_creatorName: {
-            //   userName: username,
-            //   exerciseName: newExers[i],
-            //   creatorName: creatorName,
-            // },
           },
         });
-        console.log({ addedStat });
+
         arrayAdded.push(addedStat);
       } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -76,7 +80,7 @@ export default async function handler(
   // If adding a custom exercise, newExers === "string"
   else if (typeof newExers === "string") {
     if (typeof username === "string") {
-      console.log({ newExers });
+      // console.log({ newExers });
       try {
         // Create new custom exercises record in db,
         // then create it as a new exercise stat (w/ default stats)
@@ -105,11 +109,6 @@ export default async function handler(
               creatorName: creatorName,
               muscleGroup: muscleGroup,
             },
-            // userName_exerciseName_creatorName: {
-            //   userName: username,
-            //   exerciseName: newExers,
-            //   creatorName: creatorName,
-            // },
           },
         });
 

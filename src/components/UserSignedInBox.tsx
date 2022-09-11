@@ -2,7 +2,6 @@ import { Button } from "@mantine/core";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import type { FC } from "react";
-import { useUserStore } from "../utils/zustand-stores";
 import login from "../styles/Login.module.css";
 
 interface UserSignedInBoxProps {
@@ -13,14 +12,6 @@ const UserSignedInBox: FC<UserSignedInBoxProps> = ({ email }) => {
   // useRouter()
   const router = useRouter();
 
-  // Zustand
-  const setUsername = useUserStore((state) => state.setUsername);
-
-  // Handle sign out: clear client state username, then sign out
-  const handleSignout = () => {
-    setUsername("");
-    signOut();
-  };
   return (
     <main className={login.container}>
       <div className={login.loginCard}>
@@ -57,7 +48,7 @@ const UserSignedInBox: FC<UserSignedInBoxProps> = ({ email }) => {
               to: "#c81e4c",
               deg: 45,
             }}
-            onClick={handleSignout}
+            onClick={() => signOut()}
           >
             Sign out
           </Button>

@@ -1,13 +1,13 @@
-import create from "zustand";
+// NOT USING AS GLOBAL CLIENT STATE IS NO LONGER NEEDED (FOR NOW)
 
-// User state
-interface UserState {
-  username: string;
-  setUsername: (newUsername: string) => void;
-}
-export const useUserStore = create<UserState>()((set) => ({
-  username: "",
-  setUsername: (newUsername) => set(() => ({ username: newUsername })),
-}));
+// import create from "zustand";
 
-// Workout state
+// // User state
+// interface UserState {
+//   username: string;
+//   setUsername: (newUsername: string) => void;
+// }
+// export const useUserStore = create<UserState>()((set) => ({
+//   username: "",
+//   setUsername: (newUsername) => set(() => ({ username: newUsername })),
+// }));

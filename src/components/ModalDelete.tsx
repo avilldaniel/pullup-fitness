@@ -1,10 +1,10 @@
 import { Button, Modal } from "@mantine/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useUserStore } from "../utils/zustand-stores";
 import axios from "axios";
 import { Exercise_stat } from "@prisma/client";
 import { IModalDelete } from "../utils/types";
 import type { FC } from "react";
+import { useSession } from "next-auth/react";
 
 const ModalDelete: FC<IModalDelete> = ({
   delModalOpened,
@@ -12,8 +12,8 @@ const ModalDelete: FC<IModalDelete> = ({
   invalidDelete,
   deleteQueue,
 }) => {
-  // Zustand
-  const username = useUserStore((state) => state.username);
+  // Session
+  const { data: session } = useSession();
 
   // Mutation for deleting a stat
   const queryClient = useQueryClient();
@@ -27,7 +27,7 @@ const ModalDelete: FC<IModalDelete> = ({
     {
       onSuccess: (data) => {
         queryClient.setQueriesData(
-          ["stats", username],
+          ["stats", session?.user?.email],
           (oldData: Exercise_stat[] | undefined) => {
             return oldData?.filter(
               (exercise) => JSON.stringify(exercise) !== JSON.stringify(data)

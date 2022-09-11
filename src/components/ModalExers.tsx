@@ -14,16 +14,20 @@ import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { customExerSchema } from "../schemas/zodSchemas";
 import { TableStatsContext } from "../utils/contexts";
-import { useUserStore } from "../utils/zustand-stores";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Exercise, Exercise_stat, Muscle_grp, Prisma } from "@prisma/client";
+import { useSession } from "next-auth/react";
+import useFetchUser from "../react-query-hooks/useFetchUser";
 
 const ModalExers: FC = () => {
+  // Session
+  const { data: session } = useSession();
+
+  // Username query cache
+  const { data } = useFetchUser();
+
   // Theme
   const theme = useMantineTheme();
-
-  // Zustand
-  const username = useUserStore((state) => state.username);
 
   // Context
   const { muscleGrp } = useContext(TableStatsContext);
@@ -45,7 +49,7 @@ const ModalExers: FC = () => {
     async () => {
       const res = await axios.get("/api/exercises/differenceExercises", {
         params: {
-          username,
+          username: data.username,
           muscleGrp,
         },
       });
@@ -62,70 +66,21 @@ const ModalExers: FC = () => {
   // Add new stats to query cache
   const queryClient = useQueryClient();
 
-  // // Mutation to update existing query
-  // const addStatsMutation = useMutation(
-  //   async (exercises: string | string[]) => {
-  //     const res = await axios.post("/api/stats/addStats", {
-  //       username,
-  //       muscleGroup: muscleGrp,
-  //       newExers: exercises,
-  //       // conditionally create object property based on type of exercises
-  //       ...(typeof exercises === "string"
-  //         ? { creatorName: username }
-  //         : { creatorName: "admin" }),
-  //       // creatorName: username,
-  //     });
-  //     return res.data;
-  //   },
-  //   {
-  //     // Update query cache of two arrays
-  //     onSuccess: (data) => {
-  //       queryClient.setQueriesData(
-  //         ["stats", username],
-  //         (oldData: Exercise_stat[] | undefined) => {
-  //           return [...oldData!, ...data];
-  //         }
-  //       );
-  //       queryClient.setQueriesData(
-  //         ["exercise-diff"],
-  //         (oldData: Exercise[] | undefined) => {
-  //           return oldData?.filter((exercise) => {
-  //             exercise.id !== data.id;
-  //           });
-  //         }
-  //       );
-  //     },
-  //   }
-  // );
-
-  // attempt at Optimistic Updates
+  // Optimistic Updates
   const addStatsMutation = useMutation(
-    // ["stats", username],
+    // ["stats", session?.user?.email],
     (exercises: string | string[]) => {
       return axios.post("/api/stats/addStats", {
-        username,
+        username: data.username,
         muscleGroup: muscleGrp,
         newExers: exercises,
         // conditionally create object property based on type of exercises
         ...(typeof exercises === "string"
-          ? { creatorName: username }
+          ? { creatorName: data.username }
           : { creatorName: "admin" }),
         // creatorName: username,
       });
     },
-    // async (exercises: string | string[]) => {
-    //   const res = await axios.post("/api/stats/addStats", {
-    //     username,
-    //     muscleGroup: muscleGrp,
-    //     newExers: exercises,
-    //     // conditionally create object property based on type of exercises
-    //     ...(typeof exercises === "string"
-    //       ? { creatorName: username }
-    //       : { creatorName: "admin" }),
-    //     // creatorName: username,
-    //   });
-    //   return res.data;
-    // },
     {
       onMutate: async (newExer: string | string[]) => {
         // Optimistically update the cache value on mutate, but store
@@ -133,15 +88,18 @@ const ModalExers: FC = () => {
         // an error
 
         // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-        await queryClient.cancelQueries(["stats", username]);
+        await queryClient.cancelQueries(["stats", session?.user?.email]);
 
         // Snapshot previous value
-        const previousExers = queryClient.getQueriesData(["stats", username]);
+        const previousExers = queryClient.getQueriesData([
+          "stats",
+          session?.user?.email,
+        ]);
 
         // Optimistically update to new value
         if (previousExers) {
           queryClient.setQueriesData(
-            ["stats", username],
+            ["stats", session?.user?.email],
             (oldData: Exercise_stat[] | undefined) => {
               // Preset exercise
               if (typeof newExer !== "string") {
@@ -154,7 +112,7 @@ const ModalExers: FC = () => {
                     reps: 0,
                     sets: 0,
                     updatedAt: new Date(),
-                    userName: username,
+                    userName: data.username,
                     weight: new Prisma.Decimal(0),
                   });
                 });
@@ -166,13 +124,13 @@ const ModalExers: FC = () => {
               else {
                 const newData: Exercise_stat[] = [
                   {
-                    creatorName: username,
+                    creatorName: data.username,
                     exerciseName: newExer,
                     muscleGroup: muscleGrp as Muscle_grp,
                     reps: 0,
                     sets: 0,
                     updatedAt: new Date(),
-                    userName: username,
+                    userName: data.username,
                     weight: new Prisma.Decimal(0),
                   },
                 ];
@@ -201,13 +159,16 @@ const ModalExers: FC = () => {
       // On failure, roll back to the previous value
       onError: (previousExers) => {
         console.log("trigger onError");
-        queryClient.setQueriesData(["stats", username], previousExers);
+        queryClient.setQueriesData(
+          ["stats", session?.user?.email],
+          previousExers
+        );
       },
 
       // After success or failure, refetch the todos query
       onSettled: () => {
         console.log("trigger onSettled");
-        queryClient.invalidateQueries(["stats", username]);
+        queryClient.invalidateQueries(["stats", session?.user?.email]);
       },
     }
   );
@@ -288,7 +249,7 @@ const ModalExers: FC = () => {
 
   return (
     <div>
-      {muscleGrp !== "ALL" && typeof username === "string" && (
+      {muscleGrp !== "ALL" && typeof data.username === "string" && (
         <>
           <main
             style={{

@@ -12,7 +12,6 @@ import { FC, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { loginSchema, userSchema } from "../schemas/zodSchemas";
 import login from "../styles/Login.module.css";
-import { useUserStore } from "../utils/zustand-stores";
 
 const LoginBox: FC = () => {
   // Theme
@@ -20,9 +19,6 @@ const LoginBox: FC = () => {
 
   // useRouter()
   const router = useRouter();
-
-  // Zustand
-  const setUsername = useUserStore((state) => state.setUsername);
 
   // State
   const [showRegister, setShowRegister] = useState(false);
@@ -45,8 +41,6 @@ const LoginBox: FC = () => {
       // If valid, set username in client state, signIn()
       if (res.ok) {
         const { username } = await res.json();
-        console.log(username, typeof username);
-        setUsername(username);
 
         signIn("email", {
           email: login,

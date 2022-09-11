@@ -6,11 +6,19 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Prisma } from "@prisma/client";
 import { prisma } from "../../../utils/db";
+import { unstable_getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // Session
+  const session = unstable_getServerSession(req, res, authOptions);
+  if (!session) {
+    return res.status(401).json({ message: "You must be logged in." });
+  }
+
   const {
     username,
     muscleGrp,
@@ -20,6 +28,7 @@ export default async function handler(
     newSets,
     newReps,
   } = req.body;
+
   // Format
   const newWeightDeci = new Prisma.Decimal(newWeight);
   const parsedSets = parseInt(newSets);
@@ -34,16 +43,9 @@ export default async function handler(
           creatorName: creatorName,
           muscleGroup: muscleGrp,
         },
-        // userName_exerciseName_creatorName: {
-        //   userName: username,
-        //   exerciseName: exerciseName,
-        //   creatorName: creatorName,
-        // },
       },
       data: {
         weight: newWeightDeci,
-        // weight: new Prisma.Decimal(newWeight),
-        // weight: newWeight,
         sets: parsedSets,
         reps: parsedReps,
       },

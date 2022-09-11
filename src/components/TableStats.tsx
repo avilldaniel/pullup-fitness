@@ -13,17 +13,19 @@ import TableRow from "./TableRow";
 import axios from "axios";
 import { TableStatsContext } from "../utils/contexts";
 import OrangeLoader from "./OrangeLoader";
-import { useUserStore } from "../utils/zustand-stores";
 import ModalDelete from "./ModalDelete";
 import { useFetchStats } from "../react-query-hooks/useFetchStats";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import useFetchUser from "../react-query-hooks/useFetchUser";
 
 const TableStats: FC = () => {
+  // Session
+  const { data: session } = useSession();
+  const { data } = useFetchUser();
+
   // Theme
   const theme = useMantineTheme();
-
-  // Zustand
-  const username = useUserStore((state) => state.username);
 
   // Context
   const { muscleGrp } = useContext(TableStatsContext);
@@ -43,7 +45,7 @@ const TableStats: FC = () => {
         // Iterate thru current cache of stats, if a stat matches our current stat,
         // replace the old stat with the current updated one
         queryClient.setQueriesData(
-          ["stats", username],
+          ["stats", session?.user?.email],
           (oldData: Exercise_stat[] | undefined) => {
             return oldData?.map((stat) => {
               if (
@@ -95,7 +97,7 @@ const TableStats: FC = () => {
   }: ITableRowUpdates) => {
     // Update query cache
     updateStatsMutation.mutate({
-      username: username,
+      username: data.username,
       muscleGrp: muscleGrp,
       creatorName,
       exerciseName,

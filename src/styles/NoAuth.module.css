@@ -1,0 +1,13 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  /* border: 1px solid yellow; */
+
+  width: 30em;
+  margin-bottom: 10em;
+  text-align: center;
+}

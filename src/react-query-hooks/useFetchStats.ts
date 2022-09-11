@@ -1,19 +1,18 @@
+// React-Query hook to fetch authenticated user's stats
+
 import { QueryFunctionContext, useQuery } from "@tanstack/react-query";
-import { useUserStore } from "../utils/zustand-stores";
+import { useSession } from "next-auth/react";
 
 const getStatsFetcher = async ({ queryKey }: QueryFunctionContext) => {
-  const username = queryKey[1];
-  const res = await fetch(`/api/stats/fetchStats?username=${username}`);
+  const email = queryKey[1];
+  const res = await fetch(`/api/stats/fetchStats?email=${email}`);
   const data = await res.json();
-  console.log({ data });
   return data;
 };
 
 export const useFetchStats = () => {
-  const username = useUserStore((state) => state.username);
-  // return useQuery(["stats", username], getStatsFetcher, {
-  console.log({ username });
-  return useQuery(["stats", username], getStatsFetcher, {
-    enabled: !!username,
+  const { data: session } = useSession();
+  return useQuery(["stats", session?.user?.email], getStatsFetcher, {
+    enabled: !!session?.user?.email,
   });
 };

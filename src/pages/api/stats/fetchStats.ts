@@ -18,16 +18,21 @@ export default async function handler(
     return res.status(401).json({ message: "You must be logged in." });
   }
 
-  const { username } = req.query;
-  console.log({ username });
-  if (username && typeof username === "string") {
+  const { email } = req.query;
+
+  if (email && typeof email === "string") {
     try {
       // Confirm username is a registered user
-      await prisma.appUser.findFirstOrThrow({
+      const { username } = await prisma.appUser.findFirstOrThrow({
         where: {
-          username: {
-            equals: username,
+          email: {
+            equals: email,
           },
+        },
+
+        // Get username
+        select: {
+          username: true,
         },
       });
 

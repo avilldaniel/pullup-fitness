@@ -9,11 +9,19 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Prisma } from "@prisma/client";
 import { prisma } from "../../../utils/db";
+import { unstable_getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // Session
+  const session = unstable_getServerSession(req, res, authOptions);
+  if (!session) {
+    return res.status(401).json({ message: "You must be logged in." });
+  }
+
   const { username, muscleGrp, exerciseName, creatorName } = req.body;
 
   try {
@@ -26,11 +34,6 @@ export default async function handler(
           creatorName: creatorName,
           muscleGroup: muscleGrp,
         },
-        // userName_exerciseName_creatorName: {
-        //   userName: username,
-        //   exerciseName: exerciseName,
-        //   creatorName: creatorName,
-        // },
       },
     });
 
