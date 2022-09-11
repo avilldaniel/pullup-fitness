@@ -12,6 +12,7 @@ import { FC, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { loginSchema, userSchema } from "../schemas/zodSchemas";
 import login from "../styles/Login.module.css";
+import { useUserStore } from "../utils/zustand-stores";
 
 const LoginBox: FC = () => {
   // Theme
@@ -20,7 +21,10 @@ const LoginBox: FC = () => {
   // useRouter()
   const router = useRouter();
 
-  // State that toggles whether in sign-in or register mode
+  // Zustand
+  const setUsername = useUserStore((state) => state.setUsername);
+
+  // State
   const [showRegister, setShowRegister] = useState(false);
   const [invalidLogin, setInvalidLogin] = useState("");
   const [invalidRegister, setInvalidRegister] = useState("");
@@ -33,16 +37,26 @@ const LoginBox: FC = () => {
     // formState: { errors },
   } = useForm({ resolver: zodResolver(loginSchema) });
 
-  const submitLogin: SubmitHandler<FieldValues> = ({ login }) => {
+  const submitLogin: SubmitHandler<FieldValues> = async ({ login }) => {
     try {
-      // const res = await axios.get(`/api/user/${data.login}`);
-      // const { username } = res.data;
-      // router.push(`/u/${username}`);
-      signIn("email", {
-        email: login,
-        redirect: false,
-        callbackUrl: "/u/stats",
-      });
+      // With email, fetch username
+      const res = await fetch(`/api/user/username?emailInput=${login}`);
+
+      // If valid, set username in client state, signIn()
+      if (res.ok) {
+        const { username } = await res.json();
+        console.log(username, typeof username);
+        setUsername(username);
+
+        signIn("email", {
+          email: login,
+          callbackUrl: "/",
+        });
+        // console.log("valid email");
+      } else {
+        // Else setInvalidLogin()
+        setInvalidLogin("Invalid email.");
+      }
     } catch (e) {
       // console.log("e:", e);
       setInvalidLogin("An error occurred. Please refresh and try again.");
@@ -81,6 +95,14 @@ const LoginBox: FC = () => {
             {/* Register form */}
             <form className={login.form} onSubmit={handleRegSubmit(newAccount)}>
               <h5>Register</h5>
+
+              {/* Invalid message, if cannot register user */}
+              {invalidRegister && (
+                <p style={{ fontSize: theme.fontSizes.sm }}>
+                  Invalid {invalidRegister}
+                </p>
+              )}
+
               <TextInput
                 placeholder="Email"
                 variant="default"
@@ -156,13 +178,6 @@ const LoginBox: FC = () => {
                   Sign up
                 </Button>
               </div>
-
-              {/* Invalid message, if cannot register user */}
-              {invalidRegister && (
-                <p style={{ fontSize: theme.fontSizes.sm }}>
-                  Invalid {invalidRegister}
-                </p>
-              )}
             </form>
           </div>
         ) : (
@@ -171,6 +186,12 @@ const LoginBox: FC = () => {
           <div className={login.loginCard}>
             <form className={login.form} onSubmit={handleSubmit(submitLogin)}>
               <h5>Sign in</h5>
+
+              {/* Invalid message, if login is incorrect */}
+              {invalidLogin && (
+                <p style={{ fontSize: theme.fontSizes.sm }}>{invalidLogin}</p>
+              )}
+
               <TextInput
                 placeholder="Email"
                 variant="default"
@@ -202,11 +223,6 @@ const LoginBox: FC = () => {
                 >
                   Log In
                 </Button>
-
-                {/* Invalid message, if login is incorrect */}
-                {invalidLogin && (
-                  <p style={{ fontSize: theme.fontSizes.sm }}>{invalidLogin}</p>
-                )}
               </div>
             </form>
           </div>
@@ -216,46 +232,3 @@ const LoginBox: FC = () => {
   );
 };
 export default LoginBox;
-
-/* ******************* OLD FORM **************** */
-// {/* <form className={login.form} onSubmit={handleSubmit(submitLogin)}>
-// <h5>Sign in</h5>
-// <TextInput
-//   placeholder="Username or email"
-//   variant="default"
-//   // variant="filled"
-//   radius="md"
-//   size="md"
-//   required
-//   {...register("login")}
-//   className={login.textInput}
-// />
-
-// <div className={login.registerOrLogin}>
-//   <Button
-//     variant="subtle"
-//     compact
-//     style={{ color: theme.colors.cyan[1] }}
-//     onClick={() => setShowRegister(true)}
-//     className={login.subtleBtn}
-//   >
-//     Create account
-//   </Button>
-//   <Button
-//     type="submit"
-//     variant="gradient"
-//     gradient={{
-//       from: theme.colors.rose[4],
-//       to: theme.colors.rose[5],
-//       deg: 45,
-//     }}
-//   >
-//     Log In
-//   </Button>
-
-//   {/* Invalid message, if login is incorrect */}
-//   {invalidLogin && (
-//     <p style={{ fontSize: theme.fontSizes.sm }}>{invalidLogin}</p>
-//   )}
-// </div>
-// </form> */}

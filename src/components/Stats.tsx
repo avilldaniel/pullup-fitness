@@ -25,7 +25,9 @@ const StatsComp: FC<any> = ({ email }) => {
   const username = useUserStore((state) => state.username);
 
   // Fetch user stats
-  const { isLoading, isError } = useFetchStats();
+  const { isLoading, isError, data } = useFetchStats();
+  console.log({ data });
+  console.log({ email });
 
   return (
     <div className={bg.default}>
