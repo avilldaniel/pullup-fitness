@@ -1,0 +1,33 @@
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.menu {
+  display: flex;
+}
+
+.menu>button {
+  background: transparent;
+  border: 0;
+  color: white;
+}
+
+.icons {
+  display: none;
+}
+
+.links {
+  display: block;
+}
+
+@media (max-width: 40em) {
+  .icons {
+    display: block;
+  }
+
+  .links {
+    display: none;
+  }
+}

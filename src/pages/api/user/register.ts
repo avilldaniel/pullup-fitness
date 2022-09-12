@@ -7,20 +7,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // console.log(req.body);
   const { email, name, username } = JSON.parse(req.body);
   try {
-    // const user = userSchema.parse(req.body);
-
-    // if data passes validation, invoke db query with it
-    // const newUser = await prisma.user.create({
-    //   data: {
-    //     email: user.email,
-    //     name: user.name,
-    //     username: user.username,
-    //   },
-    // });
-
     const newUser = await prisma.appUser.create({
       data: {
         email,

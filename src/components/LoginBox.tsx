@@ -5,9 +5,7 @@ import {
   TextInput,
   useMantineTheme,
 } from "@mantine/core";
-import axios from "axios";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/router";
 import { FC, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { loginSchema, userSchema } from "../schemas/zodSchemas";
@@ -16,9 +14,6 @@ import login from "../styles/Login.module.css";
 const LoginBox: FC = () => {
   // Theme
   const theme = useMantineTheme();
-
-  // useRouter()
-  const router = useRouter();
 
   // State
   const [showRegister, setShowRegister] = useState(false);
@@ -158,7 +153,7 @@ const LoginBox: FC = () => {
                 <Button
                   variant="subtle"
                   compact
-                  style={{ color: theme.colors.cyan[1] }}
+                  style={{ color: "#b5e5fd" }}
                   onClick={() => setShowRegister(false)}
                   className={login.subtleBtn}
                 >
@@ -167,12 +162,8 @@ const LoginBox: FC = () => {
                 </Button>
                 <Button
                   type="submit"
-                  variant="gradient"
-                  gradient={{
-                    from: theme.colors.rose[4],
-                    to: theme.colors.rose[5],
-                    deg: 45,
-                  }}
+                  variant="filled"
+                  style={{ backgroundColor: "#c81e4c" }}
                 >
                   Sign up
                 </Button>
@@ -205,7 +196,7 @@ const LoginBox: FC = () => {
                 <Button
                   variant="subtle"
                   compact
-                  style={{ color: theme.colors.cyan[1] }}
+                  style={{ color: "#b5e5fd" }}
                   onClick={() => setShowRegister(true)}
                   className={login.subtleBtn}
                 >
@@ -213,12 +204,8 @@ const LoginBox: FC = () => {
                 </Button>
                 <Button
                   type="submit"
-                  variant="gradient"
-                  gradient={{
-                    from: theme.colors.rose[4],
-                    to: theme.colors.rose[5],
-                    deg: 45,
-                  }}
+                  variant="filled"
+                  style={{ backgroundColor: "#c81e4c" }}
                 >
                   Log In
                 </Button>

@@ -12,7 +12,7 @@ import {
 import TableRow from "./TableRow";
 import axios from "axios";
 import { TableStatsContext } from "../utils/contexts";
-import OrangeLoader from "./OrangeLoader";
+import RoseLoader from "./RoseLoader";
 import ModalDelete from "./ModalDelete";
 import { useFetchStats } from "../react-query-hooks/useFetchStats";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -158,7 +158,7 @@ const TableStats: FC = () => {
   return (
     <>
       {isLoading ? (
-        <OrangeLoader />
+        <RoseLoader />
       ) : stats.length &&
         (stats.some((e: Exercise_stat) => e.muscleGroup === muscleGrp) ||
           muscleGrp === "ALL") ? (
@@ -270,16 +270,10 @@ const TableStats: FC = () => {
           }}
         >
           To add exercises,{" "}
-          <span style={{ color: theme.colors.orange[2] }}>
-            select a muscle group
-          </span>
-          . Then add from a list of{" "}
-          <span style={{ color: theme.colors.orange[2] }}>
-            preset exercises
-          </span>
-          , or create your own{" "}
-          <span style={{ color: theme.colors.orange[2] }}>custom exercise</span>
-          .
+          <span style={{ color: "#f08ea0" }}>select a muscle group</span>. Then
+          add from a list of{" "}
+          <span style={{ color: "#f08ea0" }}>preset exercises</span>, or create
+          your own <span style={{ color: "#f08ea0" }}>custom exercise</span>.
         </section>
       )}
     </>

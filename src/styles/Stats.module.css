@@ -16,17 +16,3 @@
   /* justify-content: space-between; */
   gap: 0.2em;
 }
-
-.header {
-  /* dev */
-  /* border: 1px solid cyan; */
-
-  /* flex */
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-
-  margin: auto;
-  max-width: 45em;
-  padding: 1em 1em 0.3em;
-}

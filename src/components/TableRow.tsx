@@ -59,9 +59,6 @@ const TableRow: FC<ITableRow> = ({
             onChange={(e) => setWeight(e.currentTarget.value)}
             styles={{
               input: {
-                // dev
-                // border: "1px solid yellow",
-
                 padding: "0.2em",
                 width: "5em",
                 display: "flex",
@@ -81,12 +78,8 @@ const TableRow: FC<ITableRow> = ({
             type="number"
             value={sets}
             onChange={(e) => setSets(e.currentTarget.value)}
-            // onChange={(e) => e && setSets(parseInt(e.currentTarget.value))}
             styles={{
               input: {
-                // dev
-                // border: "1px solid yellow",
-
                 padding: "0.2em",
                 width: "3em",
                 display: "flex",
@@ -108,9 +101,6 @@ const TableRow: FC<ITableRow> = ({
             onChange={(e) => setReps(e.currentTarget.value)}
             styles={{
               input: {
-                // dev
-                // border: "1px solid yellow",
-
                 padding: "0.2em",
                 width: "3em",
                 display: "flex",
@@ -140,9 +130,6 @@ const TableRow: FC<ITableRow> = ({
           {inEditMode.status && inEditMode.rowKey === theKey ? (
             <div
               style={{
-                // dev
-                // border: "1px solid yellow",
-
                 display: "flex",
                 flexDirection: "column",
                 height: "4em",
@@ -154,7 +141,6 @@ const TableRow: FC<ITableRow> = ({
               <ActionIcon
                 onClick={() =>
                   onSave({
-                    // username: username,
                     creatorName: stat.creatorName,
                     exerciseName: stat.exerciseName,
                     newWeight: weight,
@@ -167,8 +153,7 @@ const TableRow: FC<ITableRow> = ({
                 aria-label="Save changes"
                 title="Save"
               >
-                <IconCircleCheck color={theme.colors.green[7]} />
-                {/* <IconCircleCheck color="green" /> */}
+                <IconCircleCheck color="#37b24d" />
               </ActionIcon>
 
               {/* Cancel changes */}
@@ -186,9 +171,6 @@ const TableRow: FC<ITableRow> = ({
             // Not in edit mode
             <div
               style={{
-                // dev
-                // border: "1px solid yellow",
-
                 display: "flex",
                 flexDirection: "column",
                 height: "4em",
@@ -229,7 +211,7 @@ const TableRow: FC<ITableRow> = ({
                 aria-label="Delete record"
                 title="Delete"
               >
-                <IconTrash color={theme.colors.orange[5]} />
+                <IconTrash color="#e9627f" />
               </ActionIcon>
             </div>
           )}

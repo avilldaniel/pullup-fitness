@@ -18,6 +18,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Exercise, Exercise_stat, Muscle_grp, Prisma } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import useFetchUser from "../react-query-hooks/useFetchUser";
+import rose from "../styles/RoseBtn.module.css";
 
 const ModalExers: FC = () => {
   // Session
@@ -253,36 +254,17 @@ const ModalExers: FC = () => {
         <>
           <main
             style={{
-              // dev
-              // border: "1px solid yellow",
-
               display: "flex",
               justifyContent: "space-around",
             }}
           >
             {/* Add preset exercise */}
-            <Button
-              onClick={() => setPresetOpened(true)}
-              style={{ width: "45%" }}
-              // style={{ width: "11em" }}
-              // color="orange"
-              // variant="gradient"
-              // radius="md"
-              // size="xs"
-            >
+            <Button onClick={() => setPresetOpened(true)} className={rose.btn}>
               Add preset exercise
             </Button>
 
             {/* Add custom exercise */}
-            <Button
-              onClick={() => setCustomOpened(true)}
-              style={{ width: "45%" }}
-              // style={{ width: "11em" }}
-              // color="orange"
-              // variant="gradient"
-              // radius="md"
-              // size="xs"
-            >
+            <Button onClick={() => setCustomOpened(true)} className={rose.btn}>
               Add custom exercise
             </Button>
           </main>
@@ -295,17 +277,13 @@ const ModalExers: FC = () => {
             centered
             size="90%"
             style={{
-              // maxHeight: "28em",
-              // display: "flex",
-              // justifyContent: "center",
-              // alignItems: "center",
               maxWidth: "30em",
               margin: "auto",
             }}
           >
             {/* List available exercises to add */}
             {isLoading ? (
-              // <OrangeLoader />
+              // <RoseLoader />
               <div
                 style={{
                   display: "flex",
@@ -313,11 +291,7 @@ const ModalExers: FC = () => {
                   justifyContent: "center",
                 }}
               >
-                <Loader
-                  color={theme.colors.orange[3]}
-                  size="md"
-                  variant={theme.loader}
-                />
+                <Loader color="#c81e4c" size="md" variant={theme.loader} />
               </div>
             ) : !diffArray.length ? (
               <p>
@@ -346,29 +320,13 @@ const ModalExers: FC = () => {
                 {invalidPreset && (
                   <div>Unable to add new exercises. Please try refreshing.</div>
                 )}
-                <Button
-                  // fullWidth
-                  mt="md"
-                  variant="gradient"
-                  gradient={{ from: "#d9480f", to: "#f08c00" }}
-                  // onClick={onPresetSubmit}
-                  type="submit"
-                >
+                <Button className={rose.btn} type="submit">
                   Add exercise(s)
                 </Button>
               </form>
             )}
           </Modal>
 
-          {/* Add custom exercise
-          <Button
-            onClick={() => setCustomOpened(true)}
-            // color="orange"
-            // variant="gradient"
-            // radius="md"
-          >
-            Add custom exercise
-          </Button> */}
           <Modal
             opened={customOpened}
             onClose={() => setCustomOpened(false)}
@@ -378,33 +336,29 @@ const ModalExers: FC = () => {
             <form onSubmit={handleSubmit(onCustomSubmit)}>
               <TextInput
                 {...register("customExer")}
-                // onChange={(event) => setNewExers(event.target.value)}
                 placeholder="Example: Assisted Pull-Ups"
-                // placeholder="Name of new exercise"
                 data-autofocus
-                // autoFocus={true}
                 styles={{
                   input: {
                     "::placeholder": {
-                      color: theme.colors.cyan[1],
+                      color: "#b5e5fd",
                     },
                   },
                 }}
               />
               {errors.customExer?.message && (
                 <div>{errors.customExer.message as unknown as string}</div>
-                // <div>{errors.customExer.message}</div>
               )}
               {invalidCustom && (
                 <div>Invalid exercise. Try a different name.</div>
               )}
               <Button
-                // fullWidth
-                mt="md"
-                variant="gradient"
-                gradient={{ from: "#d9480f", to: "#f08c00" }}
-                // onClick={handleNewExer}
                 type="submit"
+                className={rose.btn}
+                style={{
+                  marginTop: "1.5em",
+                  width: "40%",
+                }}
               >
                 Create
               </Button>

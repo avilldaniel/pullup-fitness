@@ -1,7 +1,8 @@
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
+import Nav from "../components/Nav";
 import NoAuth from "../components/NoAuth";
-import OrangeLoader from "../components/OrangeLoader";
+import RoseLoader from "../components/RoseLoader";
 
 const NameOfPage: NextPage = () => {
   // Session
@@ -9,7 +10,7 @@ const NameOfPage: NextPage = () => {
 
   // Loading
   if (status === "loading") {
-    return <OrangeLoader />;
+    return <RoseLoader />;
   }
 
   // Not authenticated
@@ -19,9 +20,10 @@ const NameOfPage: NextPage = () => {
 
   // Authenticated
   return (
-    <div>
-      <div className="content"></div>
-    </div>
+    <>
+      <Nav />
+      <div className="whatever component"></div>
+    </>
   );
 };
 

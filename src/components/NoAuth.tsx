@@ -21,7 +21,7 @@ const NoAuth: FC<NoAuthProps> = ({}) => {
             <a
               style={{
                 textDecoration: "underline",
-                textDecorationColor: theme.colors.rose[5],
+                textDecorationColor: "#c81e4c",
               }}
             >
               Go to sign-in

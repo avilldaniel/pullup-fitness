@@ -5,7 +5,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Layout from "../components/Layout";
 import { MantineProvider } from "@mantine/core";
 import "../styles/globals.css";
-import MyGlobalStyles from "../styles/MyGlobalStyles";
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
@@ -23,9 +22,7 @@ export default function App(props: AppProps) {
             withNormalizeCSS
             withCSSVariables
             theme={{
-              /** Put your mantine theme override here */
               colorScheme: "dark",
-              // colorScheme: "light",
               respectReducedMotion: true,
               colors: {
                 cyan: [
@@ -106,50 +103,37 @@ export default function App(props: AppProps) {
                 ],
               },
               defaultGradient: { deg: 45, from: "#ff8b1a", to: "#e67a00" },
-              // TEST SHADOWS
-              shadows: {
-                md: "1px 1px 3px rgba(0, 0, 0, .25)",
-                xl: "5px 5px 3px rgba(0, 0, 0, .25)",
-              },
               loader: "bars",
               fontFamily: "DM Sans",
               fontSizes: { xs: 12, sm: 14, md: 20, lg: 26, xl: 30 },
               components: {
-                Button: {
-                  defaultProps: {
-                    variant: "gradient",
-                    gradient: {
-                      // from: "#ff8b1a",
-                      // to: "#e67a00",
-                      from: "#e67a00",
-                      to: "#b35300",
-                      deg: 45,
-                    },
-                    radius: "md",
-                  },
-                  styles: (theme) => ({
-                    root: {
-                      padding: 0,
-                      fontSize: theme.fontSizes.sm,
-                      width: "100%",
-                    },
-                    input: {
-                      // fontSize: "2em",
-                      // margin: 0,
-                    },
-                  }),
-                },
+                // Button: {
+                //   defaultProps: {
+                //     variant: "gradient",
+                //     gradient: {
+                //       // from: "#ff8b1a",
+                //       // to: "#e67a00",
+                //       from: "#e67a00",
+                //       to: "#b35300",
+                //       deg: 45,
+                //     },
+                //     radius: "md",
+                //   },
+                //   styles: (theme) => ({
+                //     root: {
+                //       padding: 0,
+                //       fontSize: theme.fontSizes.sm,
+                //       width: "100%",
+                //     },
+                //     input: {
+                //       // fontSize: "2em",
+                //       // margin: 0,
+                //     },
+                //   }),
+                // },
               },
             }}
-            // styles={{
-            //   Button: (theme) => ({
-            //     root: {
-            //       backgroundColor: theme.colors.orange[8],
-            //     },
-            //   }),
-            // }}
           >
-            <MyGlobalStyles />
             <Component {...pageProps} />
           </MantineProvider>
           <ReactQueryDevtools initialIsOpen={false} />

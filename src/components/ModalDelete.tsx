@@ -89,7 +89,7 @@ const ModalDelete: FC<IModalDelete> = ({
 
       {/* Deleted notification */}
       {/* {deleteMutation.isLoading ? (
-        <OrangeLoader /> // change to global loader
+        <RoseLoader /> // change to global loader
       ) : deleteMutation.isError ? (
         <p>
           3sec red notification: Could not delete record. Please try refreshing.

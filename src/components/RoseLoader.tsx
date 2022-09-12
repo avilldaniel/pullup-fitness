@@ -1,7 +1,7 @@
 import { Loader, useMantineTheme } from "@mantine/core";
 import { FC } from "react";
 
-const OrangeLoader: FC = () => {
+const RoseLoader: FC = () => {
   const theme = useMantineTheme();
   return (
     <div
@@ -9,13 +9,11 @@ const OrangeLoader: FC = () => {
         position: "fixed",
         bottom: 10,
         left: 10,
-        // top: 10,
-        // right: 10,
       }}
     >
-      <Loader color={theme.colors.orange[3]} size="sm" variant={theme.loader} />
+      <Loader color="#c81e4c" size="sm" variant={theme.loader} />
     </div>
   );
 };
 
-export default OrangeLoader;
+export default RoseLoader;
