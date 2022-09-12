@@ -91,3 +91,8 @@
 .subtleBtn:hover {
   background-color: #02324a;
 }
+
+.error {
+  font-size: .8rem;
+  color: rgb(255, 149, 149);
+}

@@ -38,21 +38,18 @@ const LoginBox: FC = () => {
       // With email, fetch username
       const res = await fetch(`/api/user/username?emailInput=${login}`);
 
-      // If valid, set username in client state, signIn()
+      // If valid, just signIn()
       if (res.ok) {
-        const { username } = await res.json();
-
+        setInvalidLogin("");
         signIn("email", {
           email: login,
           callbackUrl: "/",
         });
-        // console.log("valid email");
       } else {
         // Else setInvalidLogin()
         setInvalidLogin("Invalid email.");
       }
     } catch (e) {
-      // console.log("e:", e);
       setInvalidLogin("An error occurred. Please refresh and try again.");
     }
   };
@@ -65,19 +62,27 @@ const LoginBox: FC = () => {
     formState: { errors },
   } = useForm({ resolver: zodResolver(userSchema) });
 
-  // if form data passes Zod schema, handle submit by invoking api/post-user with the valid data
   const newAccount: SubmitHandler<FieldValues> = async (data) => {
-    // Query db with form data
-    //  if success, user info can be posted into db, re-direct to user's new dashboard
-    //  if fails, user info may already exist in db, render invalid error
     try {
-      const res = await axios.post("/api/user/register", data);
-      setInvalidRegister("");
-      const { username } = res.data;
-      router.push(`/u/${username}`);
+      const res = await fetch("/api/user/register", {
+        method: "post",
+        body: JSON.stringify(data),
+      });
+
+      // If successful in signing up, redirect to login
+      // else, throw invalid registration (ie. username/email may already exist)
+      if (res.ok) {
+        setInvalidRegister("");
+        setInvalidLogin("Almost done! Try logging in now.");
+        setShowRegister(false);
+      } else {
+        throw new Error("Invalid email or username.");
+      }
     } catch (e: any) {
-      // console.error(e);
-      setInvalidRegister(e.response.data.target[0]);
+      console.log(e);
+      if (e.message) {
+        setInvalidRegister(e.message);
+      }
     }
   };
 
@@ -93,7 +98,7 @@ const LoginBox: FC = () => {
               {/* Invalid message, if cannot register user */}
               {invalidRegister && (
                 <p style={{ fontSize: theme.fontSizes.sm }}>
-                  Invalid {invalidRegister}
+                  {invalidRegister}
                 </p>
               )}
 

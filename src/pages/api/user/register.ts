@@ -1,27 +1,35 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import * as z from "zod";
 import { prisma } from "../../../utils/db";
-import { userSchema } from "../../../schemas/zodSchemas";
 import { Prisma } from "@prisma/client";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // Test if data in request is valid and formatted
+  // console.log(req.body);
+  const { email, name, username } = JSON.parse(req.body);
   try {
-    const user = userSchema.parse(req.body);
+    // const user = userSchema.parse(req.body);
 
     // if data passes validation, invoke db query with it
-    const newUser = await prisma.user.create({
+    // const newUser = await prisma.user.create({
+    //   data: {
+    //     email: user.email,
+    //     name: user.name,
+    //     username: user.username,
+    //   },
+    // });
+
+    const newUser = await prisma.appUser.create({
       data: {
-        email: user.email,
-        name: user.name,
-        username: user.username,
+        email,
+        name,
+        username,
       },
     });
 
-    return res.status(200).send(JSON.stringify(newUser));
+    return res.status(200).json(newUser);
   } catch (e) {
     // Handle error when data does not conform to Zod schema
     // error handling is taken from Zod's docs
