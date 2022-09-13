@@ -39,6 +39,10 @@ a {
   text-decoration: none;
 }
 
+ul, ol {
+  list-style-type: none;
+}
+
 /* Custom fonts */
 
 /* dm-sans-regular - latin */

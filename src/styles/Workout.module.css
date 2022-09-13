@@ -1,0 +1,20 @@
+.container {
+  border: 1px solid yellow;
+
+  margin: auto;
+  max-width: 30em;
+  padding: 0 0.5em;
+}
+
+.container>main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.scroll {
+  border: 2px solid red;
+
+  width: 100%;
+  height: max(28em, 65vh);
+}

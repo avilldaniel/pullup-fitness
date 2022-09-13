@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import Nav from "../components/Nav";
 import NoAuth from "../components/NoAuth";
 import RoseLoader from "../components/RoseLoader";
+import bg from "../../styles/Background.module.css";
 
 const NameOfPage: NextPage = () => {
   // Session
@@ -10,7 +11,11 @@ const NameOfPage: NextPage = () => {
 
   // Loading
   if (status === "loading") {
-    return <RoseLoader />;
+    return (
+      <div className={bg.default}>
+        <RoseLoader />
+      </div>
+    );
   }
 
   // Not authenticated
@@ -20,10 +25,10 @@ const NameOfPage: NextPage = () => {
 
   // Authenticated
   return (
-    <>
+    <div className={bg.default}>
       <Nav />
       <div className="whatever component"></div>
-    </>
+    </div>
   );
 };
 

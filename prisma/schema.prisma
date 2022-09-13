@@ -14,14 +14,15 @@ datasource db {
 //  - duplicate emails
 // model User {
 model AppUser {
-  id              Int               @id @default(autoincrement())
-  memberSince     DateTime          @default(now())
-  username        String            @db.VarChar(50) @unique
-  email           String            @db.VarChar(50) @unique
-  name            String            @db.VarChar(50)
-  exerciseStats   Exercise_stat[]  
-  workouts        Workout[]
-  create          Exercise[]
+  id            Int             @id @default(autoincrement())
+  memberSince   DateTime        @default(now())
+  username      String          @unique @db.VarChar(50)
+  email         String          @unique @db.VarChar(50)
+  name          String          @db.VarChar(50)
+  exerciseStats Exercise_stat[]
+  workouts      Workout[]
+  create        Exercise[]
+
   @@index([username])
 }
 
@@ -30,35 +31,36 @@ model AppUser {
 // note: this model does not allow for duplicate exercise stats which could be differentiated by
 // different number of sets (ex. 3x10, 5x5, hypertrohpy); i would like to implement this eventually
 model Exercise_stat {
-  @@id([userName, exerciseName, creatorName, muscleGroup])
   // @@id([userName, exerciseName, creatorName])
-  user          AppUser        @relation(fields: [userName], references: [username])
-  userName      String
-  exercise      Exercise    @relation(fields: [exerciseName, muscleGroup, creatorName], references: [name, muscleGrp, creator])
-  exerciseName  String
-  muscleGroup   Muscle_grp
-  creatorName   String
-  sets          Int         @default(3) @db.Integer
+  user         AppUser    @relation(fields: [userName], references: [username])
+  userName     String
+  exercise     Exercise   @relation(fields: [exerciseName, muscleGroup, creatorName], references: [name, muscleGrp, creator])
+  exerciseName String
+  muscleGroup  Muscle_grp
+  creatorName  String
+  sets         Int        @default(3) @db.Integer
   // weight        Int?        @default(0) @db.Integer
-  weight        Decimal?    @default(0.0) @db.Decimal(5,1)
-  reps          Int?        @default(0) @db.Integer
-  updatedAt     DateTime    @updatedAt
-  
+  weight       Decimal?   @default(0.0) @db.Decimal(5, 1)
+  reps         Int?       @default(0) @db.Integer
+  updatedAt    DateTime   @updatedAt
+
   // @@index([userName, exerciseName])
+
+  @@id([userName, exerciseName, creatorName, muscleGroup])
 }
 
 // TEST AGAINST:
 //  - two different users should be able to create exercise with same exercise name
 //  - 
 model Exercise {
-  id              Int                 @id @default(autoincrement())
-  name            String              @db.VarChar(30)
+  id            Int             @id @default(autoincrement())
+  name          String          @db.VarChar(30)
   // name            String              @db.VarChar(30) @unique
-  muscleGrp       Muscle_grp
-  exerciseStats   Exercise_stat[]
-  workouts        Workout[]
-  create          AppUser                @relation(fields: [creator], references: [username])
-  creator         String
+  muscleGrp     Muscle_grp
+  exerciseStats Exercise_stat[]
+  workouts      Workout[]
+  create        AppUser         @relation(fields: [creator], references: [username])
+  creator       String
 
   // @@unique([name, muscleGrp])
   @@unique([name, muscleGrp, creator])
@@ -67,12 +69,14 @@ model Exercise {
 // TEST AGAINST:
 //  - duplicate workouts are fine
 model Workout {
-  id          Int                 @id @default(autoincrement())
-  name        String              @db.VarChar(30)
-  createdAt   DateTime            @default(now())
-  creator     AppUser                @relation(fields: [creatorId], references: [id])
-  creatorId   Int
-  exercises   Exercise[]          
+  id          Int        @id @default(autoincrement())
+  name        String     @db.VarChar(30)
+  createdAt   DateTime   @default(now())
+  creator     AppUser    @relation(fields: [creatorName], references: [username])
+  creatorName String
+  exercises   Exercise[]
+
+  @@unique([name, creatorName])
 }
 
 enum Muscle_grp {
@@ -90,18 +94,18 @@ enum Muscle_grp {
 
 // NextAuth - authenticate user session
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

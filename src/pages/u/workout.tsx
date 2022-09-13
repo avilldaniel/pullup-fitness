@@ -3,16 +3,20 @@ import { useSession } from "next-auth/react";
 import Nav from "../../components/Nav";
 import NoAuth from "../../components/NoAuth";
 import RoseLoader from "../../components/RoseLoader";
-import Stats from "../../components/Stats";
+import WorkoutComp from "../../components/Workout";
 import bg from "../../styles/Background.module.css";
 
-const StatsPage: NextPage = () => {
+const Workout: NextPage = () => {
   // Session
   const { status } = useSession();
 
   // Loading
   if (status === "loading") {
-    return <RoseLoader />;
+    return (
+      <div className={bg.default}>
+        <RoseLoader />
+      </div>
+    );
   }
 
   // Not authenticated
@@ -24,9 +28,9 @@ const StatsPage: NextPage = () => {
   return (
     <div className={bg.default}>
       <Nav />
-      <Stats />
+      <WorkoutComp />
     </div>
   );
 };
 
-export default StatsPage;
+export default Workout;

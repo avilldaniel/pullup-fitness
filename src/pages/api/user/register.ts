@@ -9,11 +9,163 @@ export default async function handler(
 ) {
   const { email, name, username } = JSON.parse(req.body);
   try {
+    // Create new user
     const newUser = await prisma.appUser.create({
       data: {
         email,
         name,
         username,
+      },
+    });
+
+    // Add 3 default workouts for user
+    await prisma.workout.create({
+      data: {
+        creatorName: newUser.username,
+        name: "Push",
+        exercises: {
+          connect: [
+            {
+              name_muscleGrp_creator: {
+                name: "Barbell Bench Press",
+                muscleGrp: "CHEST",
+                creator: "admin",
+              },
+            },
+            {
+              name_muscleGrp_creator: {
+                name: "Push-ups",
+                muscleGrp: "CHEST",
+                creator: "admin",
+              },
+            },
+            {
+              name_muscleGrp_creator: {
+                name: "Dips",
+                muscleGrp: "CHEST",
+                creator: "admin",
+              },
+            },
+            {
+              name_muscleGrp_creator: {
+                name: "Skullcrusher",
+                muscleGrp: "TRICEP",
+                creator: "admin",
+              },
+            },
+            {
+              name_muscleGrp_creator: {
+                name: "Dumbbell Overhead Extension",
+                muscleGrp: "TRICEP",
+                creator: "admin",
+              },
+            },
+            {
+              name_muscleGrp_creator: {
+                name: "Cable Push-down",
+                muscleGrp: "TRICEP",
+                creator: "admin",
+              },
+            },
+          ],
+        },
+      },
+    });
+    await prisma.workout.create({
+      data: {
+        creatorName: newUser.username,
+        name: "Pull",
+        exercises: {
+          connect: [
+            {
+              name_muscleGrp_creator: {
+                name: "Bent-over Row",
+                muscleGrp: "BACK",
+                creator: "admin",
+              },
+            },
+            {
+              name_muscleGrp_creator: {
+                name: "Pull-ups",
+                muscleGrp: "BACK",
+                creator: "admin",
+              },
+            },
+            {
+              name_muscleGrp_creator: {
+                name: "Face Pull",
+                muscleGrp: "BACK",
+                creator: "admin",
+              },
+            },
+            {
+              name_muscleGrp_creator: {
+                name: "Dumbbell Curl",
+                muscleGrp: "BICEP",
+                creator: "admin",
+              },
+            },
+            {
+              name_muscleGrp_creator: {
+                name: "Hammer Curl",
+                muscleGrp: "BICEP",
+                creator: "admin",
+              },
+            },
+            {
+              name_muscleGrp_creator: {
+                name: "Cable Curl",
+                muscleGrp: "BICEP",
+                creator: "admin",
+              },
+            },
+          ],
+        },
+      },
+    });
+    await prisma.workout.create({
+      data: {
+        creatorName: newUser.username,
+        name: "Legs",
+        exercises: {
+          connect: [
+            {
+              name_muscleGrp_creator: {
+                name: "Back Squat",
+                muscleGrp: "LEGS",
+                creator: "admin",
+              },
+            },
+            {
+              name_muscleGrp_creator: {
+                name: "Deadlift",
+                muscleGrp: "LEGS",
+                creator: "admin",
+              },
+            },
+            {
+              name_muscleGrp_creator: {
+                name: "Leg Curl",
+                muscleGrp: "LEGS",
+                creator: "admin",
+              },
+            },
+            {
+              name_muscleGrp_creator: {
+                name: "Leg Extension",
+                muscleGrp: "LEGS",
+                creator: "admin",
+              },
+            },
+            {
+              name_muscleGrp_creator: {
+                name: "Standing Calf Raise",
+                muscleGrp: "LEGS",
+                creator: "admin",
+              },
+            },
+          ],
+        },
       },
     });
 
