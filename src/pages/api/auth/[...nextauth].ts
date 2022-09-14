@@ -6,6 +6,11 @@ import { prisma } from "../../../utils/db";
 import { createTransport } from "nodemailer";
 import { html, text } from "../../../utils/customVerificationReq";
 
+const port =
+  typeof process.env.EMAIL_SERVER_PORT === "number"
+    ? process.env.EMAIL_SERVER_PORT
+    : 465;
+
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   // Configure one or more authenitcation providers
@@ -13,7 +18,8 @@ export const authOptions: NextAuthOptions = {
     EmailProvider({
       server: {
         host: process.env.EMAIL_SERVER_HOST,
-        port: process.env.EMAIL_SERVER_PORT,
+        // port: port,
+        port,
         auth: {
           user: process.env.EMAIL_SERVER_USER,
           pass: process.env.EMAIL_SERVER_PASSWORD,
