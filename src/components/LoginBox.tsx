@@ -6,6 +6,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 import { FC, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { loginSchema, userSchema } from "../schemas/zodSchemas";
@@ -17,8 +18,13 @@ const LoginBox: FC = () => {
 
   // State
   const [showRegister, setShowRegister] = useState(false);
+  // const [showOTP, setShowOTP] = useState(false);
+  const [showOTP, setShowOTP] = useState(true);
   const [invalidLogin, setInvalidLogin] = useState("");
   const [invalidRegister, setInvalidRegister] = useState("");
+
+  // useRouter()
+  const router = useRouter();
 
   /*******************************************************************/
   // For sign-in form
@@ -38,8 +44,10 @@ const LoginBox: FC = () => {
         setInvalidLogin("");
         signIn("email", {
           email: login,
-          callbackUrl: "/",
+          redirect: false,
+          // callbackUrl: "/",
         });
+        setShowOTP(true);
       } else {
         // Else setInvalidLogin()
         setInvalidLogin("Invalid email.");
@@ -47,6 +55,12 @@ const LoginBox: FC = () => {
     } catch (e) {
       setInvalidLogin("An error occurred. Please refresh and try again.");
     }
+  };
+
+  /*******************************************************************/
+  // For OTP form
+  const submitOTP = async () => {
+    router.push();
   };
 
   /*******************************************************************/
@@ -145,27 +159,33 @@ const LoginBox: FC = () => {
               <div
                 className={login.registerOrLogin}
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  marginTop: 0,
+                  // display: "flex",
+                  // justifyContent: "space-between",
+                  // alignItems: "center",
                 }}
               >
-                <Button
-                  variant="subtle"
-                  compact
-                  style={{ color: "#b5e5fd" }}
-                  onClick={() => setShowRegister(false)}
-                  className={login.subtleBtn}
-                >
-                  {/* Back to sign in */}
-                  Cancel
-                </Button>
                 <Button
                   type="submit"
                   variant="filled"
                   style={{ backgroundColor: "#c81e4c" }}
                 >
                   Sign up
+                </Button>
+                <Button
+                  variant="subtle"
+                  compact
+                  style={{
+                    color: "#b5e5fd",
+                    textAlign: "center",
+                    margin: ".75rem auto 0",
+                    width: "fit-content",
+                  }}
+                  onClick={() => setShowRegister(false)}
+                  className={login.subtleBtn}
+                >
+                  {/* Back to sign in */}
+                  Cancel
                 </Button>
               </div>
             </form>
@@ -182,6 +202,7 @@ const LoginBox: FC = () => {
                 <p style={{ fontSize: theme.fontSizes.sm }}>{invalidLogin}</p>
               )}
 
+              {/* Email */}
               <TextInput
                 placeholder="Email"
                 variant="default"
@@ -190,27 +211,72 @@ const LoginBox: FC = () => {
                 required
                 {...register("login")}
                 className={login.textInput}
+                disabled={showOTP ? true : false}
               />
 
-              <div className={login.registerOrLogin}>
+              <div
+                className={login.registerOrLogin}
+                style={{
+                  justifyContent: showOTP ? "flex-end" : "space-between",
+                }}
+              >
+                {/* Register & Log in */}
+                {!showOTP && (
+                  <>
+                    <Button
+                      type="submit"
+                      variant="filled"
+                      style={{ backgroundColor: "#c81e4c" }}
+                    >
+                      {/* Log In */}
+                      Log in with email
+                    </Button>
+                    <Button
+                      variant="subtle"
+                      style={{
+                        color: "#b5e5fd",
+                        textAlign: "center",
+                        margin: ".75rem auto 0",
+                        width: "fit-content",
+                      }}
+                      onClick={() => setShowRegister(true)}
+                      className={login.subtleBtn}
+                    >
+                      Sign up
+                    </Button>
+                  </>
+                )}
+              </div>
+            </form>
+
+            {showOTP && (
+              <form className={login.form} onSubmit={handleSubmit(submitLogin)}>
+                <p className={login.otpMsg}>
+                  We just sent you a temporary login code.
+                  <br />
+                  Please check your inbox.
+                </p>
+                <TextInput
+                  placeholder="Paste login code"
+                  variant="default"
+                  radius="md"
+                  size="md"
+                  required
+                  {...register("login")}
+                  className={login.textInput}
+                />
+                {/* Continue with login code */}
                 <Button
-                  variant="subtle"
-                  compact
-                  style={{ color: "#b5e5fd" }}
-                  onClick={() => setShowRegister(true)}
-                  className={login.subtleBtn}
-                >
-                  Create account
-                </Button>
-                <Button
-                  type="submit"
+                  type="button"
                   variant="filled"
                   style={{ backgroundColor: "#c81e4c" }}
                 >
-                  Log In
+                  <a href={`${process.env.LOGIN_BASE_URL}`}>
+                    Continue with login code
+                  </a>
                 </Button>
-              </div>
-            </form>
+              </form>
+            )}
           </div>
         )}
       </main>
