@@ -6,7 +6,6 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/router";
 import { FC, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { loginSchema, userSchema } from "../schemas/zodSchemas";
@@ -18,13 +17,11 @@ const LoginBox: FC = () => {
 
   // State
   const [showRegister, setShowRegister] = useState(false);
-  // const [showOTP, setShowOTP] = useState(false);
-  const [showOTP, setShowOTP] = useState(true);
+  const [validEmail, setValidEmail] = useState<string>("");
+  const [showOTP, setShowOTP] = useState(false);
+  const [otpCode, setOtpCode] = useState<string>("");
   const [invalidLogin, setInvalidLogin] = useState("");
   const [invalidRegister, setInvalidRegister] = useState("");
-
-  // useRouter()
-  const router = useRouter();
 
   /*******************************************************************/
   // For sign-in form
@@ -42,6 +39,7 @@ const LoginBox: FC = () => {
       // If valid, just signIn()
       if (res.ok) {
         setInvalidLogin("");
+        setValidEmail(login);
         signIn("email", {
           email: login,
           redirect: false,
@@ -55,12 +53,6 @@ const LoginBox: FC = () => {
     } catch (e) {
       setInvalidLogin("An error occurred. Please refresh and try again.");
     }
-  };
-
-  /*******************************************************************/
-  // For OTP form
-  const submitOTP = async () => {
-    router.push();
   };
 
   /*******************************************************************/
@@ -101,7 +93,13 @@ const LoginBox: FC = () => {
         {showRegister ? (
           <div className={login.regCard}>
             {/* Register form */}
-            <form className={login.form} onSubmit={handleRegSubmit(newAccount)}>
+            <form
+              className={login.form}
+              style={{
+                height: !showOTP ? "98%" : "",
+              }}
+              onSubmit={handleRegSubmit(newAccount)}
+            >
               <h5>Register</h5>
 
               {/* Invalid message, if cannot register user */}
@@ -193,7 +191,10 @@ const LoginBox: FC = () => {
         ) : (
           /*******************************************************************/
           // Login form
-          <div className={login.loginCard}>
+          <div
+            className={login.loginCard}
+            style={{ height: !showOTP ? "11em" : "12.5em" }}
+          >
             <form className={login.form} onSubmit={handleSubmit(submitLogin)}>
               <h5>Sign in</h5>
 
@@ -250,31 +251,40 @@ const LoginBox: FC = () => {
             </form>
 
             {showOTP && (
-              <form className={login.form} onSubmit={handleSubmit(submitLogin)}>
+              <form
+                className={login.otpCard}
+                onSubmit={handleSubmit(submitLogin)}
+              >
                 <p className={login.otpMsg}>
                   We just sent you a temporary login code.
                   <br />
-                  Please check your inbox.
+                  Please check your inbox or spam folder.
                 </p>
                 <TextInput
+                  value={otpCode}
+                  onChange={(e) => setOtpCode(e.currentTarget.value)}
                   placeholder="Paste login code"
                   variant="default"
                   radius="md"
                   size="md"
                   required
-                  {...register("login")}
                   className={login.textInput}
                 />
                 {/* Continue with login code */}
-                <Button
-                  type="button"
-                  variant="filled"
-                  style={{ backgroundColor: "#c81e4c" }}
+                {/* <a href={`${process.env.LOGIN_BASE_URL}${otpCode}&email=${validEmail}`}> */}
+                <a
+                  href={`${
+                    process.env.NEXT_PUBLIC_LOGIN_URL
+                  }${otpCode}&email=${encodeURI(validEmail)}`}
                 >
-                  <a href={`${process.env.LOGIN_BASE_URL}`}>
+                  <Button
+                    type="button"
+                    variant="filled"
+                    style={{ backgroundColor: "#c81e4c" }}
+                  >
                     Continue with login code
-                  </a>
-                </Button>
+                  </Button>
+                </a>
               </form>
             )}
           </div>
