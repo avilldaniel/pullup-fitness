@@ -2,7 +2,7 @@ import { Button } from "@mantine/core";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import type { FC } from "react";
-import login from "../styles/Login.module.css";
+import login from "../../styles/Login.module.css";
 
 interface UserSignedInBoxProps {
   email: string | null | undefined;

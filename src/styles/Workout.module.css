@@ -1,5 +1,5 @@
 .container {
-  border: 1px solid yellow;
+  /* border: 1px solid yellow; */
 
   margin: auto;
   max-width: 30em;
@@ -17,4 +17,22 @@
 
   width: 100%;
   height: max(28em, 65vh);
+}
+
+.row>button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  border: 0;
+  /* border-top: 2px solid whitesmoke; */
+}
+
+.modifyBtns {
+  /* border: 1px solid slateblue; */
+  display: flex;
+  justify-content: space-between;
 }

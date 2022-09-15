@@ -8,16 +8,16 @@ import {
   IOnEdit,
   ITableRowUpdates,
   IUpdatedStat,
-} from "../utils/types";
+} from "../../utils/types";
 import TableRow from "./TableRow";
 import axios from "axios";
-import { TableStatsContext } from "../utils/contexts";
-import RoseLoader from "./RoseLoader";
+import { TableStatsContext } from "../../utils/contexts";
+import RoseLoader from "../main/RoseLoader";
 import ModalDelete from "./ModalDelete";
-import { useFetchStats } from "../react-query-hooks/useFetchStats";
+import { useFetchStats } from "../../react-query-hooks/useFetchStats";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import useFetchUser from "../react-query-hooks/useFetchUser";
+import useFetchUser from "../../react-query-hooks/useFetchUser";
 
 const TableStats: FC = () => {
   // Session

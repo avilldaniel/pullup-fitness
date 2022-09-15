@@ -1,9 +1,9 @@
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
-import Nav from "../../components/Nav";
-import NoAuth from "../../components/NoAuth";
-import RoseLoader from "../../components/RoseLoader";
-import Stats from "../../components/Stats";
+import Nav from "../../components/main/Nav";
+import NoAuth from "../../components/main/NoAuth";
+import RoseLoader from "../../components/main/RoseLoader";
+import Stats from "../../components/stats/Stats";
 import bg from "../../styles/Background.module.css";
 
 const StatsPage: NextPage = () => {

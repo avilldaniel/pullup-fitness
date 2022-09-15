@@ -7,9 +7,9 @@ import {
   IconCircleX,
   IconTrash,
 } from "@tabler/icons";
-import { TableStatsContext } from "../utils/contexts";
-import { ITableRow } from "../utils/types";
-import useFetchUser from "../react-query-hooks/useFetchUser";
+import { TableStatsContext } from "../../utils/contexts";
+import { ITableRow } from "../../utils/types";
+import useFetchUser from "../../react-query-hooks/useFetchUser";
 
 const TableRow: FC<ITableRow> = ({
   // key,

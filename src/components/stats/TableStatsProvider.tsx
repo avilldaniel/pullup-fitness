@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { FC } from "react";
-import { TableStatsContext, tableStatsDefault } from "../utils/contexts";
+import { TableStatsContext, tableStatsDefault } from "../../utils/contexts";
 
 interface ITableStatsProvider {
   children: React.ReactNode;

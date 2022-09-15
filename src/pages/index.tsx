@@ -27,7 +27,7 @@ const Home: NextPage = () => {
     }
   }, [router, session, status]);
 
-  return <div className={bg.signin}>Homepage</div>;
+  return <div className={bg.signin}></div>;
 };
 
 export default Home;

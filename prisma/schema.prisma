@@ -69,14 +69,14 @@ model Exercise {
 // TEST AGAINST:
 //  - duplicate workouts are fine
 model Workout {
-  id          Int        @id @default(autoincrement())
-  name        String     @db.VarChar(30)
-  createdAt   DateTime   @default(now())
-  creator     AppUser    @relation(fields: [creatorName], references: [username])
-  creatorName String
-  exercises   Exercise[]
+  id           Int        @id @default(autoincrement())
+  name         String     @db.VarChar(30)
+  createdAt    DateTime   @default(now())
+  creator      AppUser    @relation(fields: [creatorEmail], references: [email])
+  creatorEmail String
+  exercises    Exercise[]
 
-  @@unique([name, creatorName])
+  @@unique([name, creatorEmail])
 }
 
 enum Muscle_grp {

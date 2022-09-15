@@ -2,7 +2,7 @@ import { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import Layout from "../components/Layout";
+import Layout from "../components/main/Layout";
 import { MantineProvider } from "@mantine/core";
 import "../styles/globals.css";
 

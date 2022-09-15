@@ -2,7 +2,7 @@ import { Button, Modal } from "@mantine/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Exercise_stat } from "@prisma/client";
-import { IModalDelete } from "../utils/types";
+import { IModalDelete } from "../../utils/types";
 import type { FC } from "react";
 import { useSession } from "next-auth/react";
 

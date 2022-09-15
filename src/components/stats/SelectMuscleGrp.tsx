@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import type { FC } from "react";
 import { MantineProvider, Select } from "@mantine/core";
 import { Muscle_grp } from "@prisma/client";
-import { TableStatsContext } from "../utils/contexts";
+import { TableStatsContext } from "../../utils/contexts";
 
 const SelectMuscleGrp: FC = () => {
   // Context

@@ -44,12 +44,6 @@ export const authOptions: NextAuthOptions = {
         provider: { server, from },
         token,
       }) {
-        console.log({
-          identifier: email,
-          url,
-          provider: { server, from },
-          token,
-        });
         /* your function */
         const { host } = new URL(url);
         const transport = createTransport(server);

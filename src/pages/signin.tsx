@@ -1,8 +1,8 @@
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
-import LoginBox from "../components/LoginBox";
-import RoseLoader from "../components/RoseLoader";
-import UserSignedInBox from "../components/UserSignedInBox";
+import LoginBox from "../components/main/LoginBox";
+import RoseLoader from "../components/main/RoseLoader";
+import UserSignedInBox from "../components/main/UserSignedInBox";
 import bg from "../styles/Background.module.css";
 import login from "../styles/Login.module.css";
 

@@ -8,8 +8,8 @@ import {
 import { signIn } from "next-auth/react";
 import { FC, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { loginSchema, userSchema } from "../schemas/zodSchemas";
-import login from "../styles/Login.module.css";
+import { loginSchema, userSchema } from "../../schemas/zodSchemas";
+import login from "../../styles/Login.module.css";
 
 const LoginBox: FC = () => {
   // Theme

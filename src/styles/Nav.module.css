@@ -1,19 +1,25 @@
 .container {
-  width: 100%;
+  border: 1px solid seagreen;
+  max-width: 100em;
   display: flex;
   justify-content: space-between;
 
-  margin-bottom: 1.25em;
+  margin: 0 auto 1.25em;
+  padding: .25em 1em;
 }
 
 .menu {
   display: flex;
+  align-items: center;
 }
 
-.menu>button {
+.menu button {
   background: transparent;
   border: 0;
+  /* border: 1px solid orangered; */
   color: white;
+
+  cursor: pointer;
 }
 
 .icons {
@@ -25,8 +31,13 @@
 }
 
 @media (max-width: 40em) {
+  .container {
+    padding: 0 .5em;
+    margin-bottom: .25em;
+  }
+
   .icons {
-    display: block;
+    display: flex;
   }
 
   .links {

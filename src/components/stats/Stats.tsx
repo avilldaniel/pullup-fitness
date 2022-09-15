@@ -1,15 +1,15 @@
 import React from "react";
 import type { FC } from "react";
-import { useFetchStats } from "../react-query-hooks/useFetchStats";
+import { useFetchStats } from "../../react-query-hooks/useFetchStats";
 import ModalExers from "./ModalExers";
-import RoseLoader from "./RoseLoader";
+import RoseLoader from "../main/RoseLoader";
 import SelectMuscleGrp from "./SelectMuscleGrp";
 import TableStats from "./TableStats";
 import { TableStatsProvider } from "./TableStatsProvider";
 import statStyles from "../styles/Stats.module.css";
 import bg from "../styles/Background.module.css";
 import { useSession } from "next-auth/react";
-import NoAuth from "./NoAuth";
+import NoAuth from "../main/NoAuth";
 
 const StatsComp: FC<any> = () => {
   // Session
