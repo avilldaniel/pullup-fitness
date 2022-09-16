@@ -3,6 +3,7 @@ import { Dispatch, FC, SetStateAction, useState } from "react";
 import { useWorkoutExers } from "../../react-query-hooks/useWorkoutExers";
 import RoseLoader from "../main/RoseLoader";
 import ModalWorkout from "./ModalWorkout";
+import work from "../../styles/Workout.module.css";
 
 interface ViewExercisesProps {
   workoutName: string;
@@ -32,6 +33,7 @@ const ViewExercises: FC<ViewExercisesProps> = ({
 
   return (
     <div>
+      <h1>{workoutName}</h1>
       {Array.isArray(exercises) && (
         <ul>
           {exercises.map((exercise) => {
@@ -40,7 +42,10 @@ const ViewExercises: FC<ViewExercisesProps> = ({
         </ul>
       )}
 
-      <button onClick={() => setViewWorkout(false)}>Go back</button>
+      <section className={work.viewBtns}>
+        <button onClick={() => setViewWorkout(false)}>Go back</button>
+        <button onClick={() => setEditMode(true)}>Edit exercises</button>
+      </section>
 
       <ModalWorkout
         workoutName={workoutName}

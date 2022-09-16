@@ -16,10 +16,10 @@ const handler = async (
   res: NextApiResponse<Exercise[] | Error>
 ) => {
   // Session
-  // const session = await unstable_getServerSession(req, res, authOptions);
-  // if (!session) {
-  //   return res.status(401).json({ error: "You must be logged in." });
-  // }
+  const session = await unstable_getServerSession(req, res, authOptions);
+  if (!session) {
+    return res.status(401).json({ error: "You must be logged in." });
+  }
 
   const { email, woName } = req.query;
 

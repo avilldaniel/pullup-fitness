@@ -49,7 +49,7 @@ const WorkoutComp: FC = () => {
     <div className={work.container}>
       <main>
         {!viewWorkout ? (
-          <>
+          <div className={work.list}>
             {/* List of workouts */}
             <ScrollArea scrollbarSize={4} className={work.scroll}>
               <ul>
@@ -70,16 +70,18 @@ const WorkoutComp: FC = () => {
             >
               Create workout
             </Button>
-          </>
+          </div>
         ) : (
           // View exercises of workout
-          <ScrollArea scrollbarSize={4} className={work.scroll}>
-            <ViewExercises
-              workoutName={workoutName}
-              setWorkoutName={setWorkoutName}
-              setViewWorkout={setViewWorkout}
-            />
-          </ScrollArea>
+          <div className={work.view}>
+            <ScrollArea scrollbarSize={4} className={work.scroll}>
+              <ViewExercises
+                workoutName={workoutName}
+                setWorkoutName={setWorkoutName}
+                setViewWorkout={setViewWorkout}
+              />
+            </ScrollArea>
+          </div>
         )}
       </main>
     </div>

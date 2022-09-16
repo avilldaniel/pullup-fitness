@@ -6,8 +6,8 @@ import RoseLoader from "../main/RoseLoader";
 import SelectMuscleGrp from "./SelectMuscleGrp";
 import TableStats from "./TableStats";
 import { TableStatsProvider } from "./TableStatsProvider";
-import statStyles from "../styles/Stats.module.css";
-import bg from "../styles/Background.module.css";
+import statStyles from "../../styles/Stats.module.css";
+import bg from "../../styles/Background.module.css";
 import { useSession } from "next-auth/react";
 import NoAuth from "../main/NoAuth";
 

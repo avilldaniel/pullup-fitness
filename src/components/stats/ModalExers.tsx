@@ -18,7 +18,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Exercise, Exercise_stat, Muscle_grp, Prisma } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import useFetchUser from "../../react-query-hooks/useFetchUser";
-import rose from "../styles/RoseBtn.module.css";
+import rose from "../../styles/RoseBtn.module.css";
 
 const ModalExers: FC = () => {
   // Session
