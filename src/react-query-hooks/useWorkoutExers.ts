@@ -4,13 +4,14 @@ import { Exercise } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
-export const useWorkoutExers = (woName: string) => {
+export const useWorkoutExers = (workoutName: string) => {
   const { data: session } = useSession();
+  const email = session?.user?.email;
   return useQuery<Exercise[] | string>(
-    ["woExercises", session?.user?.email, woName],
+    ["woExercises", email, workoutName],
     async () => {
       const res = await fetch(
-        `/api/workouts/fetchExercises?email=${session?.user?.email}&woName=${woName}`
+        `/api/workouts/fetchExercises?email=${email}&workoutName=${workoutName}`
       );
       const exercises = await res.json();
       return exercises;

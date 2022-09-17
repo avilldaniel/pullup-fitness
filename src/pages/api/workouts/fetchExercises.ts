@@ -21,16 +21,16 @@ const handler = async (
     return res.status(401).json({ error: "You must be logged in." });
   }
 
-  const { email, woName } = req.query;
+  const { email, workoutName } = req.query;
 
   try {
-    if (typeof email === "string" && typeof woName === "string") {
+    if (typeof email === "string" && typeof workoutName === "string") {
       const workoutExercises = await prisma.exercise.findMany({
         where: {
           workouts: {
             some: {
               creatorEmail: { equals: email },
-              name: { equals: woName },
+              name: { equals: workoutName },
             },
           },
         },
