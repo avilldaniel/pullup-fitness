@@ -42,7 +42,7 @@ const Nav: FC<NavProps> = ({}) => {
           // variant="filled"
           size="xs"
           style={{ backgroundColor: "#c81e4c", padding: "0 .7em" }}
-          onClick={() => signOut()}
+          onClick={() => signOut({ callbackUrl: "/signin" })}
         >
           Log Out
         </Button>
