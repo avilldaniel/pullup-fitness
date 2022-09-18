@@ -76,6 +76,8 @@ const WorkoutComp: FC = () => {
   return (
     <div className={work.container}>
       <main>
+        still WIP <br />
+        <span style={{ fontSize: ".5rem" }}>can i get a hooyah</span>
         {!viewWorkout ? (
           <div className={work.list}>
             {/* List of workouts */}

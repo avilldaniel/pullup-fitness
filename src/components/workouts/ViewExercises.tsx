@@ -106,7 +106,14 @@ const ViewExercises: FC<ViewExercisesProps> = ({
       )}
 
       <section className={work.viewBtns}>
-        <button onClick={() => setViewWorkout(false)}>Go back</button>
+        <button
+          onClick={() => {
+            setViewWorkout(false);
+            queryClient.invalidateQueries(["workouts", email]);
+          }}
+        >
+          Go back
+        </button>
         <button onClick={() => setEditMode(true)}>Edit exercises</button>
       </section>
 

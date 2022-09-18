@@ -21,7 +21,8 @@ export default async function handler(
     // Add 3 default workouts for user
     await prisma.workout.create({
       data: {
-        creatorName: newUser.username,
+        // creatorName: newUser.username,
+        creatorEmail: newUser.email,
         name: "Push",
         exercises: {
           connect: [
@@ -73,7 +74,8 @@ export default async function handler(
     });
     await prisma.workout.create({
       data: {
-        creatorName: newUser.username,
+        // creatorName: newUser.username,
+        creatorEmail: newUser.email,
         name: "Pull",
         exercises: {
           connect: [
@@ -125,7 +127,8 @@ export default async function handler(
     });
     await prisma.workout.create({
       data: {
-        creatorName: newUser.username,
+        // creatorName: newUser.username,
+        creatorEmail: newUser.email,
         name: "Legs",
         exercises: {
           connect: [
