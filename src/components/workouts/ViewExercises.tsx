@@ -70,7 +70,7 @@ const ViewExercises: FC<ViewExercisesProps> = ({
         <Modal
           opened={delModal}
           onClose={() => openDelModal(false)}
-          title="Are you sure you want to delete this exercise?"
+          title="Are you sure you want to delete this workout?"
           withCloseButton={false}
           centered
         >
