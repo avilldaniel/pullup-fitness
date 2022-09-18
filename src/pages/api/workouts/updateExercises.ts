@@ -1,14 +1,18 @@
-import { Prisma } from "@prisma/client";
+import { Exercise, Prisma, Workout } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { unstable_getServerSession } from "next-auth";
 import { prisma } from "../../../utils/db";
 import { authOptions } from "../auth/[...nextauth]";
 
 type Data = {
-  name: string;
+  message?: string;
+  error?: string;
 };
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (
+  req: NextApiRequest,
+  res: NextApiResponse<Exercise[] | Workout | Data>
+) => {
   // Session
   const session = await unstable_getServerSession(req, res, authOptions);
   if (!session) {
@@ -16,41 +20,50 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   // Pull array of exercise IDs, workout name, and user email
-  const { arr, workoutName, email } = JSON.parse(req.body);
-  // console.log(req.body);
-  console.log({ arr, workoutName, email });
-  // Function for index upsert
-  const idUpsert = async (exerId: number) => {
-    await prisma.workout.update({
+  const { arr, workoutName, email, newName } = JSON.parse(req.body);
+
+  // If HTTP method is DELETE, use id and delete
+  if (req.method === "DELETE") {
+    const deleted = await prisma.workout.delete({
+      where: {
+        name_creatorEmail: {
+          name: workoutName,
+          creatorEmail: email,
+        },
+      },
+    });
+    return res.status(200).send(deleted);
+  }
+
+  // Convert to array of objects of exercise IDs [{id: 1}, {id: 2}, {id: 3}, etc.]
+  const idArr = arr.map((id: number) => {
+    return { id };
+  });
+
+  try {
+    // Disconnect all exercises currently connected to workout
+    const workoutExercises = await prisma.workout.update({
       where: {
         name_creatorEmail: {
           creatorEmail: email,
           name: workoutName,
         },
       },
-      // create: {
-      //   exercises: {
-
-      //   }
-      // },
       data: {
         exercises: {
-          connect: {
-            id: exerId,
-          },
+          set: idArr,
+        },
+        name: {
+          set: newName,
         },
       },
+      select: {
+        exercises: true,
+      },
     });
-  };
 
-  try {
-    if (Array.isArray(arr)) {
-      arr.forEach((exerId) => {
-        idUpsert(exerId);
-      });
-    }
-    // Return ok status
-    return res.status(200);
+    // Return updated array of exercises
+    return res.status(200).send(workoutExercises.exercises);
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       return res.status(400).json({ error: e.message });

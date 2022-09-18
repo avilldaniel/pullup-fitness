@@ -18,6 +18,7 @@ interface ModalWorkoutProps {
   setWorkoutName: Dispatch<SetStateAction<string>>;
   editMode: boolean;
   setEditMode: Dispatch<SetStateAction<boolean>>;
+  exersLength: number | undefined;
 }
 
 const ModalWorkout: FC<ModalWorkoutProps> = ({
@@ -25,12 +26,14 @@ const ModalWorkout: FC<ModalWorkoutProps> = ({
   setWorkoutName,
   editMode,
   setEditMode,
+  exersLength,
 }) => {
   // Session
   const session = useSession();
 
   // Client state
   const [data, setData] = useState<TransferListData>([[], []]);
+  const [newName, setNewName] = useState<string>(workoutName);
 
   // Server state
   const { data: exers, isLoading: exersLoading } = useWorkoutExers(workoutName);
@@ -41,6 +44,8 @@ const ModalWorkout: FC<ModalWorkoutProps> = ({
   let exersValues: TransferListItem[];
   let nonExersValues: TransferListItem[];
   let initialValues: TransferListData = [[], []];
+  let previousState: TransferListData = [[], []];
+  let previousName: string;
   if (Array.isArray(exers) && Array.isArray(nonExers)) {
     exersValues = exers.map((exercise) => {
       return {
@@ -51,7 +56,6 @@ const ModalWorkout: FC<ModalWorkoutProps> = ({
     });
     nonExersValues = nonExers.map((exercise) => {
       return {
-        // value: exercise.name.concat(exercise.id.toLocaleString()),
         value: exercise.id.toLocaleString(),
         label: exercise.name,
         group: exercise.muscleGrp as string,
@@ -59,27 +63,50 @@ const ModalWorkout: FC<ModalWorkoutProps> = ({
     });
     initialValues = [exersValues, nonExersValues];
 
-    // After fetching the data and converting it to a list,
-    // set client state data with initial values iff data is currently empty
-    if (!data[0].length && !data[0].length) {
-      setData(initialValues);
+    // Set client state data with initial values iff
+    // data has not been set yet (data = [[], []])
+    if (!data[0].length && !data[1].length) {
+      previousName = workoutName;
+      // If workout currently has exercises in it
+      // data = [userExercises, restOfExercises]
+      if (exersLength) {
+        setData(initialValues);
+        previousState = data;
+      }
+
+      // Else, if workout currently has no exercises
+      // data = [empty, allExercises]
+      else if (!exersLength) {
+        setData([[], nonExersValues]);
+      }
     }
   }
 
-  /* --------------------------------SUBMIT HANDLER----------------------------------- */
+  /* --------------------------------MUTATION----------------------------------- */
+  const queryClient = useQueryClient();
   const mutation = useMutation(
     (arr: number[]) => {
       return fetch("/api/workouts/updateExercises", {
         method: "post",
         body: JSON.stringify({
-          arr: arr,
+          arr,
           workoutName,
+          newName: newName.length > 30 ? newName.slice(0, 29) : newName,
           email: session.data?.user?.email,
         }),
       });
     },
     {
-      // After success or failure, refetch the todos query
+      onSuccess: async (data) => {
+        console.log("trigger onSuccess");
+        const arr = await data.json();
+        const email = session?.data?.user?.email;
+        setWorkoutName(newName.length > 30 ? newName.slice(0, 29) : newName);
+        queryClient.setQueryData(["woExercises", email, workoutName], () => {
+          return arr;
+        });
+        setEditMode(false);
+      },
       onSettled: () => {
         console.log("trigger onSettled");
         const email = session?.data?.user?.email;
@@ -89,42 +116,17 @@ const ModalWorkout: FC<ModalWorkoutProps> = ({
     }
   );
 
-  const queryClient = useQueryClient();
+  /* --------------------------------SUBMIT HANDLER----------------------------------- */
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Post array of exercise IDs to update db
+    // Map array of exercise IDs to update (mutate) db with
     const arr = data[0].map((exercise) => {
       return parseInt(exercise.value);
     });
-    mutation.mutate(arr);
 
-    // const res = await fetch("/api/workouts/updateExercises", {
-    //   method: "post",
-    //   body: JSON.stringify({
-    //     arr,
-    //     workoutName,
-    //     email: session.data?.user?.email,
-    //   }),
-    // });
-    // const idk = await res.json();
-    // console.log(idk);
-    // // After post, invalidate query cache
-    // if (res.ok) {
-    //   console.log("res ok");
-    //   queryClient.invalidateQueries([
-    //     "woNonExers",
-    //     session?.data?.user?.email,
-    //     workoutName,
-    //   ]);
-    //   queryClient.invalidateQueries([
-    //     "woExercises",
-    //     session?.data?.user?.email,
-    //     workoutName,
-    //   ]);
-    // }
-
-    setEditMode(false);
+    // Mutate
+    return mutation.mutate(arr);
   };
 
   // While data is currently being fetched
@@ -132,6 +134,7 @@ const ModalWorkout: FC<ModalWorkoutProps> = ({
     return <RoseLoader />;
   }
 
+  // Render form iff able to store previous data state as a fallback
   return (
     <Modal
       opened={editMode}
@@ -146,40 +149,48 @@ const ModalWorkout: FC<ModalWorkoutProps> = ({
         // height: "40em",
       }}
     >
-      <form onSubmit={handleSave}>
-        <TextInput
-          placeholder="Workout name"
-          withAsterisk
-          required
-          value={workoutName}
-          onChange={(e) => setWorkoutName(e.currentTarget.value)}
-        />
+      {previousState && (
+        <form onSubmit={handleSave}>
+          <TextInput
+            placeholder="Workout name"
+            withAsterisk
+            required
+            value={newName}
+            onChange={(e) => setNewName(e.currentTarget.value)}
+          />
 
-        {/* Mantine transferList here */}
-        <TransferList
-          value={data}
-          onChange={setData}
-          // value={test}
-          // onChange={setTest}
-          searchPlaceholder="Search..."
-          nothingFound="Nothing here"
-          showTransferAll={false}
-          listHeight={250}
-          breakpoint="sm"
-          titles={["Current exercises", "Exercises to add"]}
-          // itemComponent={ItemComponent}
-          filter={(query, item) =>
-            item.label.toLowerCase().includes(query.toLowerCase().trim()) ||
-            item.group!.toLowerCase().includes(query.toLowerCase().trim())
-          }
-        />
+          {/* Mantine transferList here */}
+          <TransferList
+            value={data}
+            onChange={setData}
+            searchPlaceholder="Search..."
+            nothingFound="Nothing here"
+            showTransferAll={false}
+            listHeight={250}
+            breakpoint="sm"
+            titles={["Current exercises", "Exercises available to add"]}
+            filter={(query, item) =>
+              item.label.toLowerCase().includes(query.toLowerCase().trim()) ||
+              item.group!.toLowerCase().includes(query.toLowerCase().trim())
+            }
+          />
 
-        {/* These buttons will be included in the modal */}
-        <section className={work.modifyBtns}>
-          <button onClick={() => setEditMode(false)}>Cancel</button>
-          <button type="submit">Save changes</button>
-        </section>
-      </form>
+          {/* These buttons will be included in the modal */}
+          <section className={work.modifyBtns}>
+            <button
+              type="button"
+              onClick={() => {
+                setEditMode(false);
+                setData(previousState);
+                setNewName(workoutName);
+              }}
+            >
+              Cancel
+            </button>
+            <button type="submit">Save changes</button>
+          </section>
+        </form>
+      )}
     </Modal>
   );
 };

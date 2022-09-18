@@ -15,7 +15,7 @@ interface rowProps {
 
 const WorkoutComp: FC = () => {
   // Fetch workouts
-  const { data: workouts, isLoading, isError } = useFetchWorkouts();
+  const { data: workouts, isLoading } = useFetchWorkouts();
 
   // State
   const [workoutName, setWorkoutName] = useState<string>("");
