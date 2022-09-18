@@ -1,5 +1,5 @@
 .container {
-  border: 1px solid seagreen;
+  /* border: 1px solid seagreen; */
   max-width: 100em;
   display: flex;
   justify-content: space-between;
@@ -9,6 +9,7 @@
 }
 
 .menu {
+  /* border: 1px solid orchid; */
   display: flex;
   align-items: center;
 }
@@ -27,16 +28,25 @@
 }
 
 .links {
-  display: block;
+  /* border: 1px solid orchid; */
+  display: flex;
+  /* gap: 5px; */
 }
 
 @media (max-width: 40em) {
   .container {
-    padding: 0 .5em;
+    padding: .25em .5em 0;
     margin-bottom: .25em;
   }
 
+  .menu {
+    /* border: 1px solid orchid; */
+    width: 50%;
+    justify-content: flex-end;
+  }
+
   .icons {
+    /* border: 1px solid orchid; */
     display: flex;
   }
 
