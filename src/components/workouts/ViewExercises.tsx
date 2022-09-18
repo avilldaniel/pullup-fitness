@@ -6,6 +6,7 @@ import ModalWorkout from "./ModalWorkout";
 import work from "../../styles/Workout.module.css";
 import { useSession } from "next-auth/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { Button, Modal } from "@mantine/core";
 
 interface ViewExercisesProps {
   workoutName: string;
@@ -23,6 +24,7 @@ const ViewExercises: FC<ViewExercisesProps> = ({
 
   // States
   const [editMode, setEditMode] = useState(false);
+  const [delModal, openDelModal] = useState(false);
 
   // Server state
   const { data: exercises, isLoading } = useWorkoutExers(workoutName);
@@ -48,6 +50,7 @@ const ViewExercises: FC<ViewExercisesProps> = ({
     });
     queryClient.invalidateQueries(["workouts", email]);
     setViewWorkout(false);
+    openDelModal(false);
   };
 
   // Rendering
@@ -59,9 +62,38 @@ const ViewExercises: FC<ViewExercisesProps> = ({
     <div>
       <section>
         <h1>{workoutName}</h1>
-        <button type="button" onClick={handleDelete}>
+
+        {/* Handle delete */}
+        <button type="button" onClick={() => openDelModal(true)}>
           Delete SVG
         </button>
+        <Modal
+          opened={delModal}
+          onClose={() => openDelModal(false)}
+          title="Are you sure you want to delete this exercise?"
+          withCloseButton={false}
+          centered
+        >
+          {/* {invalidDelete && <p>Cannot delete record. Try refreshing.</p>} */}
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Button onClick={handleDelete} variant="filled" color="red">
+              Yes.
+            </Button>
+            <Button
+              onClick={() => openDelModal(false)}
+              variant="subtle"
+              color="white"
+            >
+              No.
+            </Button>
+          </div>
+        </Modal>
       </section>
       {Array.isArray(exercises) && exercises.length ? (
         <ul>
@@ -70,7 +102,7 @@ const ViewExercises: FC<ViewExercisesProps> = ({
           })}
         </ul>
       ) : (
-        <p>This workout has no exercises.</p>
+        <p>This workout currently has no exercises.</p>
       )}
 
       <section className={work.viewBtns}>
