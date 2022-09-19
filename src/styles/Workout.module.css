@@ -12,6 +12,23 @@
   align-items: center;
 }
 
+.empty-msg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.empty-msg>.msg {
+  font-size: .9rem;
+  padding: 5%;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .list, .view {
   width: 100%;
 }
@@ -21,10 +38,11 @@
 }
 
 .scroll {
-  border: 2px solid red;
+  /* border: 2px solid red; */
 
   width: 100%;
-  height: max(28em, 65vh);
+  height: max(27em, 65vh);
+  padding: 1em .25em;
 }
 
 .row>button {
@@ -36,7 +54,9 @@
   color: white;
   cursor: pointer;
   border: 0;
-  /* border-top: 2px solid whitesmoke; */
+
+  padding: 5px 0;
+  font-style: italic;
 }
 
 .modifyBtns {

@@ -31,18 +31,23 @@ const WorkoutComp: FC = () => {
   const workoutRow = ({ workout, index }: rowProps) => {
     return (
       <li key={workout.id} className={work.row}>
-        <button
-          onClick={() => {
-            setViewWorkout(true);
-            setWorkoutName(workout.name);
-          }}
-          style={{
-            borderTop: index === 0 ? "0" : "2px solid whitesmoke",
-          }}
-        >
-          <h3>{workout.name}</h3>
-          <IconArrowRight />
-        </button>
+        {workouts?.length && (
+          <button
+            onClick={() => {
+              setViewWorkout(true);
+              setWorkoutName(workout.name);
+            }}
+            style={{
+              borderBottom:
+                index === workouts?.length - 1 && workouts.length != 1
+                  ? "0"
+                  : "2px solid whitesmoke",
+            }}
+          >
+            <h3>{workout.name}</h3>
+            <IconArrowRight />
+          </button>
+        )}
       </li>
     );
   };
@@ -76,30 +81,55 @@ const WorkoutComp: FC = () => {
   return (
     <div className={work.container}>
       <main>
-        still WIP <br />
-        <span style={{ fontSize: ".5rem" }}>can i get a hooyah</span>
+        {/* still WIP <br />
+        <span style={{ fontSize: ".5rem" }}>can i get a hooyah</span> */}
         {!viewWorkout ? (
           <div className={work.list}>
             {/* List of workouts */}
             <ScrollArea scrollbarSize={4} className={work.scroll}>
               <ul>
-                {Array.isArray(workouts) &&
+                {workouts?.length ? (
+                  Array.isArray(workouts) &&
                   workouts.map((workout, index) => {
                     return workoutRow({ workout, index });
-                  })}
+                  })
+                ) : (
+                  <section className={work["empty-msg"]}>
+                    <div className={work.msg}>
+                      To create a new workout plan, select{" "}
+                      <span style={{ color: "#f08ea0" }}>create workout</span>.
+                      After submitting the name of the workout plan, you may
+                      proceed with modifying the workout by clicking on it.{" "}
+                    </div>
+                    <Button
+                      onClick={() => {
+                        setWorkoutName("");
+                        openCreateNew(true);
+                      }}
+                      className={rose.btn}
+                    >
+                      Create workout
+                    </Button>
+                  </section>
+                )}
               </ul>
             </ScrollArea>
 
             {/* Create workout */}
-            <Button
-              onClick={() => {
-                setWorkoutName("");
-                openCreateNew(true);
-              }}
-              className={rose.btn}
-            >
-              Create workout
-            </Button>
+            {workouts?.length ? (
+              <Button
+                onClick={() => {
+                  setWorkoutName("");
+                  openCreateNew(true);
+                }}
+                className={`${rose.btn} ${work["create-btn"]}`}
+              >
+                Create workout
+              </Button>
+            ) : (
+              <></>
+            )}
+
             <Modal
               opened={createNew}
               onClose={() => {
