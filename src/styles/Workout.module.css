@@ -1,9 +1,13 @@
 .container {
-  border: 1px solid yellow;
+  /* border: 1px solid yellow; */
 
   margin: auto;
   max-width: 30em;
-  padding: 0 0.5em;
+  padding: 0 0.25em;
+
+  /* background-color: hsl(0 0% 100% / 0.1);
+  backdrop-filter: blur(1rem);
+  border-radius: 15px; */
 }
 
 .container>main {
@@ -29,8 +33,32 @@
   align-items: center;
 }
 
+.list-hdr {
+  /* border: 1px solid dodgerblue; */
+  width: 100%;
+  text-align: start;
+  font-style: italic;
+  color: #607D8B;
+}
+
 .list, .view {
   width: 100%;
+}
+
+.hdr {
+  display: flex;
+  justify-content: space-between;
+  color: #69B1D3;
+  font-size: var(--fs-400);
+}
+
+.exer-list {
+  padding: 0 .25em;
+}
+
+.empty-exers {
+  color: #69B1D3;
+  font-size: var(--fs-600);
 }
 
 .view {
@@ -41,8 +69,16 @@
   /* border: 2px solid red; */
 
   width: 100%;
-  height: max(27em, 65vh);
-  padding: 1em .25em;
+  height: max(26em, 60vh);
+  padding: 0 .25em;
+}
+
+.row {
+  font-size: 1rem;
+}
+
+.row:hover {
+  background-color: #11547a;
 }
 
 .row>button {
@@ -55,8 +91,8 @@
   cursor: pointer;
   border: 0;
 
-  padding: 5px 0;
-  font-style: italic;
+  padding: 10px 5px;
+  /* font-style: italic; */
 }
 
 .modifyBtns {
@@ -65,10 +101,19 @@
   justify-content: space-between;
 }
 
-.viewBtns {
-  /* border: 1px solid slateblue; */
+.btns {
   display: flex;
-  justify-content: space-between;
+}
+
+.btns>button {
+  padding: 0 10px;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.view-exers {
+  font-size: 16px;
 }
 
 @keyframes transitionContent {
@@ -80,5 +125,13 @@
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+@media (min-width: 40em) {
+  .list-hdr {
+    margin-bottom: 1em;
+    text-align: end;
+    font-size: var(--fs-600);
   }
 }

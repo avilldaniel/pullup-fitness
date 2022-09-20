@@ -16,3 +16,18 @@
   /* justify-content: space-between; */
   gap: 0.2em;
 }
+
+.header {
+  width: 100%;
+  text-align: start;
+  font-style: italic;
+  color: #607D8B;
+}
+
+@media (min-width: 40em) {
+  .header {
+    margin-bottom: 1em;
+    text-align: end;
+    font-size: var(--fs-600);
+  }
+}

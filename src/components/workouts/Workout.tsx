@@ -41,7 +41,7 @@ const WorkoutComp: FC = () => {
               borderBottom:
                 index === workouts?.length - 1 && workouts.length != 1
                   ? "0"
-                  : "2px solid whitesmoke",
+                  : "1px solid #69B1D3",
             }}
           >
             <h3>{workout.name}</h3>
@@ -81,12 +81,19 @@ const WorkoutComp: FC = () => {
   return (
     <div className={work.container}>
       <main>
-        {/* still WIP <br />
-        <span style={{ fontSize: ".5rem" }}>can i get a hooyah</span> */}
+        <h6 className={work["list-hdr"]}>Workouts</h6>
         {!viewWorkout ? (
           <div className={work.list}>
+            {/* <h6 className={work["list-hdr"]}>Workouts</h6> */}
+
             {/* List of workouts */}
-            <ScrollArea scrollbarSize={4} className={work.scroll}>
+            <ScrollArea
+              type="always"
+              offsetScrollbars
+              // scrollbarSize={6}
+              // style={{ height: "80%" }}
+              className={work.scroll}
+            >
               <ul>
                 {workouts?.length ? (
                   Array.isArray(workouts) &&

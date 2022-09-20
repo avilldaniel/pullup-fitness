@@ -6,7 +6,8 @@ import ModalWorkout from "./ModalWorkout";
 import work from "../../styles/Workout.module.css";
 import { useSession } from "next-auth/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Button, Modal } from "@mantine/core";
+import { ActionIcon, Button, Modal } from "@mantine/core";
+import { IconArrowLeft, IconEdit, IconTrash } from "@tabler/icons";
 
 interface ViewExercisesProps {
   workoutName: string;
@@ -59,63 +60,83 @@ const ViewExercises: FC<ViewExercisesProps> = ({
   }
 
   return (
-    <div>
-      <section>
+    <div className={work["view-exers"]}>
+      <section className={work.hdr}>
         <h1>{workoutName}</h1>
 
-        {/* Handle delete */}
-        <button type="button" onClick={() => openDelModal(true)}>
-          Delete SVG
-        </button>
-        <Modal
-          opened={delModal}
-          onClose={() => openDelModal(false)}
-          title="Are you sure you want to delete this workout?"
-          withCloseButton={false}
-          centered
-        >
-          {/* {invalidDelete && <p>Cannot delete record. Try refreshing.</p>} */}
-          <div
-            style={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "flex-end",
+        {/* Buttons */}
+        <div className={work.btns}>
+          <button
+            onClick={() => {
+              setViewWorkout(false);
+              queryClient.invalidateQueries(["workouts", email]);
             }}
+            aria-label="Go back"
+            title="Go back"
           >
-            <Button onClick={handleDelete} variant="filled" color="red">
-              Yes.
-            </Button>
-            <Button
-              onClick={() => openDelModal(false)}
-              variant="subtle"
-              color="white"
-            >
-              No.
-            </Button>
-          </div>
-        </Modal>
+            <IconArrowLeft color="#90A4AE" />
+          </button>
+          <button
+            onClick={() => setEditMode(true)}
+            aria-label="Edit exercises"
+            title="Edit exercises"
+          >
+            <IconEdit color="#ECEFF1" />
+          </button>
+          <button
+            type="button"
+            onClick={() => openDelModal(true)}
+            aria-label="Delete workout"
+            title="Delete workout"
+          >
+            <IconTrash color="#e9627f" />
+          </button>
+        </div>
       </section>
+
+      <Modal
+        opened={delModal}
+        onClose={() => openDelModal(false)}
+        title="Are you sure you want to delete this workout?"
+        withCloseButton={false}
+        centered
+      >
+        {/* {invalidDelete && <p>Cannot delete record. Try refreshing.</p>} */}
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Button onClick={handleDelete} variant="filled" color="red">
+            Yes.
+          </Button>
+          <Button
+            onClick={() => openDelModal(false)}
+            variant="subtle"
+            color="white"
+          >
+            No.
+          </Button>
+        </div>
+      </Modal>
       {Array.isArray(exercises) && exercises.length ? (
-        <ul>
+        <ul className={work["exer-list"]}>
           {exercises.map((exercise) => {
             return exerciseRow(exercise);
           })}
         </ul>
       ) : (
-        <p>This workout currently has no exercises.</p>
+        // <p>This workout currently has no exercises.</p>
+        <p className={work["empty-exers"]}>
+          Click the{" "}
+          <span style={{ color: "#fff" }}>
+            edit <IconEdit color="#ECEFF1" size={16} />
+          </span>{" "}
+          button to add exercises to this workout.
+        </p>
       )}
-
-      <section className={work.viewBtns}>
-        <button
-          onClick={() => {
-            setViewWorkout(false);
-            queryClient.invalidateQueries(["workouts", email]);
-          }}
-        >
-          Go back
-        </button>
-        <button onClick={() => setEditMode(true)}>Edit exercises</button>
-      </section>
 
       <ModalWorkout
         workoutName={workoutName}
