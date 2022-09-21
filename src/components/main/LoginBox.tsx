@@ -34,6 +34,10 @@ const LoginBox: FC = () => {
   } = useForm({ resolver: zodResolver(loginSchema) });
 
   const submitLogin: SubmitHandler<FieldValues> = async ({ login }) => {
+    if (typeof login === "string") {
+      login = login.toLocaleLowerCase();
+    }
+
     try {
       // With email, fetch username
       const res = await fetch(`/api/user/username?emailInput=${login}`);
