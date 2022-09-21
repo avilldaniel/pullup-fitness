@@ -251,10 +251,7 @@ const LoginBox: FC = () => {
             </form>
 
             {showOTP && (
-              <form
-                className={login.otpCard}
-                onSubmit={handleSubmit(submitLogin)}
-              >
+              <div className={login.otpCard}>
                 <p className={login.otpMsg}>
                   We just sent you a temporary login code.
                   <br />
@@ -285,7 +282,7 @@ const LoginBox: FC = () => {
                     Continue with login code
                   </Button>
                 </a>
-              </form>
+              </div>
             )}
           </div>
         )}
