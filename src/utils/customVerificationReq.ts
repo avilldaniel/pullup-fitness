@@ -27,7 +27,7 @@ export function html(params: { token: string; host: string }) {
     <tr>
       <td align="center"
         style="padding: 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text};">
-        Sign in to <strong>${escapedHost}</strong>
+        Sign in to <strong>PulluP Fitness</strong>
       </td>
     </tr>
     <tr>
@@ -54,5 +54,5 @@ export function html(params: { token: string; host: string }) {
 
 /** Email Text body (fallback for email clients that don't render HTML, e.g. feature phones) */
 export function text({ token, host }: { token: string; host: string }) {
-  return `Sign in to ${host}\nOne-time Password: ${token}\n\n`;
+  return `Sign in to PulluP Fitness.\nOne-time Password: ${token}\n\n`;
 }

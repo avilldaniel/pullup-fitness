@@ -44,14 +44,15 @@ export const authOptions: NextAuthOptions = {
         provider: { server, from },
         token,
       }) {
-        console.log({ url });
+        // console.log({ url });
         /* your function */
         const { host } = new URL(url);
         const transport = createTransport(server);
         const result = await transport.sendMail({
           to: email,
           from,
-          subject: `Sign in to ${host}`,
+          // subject: `Sign in to ${host}`,
+          subject: `Sign in to PulluP Fitness`,
           text: text({ token, host }),
           html: html({ token, host }),
         });
