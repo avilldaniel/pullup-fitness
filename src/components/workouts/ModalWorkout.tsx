@@ -1,4 +1,5 @@
 import {
+  Button,
   Modal,
   TextInput,
   TransferList,
@@ -10,8 +11,9 @@ import { useSession } from "next-auth/react";
 import React, { Dispatch, FC, SetStateAction, useState } from "react";
 import { useWorkoutExers } from "../../react-query-hooks/useWorkoutExers";
 import { useWorkoutNonExers } from "../../react-query-hooks/useWorkoutNonExers";
-import work from "../../styles/Workout.module.css";
 import RoseLoader from "../main/RoseLoader";
+import work from "../../styles/Workout.module.css";
+import rose from "../../styles/RoseBtn.module.css";
 
 interface ModalWorkoutProps {
   workoutName: string;
@@ -173,21 +175,37 @@ const ModalWorkout: FC<ModalWorkoutProps> = ({
               item.label.toLowerCase().includes(query.toLowerCase().trim()) ||
               item.group!.toLowerCase().includes(query.toLowerCase().trim())
             }
+            style={{
+              fontSize: "1rem",
+              padding: "20px 0",
+            }}
           />
 
           {/* These buttons will be included in the modal */}
           <section className={work.modifyBtns}>
-            <button
+            <Button
               type="button"
               onClick={() => {
                 setEditMode(false);
                 setData(previousState);
                 setNewName(workoutName);
               }}
+              className={rose.btn}
+              style={{
+                width: "8em",
+              }}
             >
               Cancel
-            </button>
-            <button type="submit">Save changes</button>
+            </Button>
+            <Button
+              type="submit"
+              className={rose.btn}
+              style={{
+                width: "10em",
+              }}
+            >
+              Save changes
+            </Button>
           </section>
         </form>
       )}

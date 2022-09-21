@@ -271,7 +271,6 @@ const LoginBox: FC = () => {
                   className={login.textInput}
                 />
                 {/* Continue with login code */}
-                {/* <a href={`${process.env.LOGIN_BASE_URL}${otpCode}&email=${validEmail}`}> */}
                 <a
                   href={`${
                     process.env.NEXT_PUBLIC_LOGIN_URL
@@ -281,6 +280,7 @@ const LoginBox: FC = () => {
                     type="button"
                     variant="filled"
                     style={{ backgroundColor: "#c81e4c" }}
+                    className={login["code-btn"]}
                   >
                     Continue with login code
                   </Button>

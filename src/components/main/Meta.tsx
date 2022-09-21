@@ -25,7 +25,8 @@ const Meta: FC<IMetaProps> = ({ keywords, description, title }) => {
       <meta name="keywords" content={keywords} />
       <meta name="description" content={description} />
       <title>{title}</title>
-      <link rel="icon" href="/favicon.ico" />
+      {/* <link rel="icon" href="/favicon.ico" /> */}
+      <link rel="icon" href="/favicon.svg" />
     </Head>
   );
 };

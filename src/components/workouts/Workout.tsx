@@ -87,13 +87,7 @@ const WorkoutComp: FC = () => {
             {/* <h6 className={work["list-hdr"]}>Workouts</h6> */}
 
             {/* List of workouts */}
-            <ScrollArea
-              type="always"
-              offsetScrollbars
-              // scrollbarSize={6}
-              // style={{ height: "80%" }}
-              className={work.scroll}
-            >
+            <ScrollArea type="always" scrollbarSize={6} className={work.scroll}>
               <ul>
                 {workouts?.length ? (
                   Array.isArray(workouts) &&
@@ -164,23 +158,30 @@ const WorkoutComp: FC = () => {
                 {invalidWorkout && (
                   <div style={{ fontSize: "1rem" }}>{invalidWorkout}</div>
                 )}
-                <Button
-                  type="submit"
-                  className={rose.btn}
-                  style={{
-                    marginTop: "1.5em",
-                    width: "40%",
-                  }}
-                >
-                  Create
-                </Button>
+                <div className={rose.flexend}>
+                  <Button
+                    type="submit"
+                    className={rose.btn}
+                    style={{
+                      marginTop: "1.5em",
+                      width: "40%",
+                    }}
+                  >
+                    Create
+                  </Button>
+                </div>
               </form>
             </Modal>
           </div>
         ) : (
           // View exercises of workout
           <div className={work.view}>
-            <ScrollArea scrollbarSize={4} className={work.scroll}>
+            <ScrollArea
+              scrollbarSize={4}
+              // scrollbarSize={0}
+              // offsetScrollbars
+              className={work.scroll}
+            >
               <ViewExercises
                 workoutName={workoutName}
                 setWorkoutName={setWorkoutName}

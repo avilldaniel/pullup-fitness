@@ -8,8 +8,6 @@ import login from "../../styles/Login.module.css";
 interface NoAuthProps {}
 
 const NoAuth: FC<NoAuthProps> = ({}) => {
-  const theme = useMantineTheme();
-
   return (
     <div className={bg.default}>
       <h3 className={login.header}>{`PulluP Fitness`}</h3>

@@ -11,7 +11,9 @@ const Login: NextPage = () => {
   const { status, data: session } = useSession();
   return (
     <div className={bg.signin}>
-      <h3 className={login.header}>{`PulluP Fitness`}</h3>
+      <header className={login["login-header"]}>
+        <h3>{`PulluP Fitness`}</h3>
+      </header>
 
       {status === "loading" ? (
         <RoseLoader />

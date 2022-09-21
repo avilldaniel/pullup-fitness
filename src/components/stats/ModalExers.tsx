@@ -320,9 +320,11 @@ const ModalExers: FC = () => {
                 {invalidPreset && (
                   <div>Unable to add new exercises. Please try refreshing.</div>
                 )}
-                <Button className={rose.btn} type="submit">
-                  Add exercise(s)
-                </Button>
+                <div className={rose.flexend}>
+                  <Button className={rose.btn} type="submit">
+                    Add exercise(s)
+                  </Button>
+                </div>
               </form>
             )}
           </Modal>
@@ -352,16 +354,18 @@ const ModalExers: FC = () => {
               {invalidCustom && (
                 <div>Invalid exercise. Try a different name.</div>
               )}
-              <Button
-                type="submit"
-                className={rose.btn}
-                style={{
-                  marginTop: "1.5em",
-                  width: "40%",
-                }}
-              >
-                Create
-              </Button>
+              <div className={rose.flexend}>
+                <Button
+                  type="submit"
+                  className={rose.btn}
+                  style={{
+                    marginTop: "1.5em",
+                    width: "40%",
+                  }}
+                >
+                  Create
+                </Button>
+              </div>
             </form>
           </Modal>
         </>
