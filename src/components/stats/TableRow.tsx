@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import type { FC } from "react";
-import { ActionIcon, TextInput, useMantineTheme } from "@mantine/core";
+import { ActionIcon, TextInput } from "@mantine/core";
 import {
   IconBarbell,
   IconCircleCheck,
@@ -29,9 +29,6 @@ const TableRow: FC<ITableRow> = ({
 }) => {
   // Fetch username
   const { data } = useFetchUser();
-
-  // Theme
-  const theme = useMantineTheme();
 
   // Context
   const { muscleGrp } = useContext(TableStatsContext);

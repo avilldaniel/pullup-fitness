@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { FC } from "react";
-import { Divider, useMantineTheme } from "@mantine/core";
+import { Divider } from "@mantine/core";
 import bg from "../../styles/Background.module.css";
 import sx from "../../styles/NoAuth.module.css";
 import login from "../../styles/Login.module.css";

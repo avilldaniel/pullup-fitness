@@ -2,8 +2,9 @@
   /* border: 1px solid yellow; */
 
   margin: auto;
+  min-width: 17em;
   max-width: 30em;
-  padding: 0 0.25em;
+  padding: 0 0.5em;
 
   /* background-color: hsl(0 0% 100% / 0.1);
   backdrop-filter: blur(1rem);

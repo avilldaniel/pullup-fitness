@@ -84,8 +84,6 @@ const WorkoutComp: FC = () => {
         <h6 className={work["list-hdr"]}>Workouts</h6>
         {!viewWorkout ? (
           <div className={work.list}>
-            {/* <h6 className={work["list-hdr"]}>Workouts</h6> */}
-
             {/* List of workouts */}
             <ScrollArea type="always" scrollbarSize={6} className={work.scroll}>
               <ul>
@@ -137,7 +135,7 @@ const WorkoutComp: FC = () => {
                 openCreateNew(false);
                 setInvalidWorkout("");
               }}
-              title={"Give this workout a title."}
+              title={"Give this workout a title"}
               centered
             >
               <form onSubmit={handleNewWorkout}>

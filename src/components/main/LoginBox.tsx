@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
   MantineProvider,
+  NumberInput,
   TextInput,
   useMantineTheme,
 } from "@mantine/core";
@@ -28,14 +29,15 @@ const LoginBox: FC = () => {
   const {
     register,
     handleSubmit,
+    reset,
     // formState: { errors },
   } = useForm({ resolver: zodResolver(loginSchema) });
 
   const submitLogin: SubmitHandler<FieldValues> = async ({ login }) => {
     try {
       // With email, fetch username
+      console.log("email after sign up and login submit:", login);
       const res = await fetch(`/api/user/username?emailInput=${login}`);
-
       // If valid, just signIn()
       if (res.ok) {
         setInvalidLogin("");
@@ -73,6 +75,7 @@ const LoginBox: FC = () => {
       // If successful in signing up, redirect to login
       // else, throw invalid registration (ie. username/email may already exist)
       if (res.ok) {
+        reset();
         setInvalidRegister("");
         setInvalidLogin("Almost done! Try logging in now.");
         setShowRegister(false);
@@ -260,6 +263,7 @@ const LoginBox: FC = () => {
                 <TextInput
                   value={otpCode}
                   onChange={(e) => setOtpCode(e.currentTarget.value)}
+                  type="number"
                   placeholder="Paste login code"
                   variant="default"
                   radius="md"
