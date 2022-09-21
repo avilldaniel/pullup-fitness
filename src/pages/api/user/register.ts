@@ -12,7 +12,7 @@ export default async function handler(
     // Create new user
     const newUser = await prisma.appUser.create({
       data: {
-        email,
+        email: typeof email === "string" ? email.toLocaleLowerCase() : email,
         name,
         username,
       },

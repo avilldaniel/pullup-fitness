@@ -36,7 +36,6 @@ const LoginBox: FC = () => {
   const submitLogin: SubmitHandler<FieldValues> = async ({ login }) => {
     try {
       // With email, fetch username
-      console.log("email after sign up and login submit:", login);
       const res = await fetch(`/api/user/username?emailInput=${login}`);
       // If valid, just signIn()
       if (res.ok) {
