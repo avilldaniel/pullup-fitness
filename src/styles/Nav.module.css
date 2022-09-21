@@ -15,11 +15,9 @@
 }
 
 .menu button {
-  background: transparent;
-  border: 0;
   /* border: 1px solid orangered; */
+  border: 0;
   color: white;
-
   cursor: pointer;
 }
 
@@ -30,7 +28,6 @@
 .links {
   /* border: 1px solid orchid; */
   display: flex;
-  /* gap: 5px; */
 }
 
 @media (max-width: 40em) {

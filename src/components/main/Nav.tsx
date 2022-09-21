@@ -4,6 +4,7 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import type { FC } from "react";
 import nav from "../../styles/Nav.module.css";
+import rose from "../../styles/RoseBtn.module.css";
 
 interface NavProps {}
 
@@ -14,7 +15,7 @@ const Nav: FC<NavProps> = ({}) => {
       <main className={nav.menu}>
         <section className={nav.icons}>
           <Link href={"/u/stats"}>
-            <button>
+            <button style={{ background: "transparent" }}>
               <IconJumpRope />
             </button>
           </Link>
@@ -22,7 +23,7 @@ const Nav: FC<NavProps> = ({}) => {
           <Divider orientation="vertical" mx="xs" my={8} color="dark" />
 
           <Link href={"/u/workout"}>
-            <button>
+            <button style={{ background: "transparent" }}>
               <IconYoga />
             </button>
           </Link>
@@ -36,13 +37,12 @@ const Nav: FC<NavProps> = ({}) => {
           <Divider orientation="vertical" mx="sm" my="xs" color="dark" />
         </section>
 
-        {/* <button onClick={() => signOut()}>Log Out</button> */}
         <Button
           type="button"
-          // variant="filled"
           size="xs"
-          style={{ backgroundColor: "#c81e4c", padding: "0 .7em" }}
+          className={rose.btn}
           onClick={() => signOut({ callbackUrl: "/signin" })}
+          style={{ padding: "0 0.7em", width: "5em" }}
         >
           Log Out
         </Button>

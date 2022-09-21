@@ -174,7 +174,7 @@ const TableStats: FC = () => {
             <Table
               fontSize="sm"
               horizontalSpacing={8}
-              highlightOnHover
+              // highlightOnHover
               style={{ tableLayout: "fixed", minWidth: "17.6em" }}
             >
               <thead>
