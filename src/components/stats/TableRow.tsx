@@ -35,7 +35,7 @@ const TableRow: FC<ITableRow> = ({
 
   // Format date
   const d = new Date(stat.updatedAt);
-  const month = ("0" + d.getMonth()).slice(-2).toString();
+  const month = ("0" + (d.getMonth() + 1)).slice(-2).toString();
   const day = ("0" + d.getDate()).slice(-2).toString();
   const year = ("0" + d.getFullYear()).slice(-2).toString();
   const date = month.concat("/" + day).concat("/" + year);
