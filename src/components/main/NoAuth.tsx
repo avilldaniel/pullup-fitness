@@ -5,9 +5,7 @@ import bg from "../../styles/Background.module.css";
 import sx from "../../styles/NoAuth.module.css";
 import login from "../../styles/Login.module.css";
 
-interface NoAuthProps {}
-
-const NoAuth: FC<NoAuthProps> = ({}) => {
+const NoAuth: FC = ({}) => {
   return (
     <div className={bg.default}>
       <h3 className={login.header}>{`PulluP Fitness`}</h3>

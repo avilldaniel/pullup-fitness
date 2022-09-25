@@ -73,22 +73,6 @@ export default function App(props: AppProps) {
                   "#262626",
                   "#0d0d0d",
                 ],
-
-                // kinda light blue
-                // dark: [
-                //   "#F2F8FA",
-                //   "#F2F8FA",
-                //   "#BFDEEC",
-                //   "#8ECAE6",
-                //   "#69B1D3",
-                //   "#4D9BBF",
-                //   "#4483A1",
-                //   "#3F6D83",
-                //   "#3A5C6B",
-                //   "#344D58",
-                // ],
-
-                // matUI Blue Grey
                 dark: [
                   "#ECEFF1",
                   "#CFD8DC",
@@ -106,32 +90,6 @@ export default function App(props: AppProps) {
               loader: "bars",
               fontFamily: "DM Sans",
               fontSizes: { xs: 12, sm: 14, md: 20, lg: 26, xl: 30 },
-              components: {
-                // Button: {
-                //   defaultProps: {
-                //     variant: "gradient",
-                //     gradient: {
-                //       // from: "#ff8b1a",
-                //       // to: "#e67a00",
-                //       from: "#e67a00",
-                //       to: "#b35300",
-                //       deg: 45,
-                //     },
-                //     radius: "md",
-                //   },
-                //   styles: (theme) => ({
-                //     root: {
-                //       padding: 0,
-                //       fontSize: theme.fontSizes.sm,
-                //       width: "100%",
-                //     },
-                //     input: {
-                //       // fontSize: "2em",
-                //       // margin: 0,
-                //     },
-                //   }),
-                // },
-              },
             }}
           >
             <Component {...pageProps} />
