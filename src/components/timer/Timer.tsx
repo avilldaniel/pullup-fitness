@@ -1,12 +1,13 @@
-import { FC } from "react";
+import { Modal } from "@mantine/core";
+import { FC, useState } from "react";
+import ClockUI from "./ClockUI";
+import List from "./List";
 
 type TimerProps = {};
 
 const Timer: FC<TimerProps> = () => {
-  // const unixNow = getUnixTime(new Date());
-  // console.log(unixNow);
-
-  // user sets up timer
+  const [addingTimer, setAddingTimer] = useState(false);
+  // user adds a timer
 
   // timer is stored as state variable
 
@@ -19,7 +20,21 @@ const Timer: FC<TimerProps> = () => {
 
   return (
     <div>
-      <>asdf</>
+      <ClockUI />
+
+      <List />
+
+      {/* Add timer */}
+      <button onClick={() => setAddingTimer(true)}>Add a timer</button>
+      <Modal
+        opened={addingTimer}
+        onClose={() => setAddingTimer(false)}
+        title=""
+        // withCloseButton={false}
+        // centered
+      >
+        test
+      </Modal>
     </div>
   );
 };

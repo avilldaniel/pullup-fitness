@@ -1,8 +1,6 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 
-// type table stats context,
-// define table stats defaults
-// then create context w/ defaults
+// Table stats context
 interface ITableStatsContext {
   muscleGrp: string;
   setMuscleGrp: Dispatch<SetStateAction<string>>;
@@ -17,3 +15,15 @@ export const tableStatsDefault = {
 };
 export const TableStatsContext =
   createContext<ITableStatsContext>(tableStatsDefault);
+
+// Timer context
+interface IClockContext {
+  clock: number;
+  setClock: Dispatch<SetStateAction<number>>;
+}
+export const clockDefault = {
+  // clock: 0,
+  clock: 60,
+  setClock: () => {},
+};
+export const ClockContext = createContext<IClockContext>(clockDefault);
