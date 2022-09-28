@@ -1,27 +1,40 @@
-import { FC, useContext } from "react";
+import { FC, useContext, useRef, useState } from "react";
 import { ClockContext } from "../../utils/contexts";
 import Clock from "./Clock";
 
 interface ClockUIProps {}
+interface IRefProps {
+  current: string | number | NodeJS.Timeout | undefined;
+}
 
 const ClockUI: FC<ClockUIProps> = ({}) => {
-  const { clock, setClock } = useContext(ClockContext);
+  const { seconds } = useContext(ClockContext);
+  const [now, setNow] = useState(seconds);
+  const intervalRef: IRefProps = useRef(0);
 
-  // const timer = setInterval(() => {
-  //   const seconds = clock - 1;
-  //   setClock(seconds);
-  //   console.log(clock);
-  // }, 1000);
+  console.log({ now });
+
+  const handleStart = () => {
+    clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      setNow((s) => s - 1);
+    }, 1000);
+  };
 
   const handleStop = () => {
-    clearInterval(timer);
+    clearInterval(intervalRef.current);
   };
+
+  if (now <= 0) {
+    clearInterval(intervalRef.current);
+  }
 
   return (
     <>
       <button>Reset</button>
-      <Clock />
-      {/* <button onClick={handleStart}>Start/Stop</button> */}
+      <Clock now={now} />
+      <button onClick={handleStart}>Start</button>
+      <button onClick={handleStop}>Stop</button>
     </>
   );
 };

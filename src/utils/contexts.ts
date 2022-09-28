@@ -18,12 +18,12 @@ export const TableStatsContext =
 
 // Timer context
 interface IClockContext {
-  clock: number;
-  setClock: Dispatch<SetStateAction<number>>;
+  seconds: number;
+  setSeconds: Dispatch<SetStateAction<number>>;
 }
 export const clockDefault = {
-  // clock: 0,
-  clock: 60,
-  setClock: () => {},
+  // seconds: 0,
+  seconds: 10,
+  setSeconds: () => {},
 };
 export const ClockContext = createContext<IClockContext>(clockDefault);

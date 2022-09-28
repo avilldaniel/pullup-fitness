@@ -1,17 +1,19 @@
 import { FC, useContext } from "react";
 import { ClockContext } from "../../utils/contexts";
 
-interface ClockProps {}
+interface ClockProps {
+  now: number;
+}
 
-const Clock: FC<ClockProps> = ({}) => {
-  const { clock } = useContext(ClockContext);
-  const minutes = ("0" + clock / 60).slice(-2);
-  const seconds = ("0" + (clock % 60)).slice(-2);
+const Clock: FC<ClockProps> = ({ now }) => {
+  // const { seconds } = useContext(ClockContext);
+  const min = ("0" + Math.floor(now / 60)).slice(-2);
+  const sec = ("0" + (now % 60)).slice(-2);
 
   return (
     <div>
       <p>
-        {minutes}:{seconds}
+        {min}:{sec}
       </p>
     </div>
   );
