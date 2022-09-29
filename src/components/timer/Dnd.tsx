@@ -1,8 +1,9 @@
-import type { FC } from "react";
+import { FC, useContext } from "react";
 import { useListState } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { IconGripVertical } from "@tabler/icons";
 import { createStyles } from "@mantine/core";
+import { ClockContext } from "../../utils/contexts";
 
 const useStyles = createStyles((theme) => ({
   item: {
@@ -30,25 +31,42 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
+interface IData {
+  name: string;
+  seconds: number;
+  id: number;
+}
+
 interface DndProps {}
 
 const Dnd: FC<DndProps> = ({}) => {
+  const { seconds, setSeconds } = useContext(ClockContext);
+
   const { classes, cx } = useStyles();
-  const [state, handlers] = useListState([
-    { name: "a", seconds: 30 },
-    { name: "b", seconds: 10 },
-    { name: "c", seconds: 20 },
+  // const [state, handlers] = useListState<IData>([]);
+  const [state, handlers] = useListState<IData>([
+    { name: "a", seconds: 30, id: new Date().getTime() + 1 },
+    { name: "b", seconds: 10, id: new Date().getTime() + 2 },
+    { name: "c", seconds: 20, id: new Date().getTime() + 3 },
   ]);
 
+  console.log(state[0].seconds);
+  console.log({ seconds });
+
   const items = state.map((item, index) => (
-    <Draggable key={item.name} index={index} draggableId={item.name}>
+    // <Draggable key={item.id} index={index} draggableId={item.id.toString()}>
+    <Draggable
+      key={item.id}
+      // key={item.name + index}
+      index={index}
+      draggableId={item.id.toString()}
+    >
       {(provided, snapshot) => (
         <div
           className={cx(classes.item, {
             [classes.itemDragging]: snapshot.isDragging,
           })}
           {...provided.draggableProps}
-          {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
           {/* Handle */}
@@ -64,9 +82,10 @@ const Dnd: FC<DndProps> = ({}) => {
 
   return (
     <DragDropContext
-      onDragEnd={({ destination, source }) =>
-        handlers.reorder({ from: source.index, to: destination?.index || 0 })
-      }
+      onDragEnd={({ destination, source }) => {
+        handlers.reorder({ from: source.index, to: destination?.index || 0 });
+        setSeconds(state[source.index].seconds);
+      }}
     >
       <Droppable droppableId="dnd-list" direction="vertical">
         {(provided) => (
