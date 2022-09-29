@@ -14,6 +14,7 @@ const ClockUI: FC<ClockUIProps> = ({}) => {
 
   console.log({ now });
 
+  // START
   const handleStart = () => {
     clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
@@ -21,7 +22,14 @@ const ClockUI: FC<ClockUIProps> = ({}) => {
     }, 1000);
   };
 
+  // STOP
   const handleStop = () => {
+    clearInterval(intervalRef.current);
+  };
+
+  // RESET
+  const handleReset = () => {
+    setNow(seconds);
     clearInterval(intervalRef.current);
   };
 
@@ -31,7 +39,7 @@ const ClockUI: FC<ClockUIProps> = ({}) => {
 
   return (
     <>
-      <button>Reset</button>
+      <button onClick={handleReset}>Reset</button>
       <Clock now={now} />
       <button onClick={handleStart}>Start</button>
       <button onClick={handleStop}>Stop</button>

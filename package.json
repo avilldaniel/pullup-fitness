@@ -29,6 +29,7 @@
     "next-auth": "^4.10.3",
     "nodemailer": "^6.7.8",
     "react": "18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.33.1",
     "ts-node": "^10.9.1",
@@ -38,6 +39,7 @@
   "devDependencies": {
     "@types/node": "18.0.6",
     "@types/react": "18.0.15",
+    "@types/react-beautiful-dnd": "^13.1.2",
     "@types/react-dom": "18.0.6",
     "eslint": "8.20.0",
     "eslint-config-next": "12.2.3",

@@ -4,6 +4,8 @@ import type { FC } from "react";
 interface NewTimerProps {}
 
 const NewTimer: FC<NewTimerProps> = ({}) => {
+  //
+
   return (
     // Modal
     <div
