@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction, useContext } from "react";
 import { useListState, UseListStateHandlers } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { IconGripVertical } from "@tabler/icons";
+import { IconGripVertical, IconTrash } from "@tabler/icons";
 import { createStyles } from "@mantine/core";
 import { ClockContext } from "../../utils/contexts";
 import { IData } from "./Timer";
@@ -60,10 +60,22 @@ const Dnd: FC<DndProps> = ({ setNow, state, handlers }) => {
         >
           {/* Handle */}
           <div {...provided.dragHandleProps}>
-            <IconGripVertical size={18} stroke={1.5} />
+            <IconGripVertical size={24} stroke={1.5} />
           </div>
           {/* Exercise */}
           {item.name} - {item.seconds}
+          {/* Delete */}
+          <button
+            onClick={() => {
+              handlers.remove(index);
+              setNow(0);
+            }}
+            type="button"
+          >
+            {/* <IconTrash size={24} stroke={1.5} color="#c81e4c" />
+          <IconTrash size={24} stroke={1.5} color="#e9627f" /> */}
+            <IconTrash size={24} stroke={1.5} color="red" />
+          </button>
         </div>
       )}
     </Draggable>

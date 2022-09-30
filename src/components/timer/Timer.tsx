@@ -23,9 +23,10 @@ const Timer: FC<TimerProps> = () => {
   const [now, setNow] = useState(seconds);
   const [state, handlers] = useListState<IData>([]);
   // const [state, handlers] = useListState<IData>([
-  //   { name: "a", seconds: 30, id: new Date().getTime() + 1 },
-  //   { name: "b", seconds: 10, id: new Date().getTime() + 2 },
-  //   { name: "c", seconds: 20, id: new Date().getTime() + 3 },
+  //   { name: "a", seconds: 3, id: new Date().getTime() + 1 },
+  //   { name: "b", seconds: 4, id: new Date().getTime() + 2 },
+  //   { name: "c", seconds: 5, id: new Date().getTime() + 3 },
+  //   { name: "d", seconds: 6, id: new Date().getTime() + 4 },
   // ]);
 
   console.log({ now });

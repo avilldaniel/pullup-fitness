@@ -1,4 +1,11 @@
-import { Dispatch, FC, SetStateAction, useContext, useRef } from "react";
+import {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useRef,
+} from "react";
 import { ClockContext } from "../../utils/contexts";
 import Clock from "./Clock";
 import { IData } from "./Timer";
@@ -41,15 +48,19 @@ const ClockUI: FC<ClockUIProps> = ({ state, handlers, now, setNow }) => {
     setNow(seconds);
   };
 
-  if (now <= 0) {
-    // clearInterval(intervalRef.current);
-    if (state[1]) {
-      setNow(state[1].seconds);
-      // handlers.remove(0);
-    } else {
-      clearInterval(intervalRef.current);
+  // Remove current timer when it finishes
+  // Re-set now state if there is another timer queued
+  useEffect(() => {
+    if (now < 0) {
+      if (state[1]) {
+        setNow(state[1].seconds);
+        handlers.remove(0);
+      } else {
+        setNow(0);
+        clearInterval(intervalRef.current);
+      }
     }
-  }
+  }, [state, handlers, now, setNow]);
 
   return (
     <>
