@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import Nav from "../../components/main/Nav";
 import NoAuth from "../../components/main/NoAuth";
 import RoseLoader from "../../components/main/RoseLoader";
+import { ClockProvider } from "../../components/timer/ClockProvider";
 import Timer from "../../components/timer/Timer";
 import bg from "../../styles/Background.module.css";
 
@@ -27,8 +28,10 @@ const TimerPage: NextPage = () => {
   // Authenticated
   return (
     <div className={bg.default}>
-      <Nav />
-      <Timer />
+      <ClockProvider>
+        <Nav />
+        <Timer />
+      </ClockProvider>
     </div>
   );
 };

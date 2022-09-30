@@ -22,8 +22,8 @@ interface IClockContext {
   setSeconds: Dispatch<SetStateAction<number>>;
 }
 export const clockDefault = {
-  // seconds: 0,
-  seconds: 10,
+  seconds: 0,
+  // seconds: 10,
   setSeconds: () => {},
 };
 export const ClockContext = createContext<IClockContext>(clockDefault);

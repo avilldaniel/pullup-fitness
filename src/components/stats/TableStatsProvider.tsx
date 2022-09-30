@@ -6,11 +6,6 @@ interface ITableStatsProvider {
   children: React.ReactNode;
 }
 export const TableStatsProvider: FC<ITableStatsProvider> = ({ children }) => {
-  // const [username, setUsername] = useState<string>("");
-  // const [muscleGrp, setMuscleGrp] = useState<string>("ALL");
-  // const [exerciseName, setExerciseName] = useState<string>("");
-
-  // const [username, setUsername] = useState<string>(tableStatsDefault.username);
   const [muscleGrp, setMuscleGrp] = useState<string>(
     tableStatsDefault.muscleGrp
   );
@@ -21,19 +16,11 @@ export const TableStatsProvider: FC<ITableStatsProvider> = ({ children }) => {
   return (
     <TableStatsContext.Provider
       value={{
-        // username,
         muscleGrp,
         exerciseName,
-        // setUsername,
         setMuscleGrp,
         setExerciseName,
       }}
-
-      // value={{
-      //   usernameContext: [username, setUsername],
-      //   muscleGrpContext: [muscleGrp, setMuscleGrp],
-      //   exerciseNameContext: [exerciseName, setExerciseName]
-      // }}
     >
       {children}
     </TableStatsContext.Provider>

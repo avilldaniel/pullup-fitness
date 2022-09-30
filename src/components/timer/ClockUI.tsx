@@ -1,18 +1,26 @@
-import { FC, useContext, useRef, useState } from "react";
+import { Dispatch, FC, SetStateAction, useContext, useRef } from "react";
 import { ClockContext } from "../../utils/contexts";
 import Clock from "./Clock";
+import { IData } from "./Timer";
+import rose from "../../styles/RoseBtn.module.css";
+import { Button } from "@mantine/core";
+import { UseListStateHandlers } from "@mantine/hooks";
 
-interface ClockUIProps {}
+interface ClockUIProps {
+  state: IData[];
+  handlers: UseListStateHandlers<IData>;
+  now: number;
+  setNow: Dispatch<SetStateAction<number>>;
+}
 interface IRefProps {
   current: string | number | NodeJS.Timeout | undefined;
 }
 
-const ClockUI: FC<ClockUIProps> = ({}) => {
+const ClockUI: FC<ClockUIProps> = ({ state, handlers, now, setNow }) => {
   const { seconds } = useContext(ClockContext);
-  const [now, setNow] = useState(seconds);
   const intervalRef: IRefProps = useRef(0);
 
-  console.log({ now });
+  // console.log({ now });
 
   // START
   const handleStart = () => {
@@ -29,20 +37,44 @@ const ClockUI: FC<ClockUIProps> = ({}) => {
 
   // RESET
   const handleReset = () => {
-    setNow(seconds);
     clearInterval(intervalRef.current);
+    setNow(seconds);
   };
 
   if (now <= 0) {
-    clearInterval(intervalRef.current);
+    // clearInterval(intervalRef.current);
+    if (state[1]) {
+      setNow(state[1].seconds);
+      // handlers.remove(0);
+    } else {
+      clearInterval(intervalRef.current);
+    }
   }
 
   return (
     <>
-      <button onClick={handleReset}>Reset</button>
-      <Clock now={now} />
-      <button onClick={handleStart}>Start</button>
-      <button onClick={handleStop}>Stop</button>
+      <Button
+        onClick={handleReset}
+        disabled={!state[0] ? true : false}
+        className={rose.btn}
+      >
+        Reset
+      </Button>
+      <Clock now={now} state={state} />
+      <Button
+        onClick={handleStart}
+        disabled={!state[0] ? true : false}
+        className={rose.btn}
+      >
+        Start
+      </Button>
+      <Button
+        onClick={handleStop}
+        disabled={!state[0] ? true : false}
+        className={rose.btn}
+      >
+        Stop
+      </Button>
     </>
   );
 };

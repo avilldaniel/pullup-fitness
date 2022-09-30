@@ -1,9 +1,10 @@
-import { FC, useContext } from "react";
-import { useListState } from "@mantine/hooks";
+import { Dispatch, FC, SetStateAction, useContext } from "react";
+import { useListState, UseListStateHandlers } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { IconGripVertical } from "@tabler/icons";
 import { createStyles } from "@mantine/core";
 import { ClockContext } from "../../utils/contexts";
+import { IData } from "./Timer";
 
 const useStyles = createStyles((theme) => ({
   item: {
@@ -31,30 +32,18 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-interface IData {
-  name: string;
-  seconds: number;
-  id: number;
+interface DndProps {
+  setNow: Dispatch<SetStateAction<number>>;
+  state: IData[];
+  handlers: UseListStateHandlers<IData>;
 }
 
-interface DndProps {}
-
-const Dnd: FC<DndProps> = ({}) => {
-  const { seconds, setSeconds } = useContext(ClockContext);
+const Dnd: FC<DndProps> = ({ setNow, state, handlers }) => {
+  const { setSeconds } = useContext(ClockContext);
 
   const { classes, cx } = useStyles();
-  // const [state, handlers] = useListState<IData>([]);
-  const [state, handlers] = useListState<IData>([
-    { name: "a", seconds: 30, id: new Date().getTime() + 1 },
-    { name: "b", seconds: 10, id: new Date().getTime() + 2 },
-    { name: "c", seconds: 20, id: new Date().getTime() + 3 },
-  ]);
-
-  console.log(state[0].seconds);
-  console.log({ seconds });
 
   const items = state.map((item, index) => (
-    // <Draggable key={item.id} index={index} draggableId={item.id.toString()}>
     <Draggable
       key={item.id}
       // key={item.name + index}
@@ -85,6 +74,7 @@ const Dnd: FC<DndProps> = ({}) => {
       onDragEnd={({ destination, source }) => {
         handlers.reorder({ from: source.index, to: destination?.index || 0 });
         setSeconds(state[source.index].seconds);
+        setNow(state[source.index].seconds);
       }}
     >
       <Droppable droppableId="dnd-list" direction="vertical">
