@@ -46,7 +46,7 @@ const NewTimer: FC<NewTimerProps> = ({
 
     handlers.append({
       name: data.name,
-      seconds: data.sec,
+      seconds: data.min * 60 + data.sec,
       id: new Date().getTime(),
     });
 
@@ -54,8 +54,8 @@ const NewTimer: FC<NewTimerProps> = ({
       setNow(state[0].seconds);
       setSeconds(state[0].seconds);
     } else {
-      setNow(data.sec);
-      setSeconds(data.sec);
+      setNow(data.min * 60 + data.sec);
+      setSeconds(data.min * 60 + data.sec);
     }
 
     setAddingTimer(false);
@@ -63,15 +63,7 @@ const NewTimer: FC<NewTimerProps> = ({
 
   return (
     // Modal
-    <div
-      style={
-        {
-          // width: "100%",
-          // display: "flex",
-          // justifyContent: "flex-end",
-        }
-      }
-    >
+    <div>
       <form onSubmit={handleSubmit} className={timersx.form}>
         {/* Name */}
         <TextInput
@@ -113,7 +105,7 @@ const NewTimer: FC<NewTimerProps> = ({
             }}
             label="Seconds"
             step={15}
-            max={60}
+            max={59}
             min={0}
           />
         </section>

@@ -10,7 +10,6 @@ import {
 import { ClockContext } from "../../utils/contexts";
 import Clock from "./Clock";
 import { IData } from "./Timer";
-import rose from "../../styles/RoseBtn.module.css";
 import { Button } from "@mantine/core";
 import { UseListStateHandlers } from "@mantine/hooks";
 import timersx from "../../styles/Timer.module.css";
@@ -29,8 +28,6 @@ const ClockUI: FC<ClockUIProps> = ({ state, handlers, now, setNow }) => {
   const { seconds } = useContext(ClockContext);
   const intervalRef: IRefProps = useRef(0);
   const [showStart, setShowStart] = useState(true);
-
-  // console.log({ now });
 
   // START
   const handleStart = () => {

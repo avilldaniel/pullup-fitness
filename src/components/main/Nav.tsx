@@ -20,7 +20,6 @@ const Nav: FC<NavProps> = ({}) => {
             </button>
           </Link>
 
-          {/* <Divider orientation="vertical" mx="xs" my={8} color="dark" /> */}
           <Divider orientation="vertical" mx={7} my={8} color="dark" />
 
           <Link href={"/u/workout"}>
@@ -29,7 +28,6 @@ const Nav: FC<NavProps> = ({}) => {
             </button>
           </Link>
 
-          {/* <Divider orientation="vertical" mx="xs" my={8} color="dark" /> */}
           <Divider orientation="vertical" mx={7} my={8} color="dark" />
 
           <Link href={"/u/timer"}>
@@ -38,7 +36,6 @@ const Nav: FC<NavProps> = ({}) => {
             </button>
           </Link>
 
-          {/* <Divider orientation="vertical" mx="xs" my={8} color="dark" /> */}
           <Divider orientation="vertical" mx={7} my={8} color="dark" />
         </section>
 

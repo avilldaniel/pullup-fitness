@@ -12,7 +12,6 @@ const useStyles = createStyles((theme) => ({
     ...theme.fn.focusStyles(),
     marginBottom: theme.spacing.sm,
   },
-
   itemDragging: {
     boxShadow: theme.shadows.sm,
   },
@@ -30,12 +29,7 @@ const Dnd: FC<DndProps> = ({ setNow, state, handlers }) => {
   const { classes, cx } = useStyles();
 
   const items = state.map((item, index) => (
-    <Draggable
-      key={item.id}
-      // key={item.name + index}
-      index={index}
-      draggableId={item.id.toString()}
-    >
+    <Draggable key={item.id} index={index} draggableId={item.id.toString()}>
       {(provided, snapshot) => (
         <div
           className={`${cx(classes.item, {
@@ -46,12 +40,14 @@ const Dnd: FC<DndProps> = ({ setNow, state, handlers }) => {
         >
           {/* Handle */}
           <div {...provided.dragHandleProps}>
-            {/* <IconGripVertical size={24} stroke={1.5} /> */}
             <IconGripVertical size={20} stroke={1.5} />
           </div>
           {/* Exercise */}
-          {item.name && `${item.name} -`}
-          {item.seconds}
+          {item.name && `${item.name} - `}
+          {Math.floor(item.seconds / 60)
+            .toString()
+            .slice(-2)}
+          :{("0" + (item.seconds % 60)).slice(-2)}
           {/* Delete */}
           <button
             onClick={() => {
@@ -60,9 +56,7 @@ const Dnd: FC<DndProps> = ({ setNow, state, handlers }) => {
             }}
             type="button"
           >
-            {/* <IconTrash size={24} stroke={1.5} color="#c81e4c" /> */}
             <IconTrash size={28} stroke={1.5} color="#e9627f" />
-            {/* <IconTrash size={24} stroke={1.5} color="red" /> */}
           </button>
         </div>
       )}
