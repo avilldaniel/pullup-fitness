@@ -1,5 +1,5 @@
 import { Button, Divider } from "@mantine/core";
-import { IconJumpRope, IconYoga } from "@tabler/icons";
+import { IconDeviceWatch, IconJumpRope, IconYoga } from "@tabler/icons";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import type { FC } from "react";
@@ -20,20 +20,34 @@ const Nav: FC<NavProps> = ({}) => {
             </button>
           </Link>
 
-          <Divider orientation="vertical" mx="xs" my={8} color="dark" />
+          {/* <Divider orientation="vertical" mx="xs" my={8} color="dark" /> */}
+          <Divider orientation="vertical" mx={7} my={8} color="dark" />
 
           <Link href={"/u/workout"}>
             <button style={{ background: "transparent" }}>
               <IconYoga />
             </button>
           </Link>
-          <Divider orientation="vertical" mx="sm" my={8} color="dark" />
+
+          {/* <Divider orientation="vertical" mx="xs" my={8} color="dark" /> */}
+          <Divider orientation="vertical" mx={7} my={8} color="dark" />
+
+          <Link href={"/u/timer"}>
+            <button style={{ background: "transparent" }}>
+              <IconDeviceWatch />
+            </button>
+          </Link>
+
+          {/* <Divider orientation="vertical" mx="xs" my={8} color="dark" /> */}
+          <Divider orientation="vertical" mx={7} my={8} color="dark" />
         </section>
 
         <section className={nav.links}>
           <Link href={"/u/stats"}>Stats</Link>
           <Divider orientation="vertical" mx="sm" my="xs" color="dark" />
           <Link href={"/u/workout"}>Workouts</Link>
+          <Divider orientation="vertical" mx="sm" my="xs" color="dark" />
+          <Link href={"/u/timer"}>Timer</Link>
           <Divider orientation="vertical" mx="sm" my="xs" color="dark" />
         </section>
 
