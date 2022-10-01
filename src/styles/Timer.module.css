@@ -35,11 +35,11 @@
 }
 
 .text {
-  line-height: .9;
+  line-height: 1;
 }
 
 .title {
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
 .btn {
@@ -95,7 +95,7 @@
 
 @media (max-width: 40em) {
   .container {
-    height: 29em;
+    /* min-height: 29em; */
     padding: 2em 0.5em 0;
   }
 

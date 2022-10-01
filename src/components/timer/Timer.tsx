@@ -21,7 +21,7 @@ const Timer: FC<TimerProps> = () => {
 
   // State
   const [addingTimer, setAddingTimer] = useState(false);
-  const [now, setNow] = useState(seconds);
+  const [now, setNow] = useState<number | null>(seconds);
   const [state, handlers] = useListState<IData>([]);
 
   return (

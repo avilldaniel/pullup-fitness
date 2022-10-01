@@ -23,7 +23,7 @@ interface NewTimerProps {
   state: IData[];
   handlers: UseListStateHandlers<IData>;
   setAddingTimer: Dispatch<SetStateAction<boolean>>;
-  setNow: Dispatch<SetStateAction<number>>;
+  setNow: Dispatch<SetStateAction<number | null>>;
 }
 
 const NewTimer: FC<NewTimerProps> = ({

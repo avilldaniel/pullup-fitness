@@ -13,27 +13,32 @@ import { IData } from "./Timer";
 import { Button } from "@mantine/core";
 import { UseListStateHandlers } from "@mantine/hooks";
 import timersx from "../../styles/Timer.module.css";
+// import beep from '../../../public/beep.mp3';
 
 interface ClockUIProps {
   state: IData[];
   handlers: UseListStateHandlers<IData>;
-  now: number;
-  setNow: Dispatch<SetStateAction<number>>;
+  now: number | null;
+  setNow: Dispatch<SetStateAction<number | null>>;
 }
 interface IRefProps {
   current: string | number | NodeJS.Timeout | undefined;
 }
 
 const ClockUI: FC<ClockUIProps> = ({ state, handlers, now, setNow }) => {
-  const { seconds } = useContext(ClockContext);
+  const { seconds, setSeconds } = useContext(ClockContext);
   const intervalRef: IRefProps = useRef(0);
   const [showStart, setShowStart] = useState(true);
+
+  // console.log({ seconds });
+  // console.log({ now });
+  // console.table(state);
 
   // START
   const handleStart = () => {
     clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
-      setNow((s) => s - 1);
+      setNow((s) => s! - 1);
     }, 1000);
     setShowStart(false);
   };
@@ -46,23 +51,33 @@ const ClockUI: FC<ClockUIProps> = ({ state, handlers, now, setNow }) => {
 
   // RESET
   const handleReset = () => {
-    clearInterval(intervalRef.current);
     setNow(seconds);
+    handleStop();
   };
 
   // Remove current timer when it finishes
   // Re-set now state if there is another timer queued
   useEffect(() => {
-    if (now < 0) {
+    // UI beep at 0
+    if (now === 0 && state[0]) {
+      const beep = new Audio(
+        "https://d1i3aib8o7oh3l.cloudfront.net/temp-placeholder/beep.mp3"
+      );
+      beep.load();
+      beep.play();
+    }
+
+    if (typeof now === "number" && now < 0) {
       if (state[1]) {
         setNow(state[1].seconds);
+        setSeconds(state[1].seconds);
         handlers.remove(0);
       } else {
-        setNow(0);
-        clearInterval(intervalRef.current);
+        setNow(null);
+        handleStop();
       }
     }
-  }, [state, handlers, now, setNow]);
+  }, [state, handlers, now, setNow, setSeconds]);
 
   return (
     <div className={timersx.clockui}>

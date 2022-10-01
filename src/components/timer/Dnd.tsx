@@ -18,7 +18,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface DndProps {
-  setNow: Dispatch<SetStateAction<number>>;
+  setNow: Dispatch<SetStateAction<number | null>>;
   state: IData[];
   handlers: UseListStateHandlers<IData>;
 }

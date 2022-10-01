@@ -4,19 +4,17 @@ import timersx from "../../styles/Timer.module.css";
 
 interface ClockProps {
   state: IData[];
-  now: number;
+  now: number | null;
 }
 
 const Clock: FC<ClockProps> = ({ now, state }) => {
-  const min = ("0" + Math.floor(now / 60)).slice(-2);
-  const sec = ("0" + (now % 60)).slice(-2);
+  const min = now && ("0" + Math.floor(now / 60)).slice(-2);
+  const sec = now && ("0" + (now % 60)).slice(-2);
 
   return (
     <div className={timersx.clock}>
       <section className={timersx.text}>
-        <p>
-          {min}:{sec}
-        </p>
+        <p>{now ? `${min}:${sec}` : `00:00`}</p>
         <p className={timersx.title}>{state[0] && state[0].name}</p>
       </section>
     </div>
