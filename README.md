@@ -8,18 +8,22 @@ efficiently at the gym. PulluP Fitness is a web app for those who
 wish to track their fitness progression! This full-stack project
 includes the following features:
 <br />
+<ul>
 <li>Passwordless sign-in as an authenticated user with NextAuth.</li>
 <li>Query a live database in order to create, update, and modify exercise stats such as weight, repetitions, and number of sets.</li>
 <li>Curate diverse workouts across several muscle groups.</li>
+<li>Set consecutive timers for timed workouts such as abs.</li>
 <li>Plus more to come!</li>
+</ui>
 <br />
 
 🖇 [PulluP Fitness](https://pullup.at)
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/90011911/192119232-430de371-a5a7-4b83-a90f-4a8746b48ded.png" alt="auth" />
-  <img src="https://user-images.githubusercontent.com/90011911/192119234-543cc51e-f9a4-4f35-9690-5fb323d23fb7.png" alt="stats" />
-  <img src="https://user-images.githubusercontent.com/90011911/192119233-16c5a16e-9a91-4641-9cbb-ad8246b9b79f.png" alt="workout" />
+  <img src="https://user-images.githubusercontent.com/90011911/193400063-de4e9922-ed07-4801-bd8f-f1a3ed9742aa.png" alt="auth" />
+  <img src="https://user-images.githubusercontent.com/90011911/193400064-334c323d-0214-49c7-9bcc-514c864029e2.png" alt="stats" />
+  <img src="https://user-images.githubusercontent.com/90011911/193400062-9a8fa115-bba7-4b1d-9007-33ba89ceb5cd.png" alt="workout" />
+  <img src="https://user-images.githubusercontent.com/90011911/193400060-4ee9d511-eaf2-440d-9f17-324ac50a68c6.png" alt="timer" />
 </p>
 
 ## ⌨️ Tech
