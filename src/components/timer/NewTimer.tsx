@@ -1,5 +1,3 @@
-import { Button, NumberInput, TextInput } from "@mantine/core";
-import { UseListStateHandlers } from "@mantine/hooks";
 import {
   Dispatch,
   FC,
@@ -8,9 +6,12 @@ import {
   useContext,
   useState,
 } from "react";
+import { Button, NumberInput, TextInput } from "@mantine/core";
+import { UseListStateHandlers } from "@mantine/hooks";
 import { IData } from "./Timer";
 import rose from "../../styles/RoseBtn.module.css";
 import { ClockContext } from "../../utils/contexts";
+import timersx from "../../styles/Timer.module.css";
 
 interface IFormData {
   name: string;
@@ -71,16 +72,24 @@ const NewTimer: FC<NewTimerProps> = ({
         }
       }
     >
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={timersx.form}>
         {/* Name */}
         <TextInput
           value={data.name}
           onChange={(e) => setData({ ...data, name: e.currentTarget.value })}
           label="Name"
-          required
+          placeholder="Example: Plank"
+          // required
+          styles={{
+            input: {
+              "::placeholder": {
+                color: "#b5e5fd",
+              },
+            },
+          }}
         />
 
-        <section className="time">
+        <section className={timersx.modaltime}>
           {/* Minutes */}
           <NumberInput
             value={data.min}
@@ -110,7 +119,11 @@ const NewTimer: FC<NewTimerProps> = ({
         </section>
 
         {/* Add */}
-        <Button type="submit" className={rose.btn}>
+        <Button
+          type="submit"
+          className={rose.btn}
+          style={{ alignSelf: "flex-end" }}
+        >
           Add
         </Button>
       </form>

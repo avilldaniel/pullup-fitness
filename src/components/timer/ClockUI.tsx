@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useRef,
+  useState,
 } from "react";
 import { ClockContext } from "../../utils/contexts";
 import Clock from "./Clock";
@@ -12,6 +13,7 @@ import { IData } from "./Timer";
 import rose from "../../styles/RoseBtn.module.css";
 import { Button } from "@mantine/core";
 import { UseListStateHandlers } from "@mantine/hooks";
+import timersx from "../../styles/Timer.module.css";
 
 interface ClockUIProps {
   state: IData[];
@@ -26,6 +28,7 @@ interface IRefProps {
 const ClockUI: FC<ClockUIProps> = ({ state, handlers, now, setNow }) => {
   const { seconds } = useContext(ClockContext);
   const intervalRef: IRefProps = useRef(0);
+  const [showStart, setShowStart] = useState(true);
 
   // console.log({ now });
 
@@ -35,11 +38,13 @@ const ClockUI: FC<ClockUIProps> = ({ state, handlers, now, setNow }) => {
     intervalRef.current = setInterval(() => {
       setNow((s) => s - 1);
     }, 1000);
+    setShowStart(false);
   };
 
   // STOP
   const handleStop = () => {
     clearInterval(intervalRef.current);
+    setShowStart(true);
   };
 
   // RESET
@@ -63,30 +68,38 @@ const ClockUI: FC<ClockUIProps> = ({ state, handlers, now, setNow }) => {
   }, [state, handlers, now, setNow]);
 
   return (
-    <>
+    <div className={timersx.clockui}>
+      {/* Reset */}
       <Button
         onClick={handleReset}
         disabled={!state[0] ? true : false}
-        className={rose.btn}
+        className={timersx.btn}
       >
         Reset
       </Button>
+
+      {/* Clock */}
       <Clock now={now} state={state} />
-      <Button
-        onClick={handleStart}
-        disabled={!state[0] ? true : false}
-        className={rose.btn}
-      >
-        Start
-      </Button>
-      <Button
-        onClick={handleStop}
-        disabled={!state[0] ? true : false}
-        className={rose.btn}
-      >
-        Stop
-      </Button>
-    </>
+
+      {/* Start/Stop */}
+      {showStart ? (
+        <Button
+          onClick={handleStart}
+          disabled={!state[0] ? true : false}
+          className={timersx.btn}
+        >
+          Start
+        </Button>
+      ) : (
+        <Button
+          onClick={handleStop}
+          disabled={!state[0] ? true : false}
+          className={timersx.btn}
+        >
+          Stop
+        </Button>
+      )}
+    </div>
   );
 };
 export default ClockUI;

@@ -1,10 +1,11 @@
-import { Modal } from "@mantine/core";
-import { useListState } from "@mantine/hooks";
 import { FC, useContext, useState } from "react";
+import { Button, Modal } from "@mantine/core";
+import { useListState } from "@mantine/hooks";
 import { ClockContext } from "../../utils/contexts";
 import ClockUI from "./ClockUI";
 import Dnd from "./Dnd";
 import NewTimer from "./NewTimer";
+import timersx from "../../styles/Timer.module.css";
 
 export interface IData {
   name: string;
@@ -29,12 +30,12 @@ const Timer: FC<TimerProps> = () => {
   //   { name: "d", seconds: 6, id: new Date().getTime() + 4 },
   // ]);
 
-  console.log({ now });
-  console.log({ state });
-  console.log({ seconds });
+  // console.log({ now });
+  // console.log({ state });
+  // console.log({ seconds });
 
   return (
-    <div>
+    <div className={timersx.container}>
       {/* Clock UI */}
       <ClockUI state={state} handlers={handlers} now={now} setNow={setNow} />
 
@@ -42,11 +43,20 @@ const Timer: FC<TimerProps> = () => {
       <Dnd setNow={setNow} state={state} handlers={handlers} />
 
       {/* Add timer */}
-      <button onClick={() => setAddingTimer(true)}>Add a timer</button>
+      <Button
+        onClick={() => setAddingTimer(true)}
+        className={timersx.newtimer}
+        variant="outline"
+      >
+        Add a timer
+      </Button>
       <Modal
         opened={addingTimer}
         onClose={() => setAddingTimer(false)}
-        title=""
+        title="Add a new timer"
+        style={{
+          marginTop: "3em",
+        }}
         // withCloseButton={false}
         // centered
       >

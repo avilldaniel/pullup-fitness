@@ -1,34 +1,20 @@
 import { Dispatch, FC, SetStateAction, useContext } from "react";
-import { useListState, UseListStateHandlers } from "@mantine/hooks";
+import { UseListStateHandlers } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { IconGripVertical, IconTrash } from "@tabler/icons";
 import { createStyles } from "@mantine/core";
 import { ClockContext } from "../../utils/contexts";
 import { IData } from "./Timer";
+import timersx from "../../styles/Timer.module.css";
 
 const useStyles = createStyles((theme) => ({
   item: {
     ...theme.fn.focusStyles(),
-    display: "flex",
-    alignItems: "center",
-    borderRadius: theme.radius.md,
-    border: `1px solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[2]
-    }`,
-    padding: `${theme.spacing.sm}px ${theme.spacing.xl}px`,
-    backgroundColor:
-      theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.white,
     marginBottom: theme.spacing.sm,
   },
 
   itemDragging: {
     boxShadow: theme.shadows.sm,
-  },
-
-  symbol: {
-    fontSize: 30,
-    fontWeight: 700,
-    width: 60,
   },
 }));
 
@@ -52,18 +38,20 @@ const Dnd: FC<DndProps> = ({ setNow, state, handlers }) => {
     >
       {(provided, snapshot) => (
         <div
-          className={cx(classes.item, {
+          className={`${cx(classes.item, {
             [classes.itemDragging]: snapshot.isDragging,
-          })}
+          })} ${timersx.draggable}`}
           {...provided.draggableProps}
           ref={provided.innerRef}
         >
           {/* Handle */}
           <div {...provided.dragHandleProps}>
-            <IconGripVertical size={24} stroke={1.5} />
+            {/* <IconGripVertical size={24} stroke={1.5} /> */}
+            <IconGripVertical size={20} stroke={1.5} />
           </div>
           {/* Exercise */}
-          {item.name} - {item.seconds}
+          {item.name && `${item.name} -`}
+          {item.seconds}
           {/* Delete */}
           <button
             onClick={() => {
@@ -72,9 +60,9 @@ const Dnd: FC<DndProps> = ({ setNow, state, handlers }) => {
             }}
             type="button"
           >
-            {/* <IconTrash size={24} stroke={1.5} color="#c81e4c" />
-          <IconTrash size={24} stroke={1.5} color="#e9627f" /> */}
-            <IconTrash size={24} stroke={1.5} color="red" />
+            {/* <IconTrash size={24} stroke={1.5} color="#c81e4c" /> */}
+            <IconTrash size={28} stroke={1.5} color="#e9627f" />
+            {/* <IconTrash size={24} stroke={1.5} color="red" /> */}
           </button>
         </div>
       )}
