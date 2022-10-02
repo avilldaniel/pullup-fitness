@@ -6,6 +6,7 @@ import RoseLoader from "../../components/main/RoseLoader";
 import { ClockProvider } from "../../components/timer/ClockProvider";
 import Timer from "../../components/timer/Timer";
 import bg from "../../styles/Background.module.css";
+import timersx from "../../styles/Timer.module.css";
 
 const TimerPage: NextPage = () => {
   // Session
@@ -30,6 +31,7 @@ const TimerPage: NextPage = () => {
     <div className={bg.default}>
       <ClockProvider>
         <Nav />
+        <h6 className={timersx.header}>Timer</h6>
         <Timer />
       </ClockProvider>
     </div>

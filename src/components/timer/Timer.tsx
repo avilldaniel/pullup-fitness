@@ -26,6 +26,7 @@ const Timer: FC<TimerProps> = () => {
 
   return (
     <div className={timersx.container}>
+      {/* <h6 className={timersx.header}>Timer</h6> */}
       {/* Clock UI */}
       <ClockUI state={state} handlers={handlers} now={now} setNow={setNow} />
 
